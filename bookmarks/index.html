@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bookmarks</title>
+</head>
+<body>
+
+	<script>
+		var page = localStorage.getItem("cwm.page");
+		if ( page ) {
+			document.write(page);
+		} else {
+			document.write('<script src="https://cwmonkey.github.com/bookmarks/bookmarks.js"><\/script>')
+		}
+	</script>
+</body>
+</html>
