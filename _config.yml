@@ -6,5 +6,21 @@
 name: cwmonkey.github.io
 description: 
 author:
-  name: 
-  email: 
+  name: Some Name
+  email: some.email@example.com
+
+# Grunt handles images and assets.
+exclude: ['images', 'styles', 'scripts', 'fonts',
+          '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
+
+include: ['.htaccess']
+
+# _config.build.yml sets future and show_drafts to false on `grunt build`
+future: true
+show_drafts: true
+
+# Markdown library
+markdown: redcarpet
+#   extensions: ['fenced_code_blocks', 'smart']
+
+pygments: true
