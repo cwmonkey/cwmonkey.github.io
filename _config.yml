@@ -11,8 +11,8 @@ author:
 
 domain: cwmonkey.github.io
 # Grunt handles images and assets.
-exclude: ['images', 'css', 'js', 'fonts',
-          '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
+# exclude: ['images', 'css', 'js', 'fonts',
+#           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
 
 include: ['.htaccess']
 
