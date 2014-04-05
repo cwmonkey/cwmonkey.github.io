@@ -9,6 +9,7 @@ author:
   name: Some Name
   email: some.email@example.com
 
+domain: cwmonkey.github.io
 # Grunt handles images and assets.
 exclude: ['images', 'styles', 'scripts', 'fonts',
           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
