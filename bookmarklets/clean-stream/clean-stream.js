@@ -35,27 +35,25 @@ var main = function($) {
 		}
 	});
 
-	//$('iframe').appendTo('body');
-	//$('*:not(iframe):not(:has(iframe))').remove();
-
-	// WWE Network
+	// TODO: fix this logic up, break into functions, etc
+	// Youtube
 	if ( document.location.hostname == 'www.youtube.com' ) {
 		$('*:not(embed,object,param,#cleanStreamCss):not(:has(embed,object,param))').remove();
-	} else {
+	} else if ( document.location.hostname != 'network.wwe.com' ) {
 		$('*:not(iframe,embed,object,param,#cleanStreamCss):not(:has(iframe,embed,object,param))').remove();
-	}
-	/* $('body').append('<div><style>*{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;' + x + 'width:100% !important;' + x + 'height:100% !important;' + x + 'overflow:hidden !important;xdisplay:block !important}</style></div>');
-	$('body').append('<div><style>*{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;' + x + 'width:100% !important;' + x + 'height:100% !important;' + x + 'overflow:hidden !important;xdisplay:block !important}</style></div>'); */
-
-	var $cleanStreamCss = $('#cleanStreamCss');
-	if ( !$cleanStreamCss.length ) {
-		//$cleanStreamCss = $('<link id="cleanStreamCss" rel="stylesheet"/>').prependTo('body');
-		//$cleanStreamCss.attr({href: window.cwmBookmarkletUrl + '/clean-stream.css?' + new Date().getTime()});
-		$('body').append('<style id="cleanStreamCss">*{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;width:100% !important;height:100% !important;overflow:hidden !important;xdisplay:block !important}</style>');
 	}
 
 	// WWE Network
 	if ( document.location.hostname == 'network.wwe.com' ) {
+		var $videoContainer = $('#videoContainer');
+		$videoContainer.appendTo('body');
+		$('*:not(iframe,embed,object,param,#cleanStreamCss):not(:has(iframe,embed,object,param))').remove();
+
+		var $cleanStreamCss = $('#cleanStreamCss');
+		if ( !$cleanStreamCss.length ) {
+			$('body').append('<style id="cleanStreamCss">html,body,#videoContainer{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;width:100% !important;height:100% !important;overflow:hidden !important;display:block !important}body{background:black}object{margin:auto;display:block}</style>');
+		}
+
 		var wwe_network_resize_TO;
 		var resize = function() {
 			clearTimeout(wwe_network_resize_TO);
@@ -65,6 +63,11 @@ var main = function($) {
 		setTimeout(wwe_network_resize, 0);
 
 		$(window).bind('resize', resize);
+	} else {
+		var $cleanStreamCss = $('#cleanStreamCss');
+		if ( !$cleanStreamCss.length ) {
+			$('body').append('<style id="cleanStreamCss">*{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;width:100% !important;height:100% !important;overflow:hidden !important;display:block !important}</style>');
+		}
 	}
 };
 
