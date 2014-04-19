@@ -15,12 +15,41 @@
 
 		for (index = 0; index < len; index += 1) {
 			var arg = arguments[index];
-			if (typeof arg === 'string' || typeof arg === 'function') {
+			if ( typeof arg === 'string' ) {
 				args.push(arg);
+			} else if ( typeof arg === 'function' ) {
+				args.push((function(callback) {
+					return function() {
+						setTimeout(function() {
+							callback();
+						}, 0);
+					}
+				})(arg));
 			} else {
-				if ( arg.test() ) continue;
+				if ( arg.test() ) {
+					if ( typeof arg.callback != 'undefined' ) {
+						args.push((function(callback) {
+							return function() {
+								setTimeout(function() {
+									callback();
+								}, 0);
+							}
+						})(arg.callback));
+					}
+					continue;
+				}
+
 				args.push(arg.script);
-				if ( typeof arg.callback != 'undefined' ) args.push(arg.callback);
+
+				if ( typeof arg.callback != 'undefined' ) {
+					args.push((function(callback) {
+						return function() {
+							setTimeout(function() {
+								callback();
+							}, 0);
+						}
+					})(arg.callback));
+				}
 			}
 		}
 
