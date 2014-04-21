@@ -95,7 +95,7 @@ var tpl =
 		<label for="place-image-height" class="input">Height: <input type="number" value="100" id="place-image-height"></label>\
 		<label id="place-image-result-label" for="place-image-result">\
 			Image: <input type="text" id="place-image-result">\
-			<button id="place-image-reload">&gt;</button>\
+			<button id="place-image-reload" title="Next Placeholder">&gt;</button>\
 		</label>\
 		<label id="place-image-buttons-label"><button id="place-image-update">&lt;- Update</button> <button id="place-image-close">Close</button></label>\
 		<label id="place-image-img"></label>\
