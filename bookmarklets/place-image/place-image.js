@@ -93,7 +93,10 @@ var tpl =
 		</label>\
 		<label for="place-image-width" class="input">Width: <input type="number" value="100" id="place-image-width"></label>\
 		<label for="place-image-height" class="input">Height: <input type="number" value="100" id="place-image-height"></label>\
-		<label id="place-image-result-label" for="place-image-result">Image: <input type="text" id="place-image-result"></label>\
+		<label id="place-image-result-label" for="place-image-result">\
+			Image: <input type="text" id="place-image-result">\
+			<button id="place-image-reload">&gt;</button>\
+		</label>\
 		<label id="place-image-buttons-label"><button id="place-image-update">&lt;- Update</button> <button id="place-image-close">Close</button></label>\
 		<label id="place-image-img"></label>\
 	</form>\
@@ -168,7 +171,8 @@ var setup = function() {
 	}
 
 	var update_image_TO;
-	var update_image = function() {
+	var image_index;
+	var update_image = function(idx) {
 		var cplaces = [];
 		var $checks = $config.find('.site:checked');
 
@@ -177,7 +181,15 @@ var setup = function() {
 			cplaces.push(places[$check.data('i')]);
 		}
 
-		var place = cplaces[Math.floor(Math.random() * cplaces.length)];
+		if ( typeof idx != 'undefined' ) {
+			idx++;
+			if ( idx >= cplaces.length ) idx = 0;
+			image_index = idx
+		} else {
+			image_index = Math.floor(Math.random() * cplaces.length);
+		}
+		
+		var place = cplaces[image_index];
 		var template = place.template;
 		var url = template;
 		var vars = $.extend({}, defaults, {
@@ -228,6 +240,10 @@ var setup = function() {
 			$last_input.val($image.val()).focus();
 			$menu.hide();
 			update_image();
+		})
+		.delegate('#place-image-reload', 'click', function(e) {
+			e.preventDefault();
+			update_image(image_index);
 		})
 		.delegate('#place-image-close', 'click', function(e) {
 			e.preventDefault();
