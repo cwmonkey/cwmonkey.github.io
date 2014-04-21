@@ -20,6 +20,7 @@
 	width: 280px;
 }
 
+#place-image-menu #place-image-buttons-label,
 #place-image-menu #place-image-config-head,
 #place-image-menu #place-image-config,
 #place-image-menu #place-image-result-label {
@@ -48,3 +49,6 @@
 	content: '- ';
 }
 
+#place-image-img img {
+	width: 100px;
+}

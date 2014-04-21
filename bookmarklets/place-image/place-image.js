@@ -94,7 +94,8 @@ var tpl =
 		<label for="place-image-width" class="input">Width: <input type="number" value="100" id="place-image-width"></label>\
 		<label for="place-image-height" class="input">Height: <input type="number" value="100" id="place-image-height"></label>\
 		<label id="place-image-result-label" for="place-image-result">Image: <input type="text" id="place-image-result"></label>\
-		<label><button id="place-image-update">&lt;- Update</button> <button id="place-image-close">Close</button></label>\
+		<label id="place-image-buttons-label"><button id="place-image-update">&lt;- Update</button> <button id="place-image-close">Close</button></label>\
+		<label id="place-image-img"></label>\
 	</form>\
 </menu>';
 
@@ -107,6 +108,7 @@ var $width;
 var $height;
 var $update;
 var $config;
+var $img;
 var $body;
 var $last_input;
 var $;
@@ -131,6 +133,7 @@ var setup = function() {
 	$height = $menu.find('#place-image-height');
 	$update = $menu.find('#place-image-update');
 	$config = $menu.find('#place-image-config');
+	$img = $menu.find('#place-image-img');
 
 	if ( !$last_input.length ) $update.hide();
 
@@ -164,6 +167,7 @@ var setup = function() {
 		$config.prepend($label.prepend($input));
 	}
 
+	var update_image_TO;
 	var update_image = function() {
 		var cplaces = [];
 		var $checks = $config.find('.site:checked');
@@ -194,17 +198,30 @@ var setup = function() {
 		}
 
 		$image.val(url);
+
+		var $i = $('<img/>').attr({src: url});
+
+		clearTimeout(update_image_TO);
+		update_image_TO = setTimeout(function() {
+			$img.empty().append($i);
+		}, 100);
 	};
 
 	$menu
 		.delegate('.input input', 'keypress change', function(e) {
-			update_image();
+			setTimeout(function() {
+				update_image();
+			}, 0);
 		})
 		.delegate('#place-image-width', 'keypress change', function(e) {
-			$.jStorage.set('place-image-width', $width.val());
+			setTimeout(function() {
+				$.jStorage.set('place-image-width', $width.val());
+			}, 0);
 		})
 		.delegate('#place-image-height', 'keypress change', function(e) {
-			$.jStorage.set('place-image-height', $height.val());
+			setTimeout(function() {
+				$.jStorage.set('place-image-height', $height.val());
+			}, 0);
 		})
 		.delegate('#place-image-update', 'click', function(e) {
 			e.preventDefault();
