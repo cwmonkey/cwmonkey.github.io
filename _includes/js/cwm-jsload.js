@@ -17,18 +17,18 @@
 		for ( var i = 0; i < queue.length; i++ ) {
 			var step = queue[i];
 
-			if ( typeof step == 'string' ) {
-				step = {script: step};
+			if ( typeof step === 'string' ) {
+				queue[i] = {script: step};
 			} else if ( toString.call(step) === "[object Array]" ) {
 				for ( var j = 0; j < step.length; j++ ) {
-					var substep = step[i];
-					if ( typeof substep == 'string' ) {
-						step[i] = {script: substep};
+					var substep = step[j];
+					if ( typeof substep === 'string' ) {
+						queue[i][j] = {script: substep};
 					}
 				}
 			}
 
-			this.buffer.push(step);
+			this.buffer.push(queue[i]);
 		}
 
 		this.stepBuffer();
