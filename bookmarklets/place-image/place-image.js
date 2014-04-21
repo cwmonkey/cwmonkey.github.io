@@ -118,11 +118,12 @@ var setup = function() {
 
 	$menu = $(tpl)
 		.attr({tabIndex: '-1'})
+		.hide()
 		.appendTo('body')
 		.focus();
 
 	setTimeout(function() {
-		$menu.width($menu.outerWidth());
+		$menu.show();
 	}, 0);
 
 	$image = $menu.find('#place-image-result');
