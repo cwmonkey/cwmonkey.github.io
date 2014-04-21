@@ -50,7 +50,7 @@ var places = [
 	{
 		name: 'Dummy Image',
 		site: 'dummyimage.com',
-		template: 'http://placebear.com/{width}x{height}/{background}/{foreground}'
+		template: 'http://dummyimage.com/{width}x{height}/{background}/{foreground}'
 	},
 	{
 		name: 'FPO IMG',
