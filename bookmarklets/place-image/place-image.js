@@ -94,7 +94,7 @@ var tpl =
 		<label for="place-image-width" class="input">Width: <input type="number" value="100" id="place-image-width"></label>\
 		<label for="place-image-height" class="input">Height: <input type="number" value="100" id="place-image-height"></label>\
 		<label id="place-image-result-label" for="place-image-result">Image: <input type="text" id="place-image-result"></label>\
-		<label><button id="place-image-update">&lt;- Update</button></label>\
+		<label><button id="place-image-update">&lt;- Update</button> <button id="place-image-close">Close</button></label>\
 	</form>\
 </menu>';
 
@@ -209,6 +209,11 @@ var setup = function() {
 		.delegate('#place-image-update', 'click', function(e) {
 			e.preventDefault();
 			$last_input.val($image.val()).focus();
+			$menu.hide();
+			update_image();
+		})
+		.delegate('#place-image-close', 'click', function(e) {
+			e.preventDefault();
 			$menu.hide();
 			update_image();
 		})
