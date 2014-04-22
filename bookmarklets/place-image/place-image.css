@@ -11,6 +11,26 @@
 	width: 380px;
 	font-family: sans-serif;
 	z-index: 9999;
+	line-height: 1;
+}
+
+#place-image-menu *,
+#place-image-menu *:before,
+#place-image-menu *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#place-image-menu input[type="text"],
+#place-image-menu input[type="number"] {
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 1px;
+	color: #000;
+	font-family: sans-serif;
+	display: inline-block;
+	line-height: 1;
 }
 
 #place-image-width,

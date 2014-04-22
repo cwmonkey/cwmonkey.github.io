@@ -71,6 +71,11 @@ var places = [
 		name: 'Place Sheen',
 		site: 'placesheen.com',
 		template: 'http://placesheen.com/{width}/{height}'
+	},
+	{
+		name: 'P-Hold',
+		site: 'p-hold.com/',
+		template: 'http://p-hold.com/{search}/{width}/{height}/{gray_blur}'
 	}
 ];
 
@@ -81,7 +86,9 @@ var defaults = {
 	background: null,
 	foreground: null,
 	type: null,
-	category: null
+	category: null,
+	search: null,
+	gray_blur: null
 };
 
 var tpl =
