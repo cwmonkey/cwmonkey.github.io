@@ -1,81 +1,106 @@
 (function (window) {
 'use strict';
 
-var places = [
+var sections = [
 	{
-		name: 'Place Cosby',
-		site: 'placecosby.com',
-		template: 'http://placecosby.com/{width}/{height}'
+		name: 'Animals',
+		places: [
+			{
+				name: 'Place Bear',
+				site: 'placebear.com',
+				template: 'http://placebear.com/{type}/{width}/{height}',
+				type: {text: 'grayscale', value: 'g'}
+			},
+			{
+				name: 'Place Kitten',
+				site: 'placekitten.com',
+				template: 'http://placekitten.com/{type}/{width}/{height}',
+				type: {text: 'grayscale', value: 'g'}
+			}
+		]
 	},
 	{
-		name: 'Place Kitten',
-		site: 'placekitten.com',
-		template: 'http://placekitten.com/{type}/{width}/{height}',
-		type: {text: 'grayscale', value: 'g'}
+		name: 'Famous',
+		places: [
+			{
+				name: 'Fill Murray',
+				site: 'fillmurray.com',
+				template: 'http://fillmurray.com/{width}/{height}'
+			},
+			{
+				name: 'Nice Nice jpg',
+				site: 'nicenicejpg.com',
+				template: 'http://nicenicejpg.com/{width}/{height}'
+			},
+			{
+				name: 'Place Cage',
+				site: 'placecage.com',
+				template: 'http://placecage.com/{type}/{width}/{height}',
+				type: [{text: 'grayscale', value: 'g'}, {text: 'CRAZY', value: 'c'}]
+			},
+			{
+				name: 'Place Cosby',
+				site: 'placecosby.com',
+				template: 'http://placecosby.com/{width}/{height}'
+			},
+			{
+				name: 'Place Sheen',
+				site: 'placesheen.com',
+				template: 'http://placesheen.com/{width}/{height}'
+			}
+		]
 	},
 	{
-		name: 'Place Cage',
-		site: 'placecage.com',
-		template: 'http://placecage.com/{type}/{width}/{height}',
-		type: [{text: 'grayscale', value: 'g'}, {text: 'CRAZY', value: 'c'}]
+		name: 'Food',
+		places: [
+			{
+				name: 'Bacon Mockup',
+				site: 'baconmockup.com',
+				template: 'http://baconmockup.com/{width}/{height}'
+			},
+			{
+				name: 'Lorem Pizza',
+				site: 'lorempizza.com',
+				template: 'http://lorempizza.com/{width}/{height}'
+			}
+		]
 	},
 	{
-		name: 'Place Hold It',
-		site: 'placehold.it',
-		template: 'http://placehold.it/{width}x{height}'
+		name: 'Other',
+		places: [
+			{
+				name: 'Lorem Pixel',
+				site: 'lorempixel.com',
+				template: 'http://lorempixel.com/{type}/{width}/{height}/{category}/{text}',
+				type: {text: 'grayscale', value: 'g'},
+				category: ['abstract', 'animals', 'business', 'cats', 'city', 'food', 'nightlife', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport']
+			},
+			{
+				name: 'P-Hold',
+				site: 'p-hold.com/',
+				template: 'http://p-hold.com/{search}/{width}/{height}/{gray_blur}'
+			}
+		]
 	},
 	{
-		name: 'Lorem Pixel',
-		site: 'lorempixel.com',
-		template: 'http://lorempixel.com/{type}/{width}/{height}/{category}/{text}',
-		type: {text: 'grayscale', value: 'g'},
-		category: ['abstract', 'animals', 'business', 'cats', 'city', 'food', 'nightlife', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport']
-	},
-	{
-		name: 'Fill Murray',
-		site: 'fillmurray.com',
-		template: 'http://fillmurray.com/{width}/{height}'
-	},
-	{
-		name: 'Nice Nice jpg',
-		site: 'nicenicejpg.com',
-		template: 'http://nicenicejpg.com/{width}/{height}'
-	},
-	{
-		name: 'Place Bear',
-		site: 'placebear.com',
-		template: 'http://placebear.com/{type}/{width}/{height}',
-		type: {text: 'grayscale', value: 'g'}
-	},
-	{
-		name: 'Dummy Image',
-		site: 'dummyimage.com',
-		template: 'http://dummyimage.com/{width}x{height}/{background}/{foreground}'
-	},
-	{
-		name: 'FPO IMG',
-		site: 'fpoimg.com',
-		template: 'http://fpoimg.com/{width}x{height}?text={text}'
-	},
-	{
-		name: 'Bacon Mockup',
-		site: 'baconmockup.com',
-		template: 'http://baconmockup.com/{width}/{height}'
-	},
-	{
-		name: 'Lorem Pizza',
-		site: 'lorempizza.com',
-		template: 'http://lorempizza.com/{width}/{height}'
-	},
-	{
-		name: 'Place Sheen',
-		site: 'placesheen.com',
-		template: 'http://placesheen.com/{width}/{height}'
-	},
-	{
-		name: 'P-Hold',
-		site: 'p-hold.com/',
-		template: 'http://p-hold.com/{search}/{width}/{height}/{gray_blur}'
+		name: 'Text',
+		places: [
+			{
+				name: 'Dummy Image',
+				site: 'dummyimage.com',
+				template: 'http://dummyimage.com/{width}x{height}/{background}/{foreground}'
+			},
+			{
+				name: 'FPO IMG',
+				site: 'fpoimg.com',
+				template: 'http://fpoimg.com/{width}x{height}?text={text}'
+			},
+			{
+				name: 'Place Hold It',
+				site: 'placehold.it',
+				template: 'http://placehold.it/{width}x{height}'
+			}
+		]
 	}
 ];
 
@@ -98,8 +123,8 @@ var tpl =
 		<label id="place-image-config">\
 \
 		</label>\
-		<label for="place-image-width" class="input">Width: <input type="number" value="100" id="place-image-width"></label>\
-		<label for="place-image-height" class="input">Height: <input type="number" value="100" id="place-image-height"></label>\
+		<label for="place-image-width" class="place-image-input">Width: <input type="number" value="100" id="place-image-width"></label>\
+		<label for="place-image-height" class="place-image-input">Height: <input type="number" value="100" id="place-image-height"></label>\
 		<label id="place-image-result-label" for="place-image-result">\
 			Image: <input type="text" id="place-image-result">\
 			<button id="place-image-reload" title="Next Placeholder">&gt;</button>\
@@ -157,31 +182,55 @@ var setup = function() {
 
 	$css.attr({href: window.cwmBookmarkletUrl + '/place-image.css?' + new Date().getTime()});
 
-	for ( var i = 0; i < places.length; i++ ) {
-		var place = places[i];
-		var $label = $('<label/>').html(' ' + place.name + ' ');
-		var $input = $('<input type="checkbox"/>')
-			.addClass('site')
-			.attr({value: i})
-			.data({
-				site: place.site,
-				i: i
-			});
-		var $a = $('<a href="#"/>')
-			.attr({href: 'http://' + place.site, target: '_blank'})
-			.html('^')
-			.appendTo($label);
-		var val = $.jStorage.get('place-image-' + place.site);
-		if ( val === null || val === true ) $input.prop({checked: true});
-
-		$config.prepend($label.prepend($input));
+	for ( var j = 0; j < sections.length; j++ ) {
+		var places = sections[j].places;
+		var $section = $('<fieldset/>')
+			.addClass('place-image-section')
+			.appendTo($config);
+		var $legend = $('<legend/>')
+			.appendTo($section);
+		var $legend_label = $('<label/>')
+			.html(' ' + sections[j].name)
+			.appendTo($legend);
+		var $legend_input = $('<input type="checkbox"/>')
+			.prependTo($legend_label);
+		for ( var i = 0; i < places.length; i++ ) {
+			var place = places[i];
+			var $label = $('<label/>')
+				.html(' ' + place.name + ' ')
+				.appendTo($section);
+			var $input = $('<input type="checkbox"/>')
+				.addClass('place-image-site')
+				.attr({value: i})
+				.data({
+					site: place.site,
+					i: i
+				})
+				.prependTo($label);
+			var $a = $('<a href="#"/>')
+				.attr({href: 'http://' + place.site, target: '_blank'})
+				.html('^')
+				.appendTo($label);
+			var val = $.jStorage.get('place-image-' + place.site);
+			if ( val === null || val === true ) $input.prop({checked: true});
+		}
 	}
 
 	var update_image_TO;
 	var image_index;
 	var update_image = function(idx) {
 		var cplaces = [];
-		var $checks = $config.find('.site:checked');
+		var $checks = $config.find('.place-image-site:checked');
+		var places = [];
+		for ( var i = 0; i < sections.length; i++ ) {
+			for ( var j = 0; j < sections[i].places.length; j++ ) {
+				places.push(sections[i].places[j]);
+			}
+		}
+
+		if ( !$checks.length ) {
+			$checks = $config.find('.place-image-site').eq(1);
+		}
 
 		for ( var i = 0; i < $checks.length; i++ ) {
 			var $check = $checks.eq(i);
@@ -226,8 +275,33 @@ var setup = function() {
 		}, 100);
 	};
 
+	var update_sections = function() {
+		var $sections = $menu.find('.place-image-section');
+		for ( var i = 0; i < $sections.length; i++ ) {
+			var $section = $sections.eq(i);
+			var $legend_input = $section.find('legend input');
+			var $unchecked = $section.find('.place-image-site:not(:checked)');
+			var $checked = $section.find('.place-image-site:checked');
+
+			if ( $unchecked.length && $checked.length ) {
+				$legend_input.prop({checked: false, indeterminate: true});
+			} else if ( $unchecked.length ) {
+				$legend_input.prop({indeterminate: false, checked: false});
+			} else {
+				$legend_input.prop({indeterminate: false, checked: true});
+			}
+		}
+	};
+
 	$menu
-		.delegate('.input input', 'keypress change', function(e) {
+		.delegate('.place-image-section legend input', 'click', function(e) {
+			var $this = $(this);
+			setTimeout(function() {
+				var $section = $this.closest('.place-image-section');
+				$section.find('.place-image-site').prop({checked: $this.is(':checked')}).change();
+			}, 0);
+		})
+		.delegate('.place-image-input input', 'keypress change', function(e) {
 			setTimeout(function() {
 				update_image();
 			}, 0);
@@ -270,9 +344,13 @@ var setup = function() {
 				$menu.addClass('place-image-config-open');
 			}
 		})
-		.delegate('#place-image-config .site', 'change', function(e) {
+		.delegate('#place-image-config .place-image-site', 'change', function(e) {
 			var $this = $(this);
-			$.jStorage.set('place-image-' + $this.data('site'), $this.prop('checked'));
+			setTimeout(function() {
+				$.jStorage.set('place-image-' + $this.data('site'), $this.prop('checked'));
+				update_sections();
+				update_image();
+			}, 0);
 		})
 		;
 
@@ -284,6 +362,7 @@ var setup = function() {
 		;
 
 	update_image();
+	update_sections();
 };
 
 // Main
