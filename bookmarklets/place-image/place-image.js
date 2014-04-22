@@ -257,6 +257,12 @@ var setup = function() {
 			$menu.hide();
 			update_image();
 		})
+		.delegate('#place-image-result', 'focus click', function(e) {
+			var $this = $(this);
+			setTimeout(function() {
+				$this.select();
+			}, 0);
+		})
 		.delegate('#place-image-config-head', 'click', function() {
 			if ( $menu.is('.place-image-config-open') ) {
 				$menu.removeClass('place-image-config-open');
