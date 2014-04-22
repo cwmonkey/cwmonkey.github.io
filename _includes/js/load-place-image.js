@@ -8,6 +8,7 @@ cwmJsload.load(
 	[
 		{
 			script: '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js',
+			static: true,
 			test: function() {
 				var v1 = 1;
 				var v2 = 7;
@@ -40,6 +41,7 @@ cwmJsload.load(
 		},
 		{
 			script: '//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js',
+			static: true,
 			test: function() {
 				return typeof JSON == "object";
 			}
@@ -47,6 +49,7 @@ cwmJsload.load(
 	],
 	{
 		script: '//cdnjs.cloudflare.com/ajax/libs/jStorage/0.4.4/jstorage.min.js',
+		static: true,
 		test: function() {
 			return ( (window.jQuery && window.jQuery.jStorage) || (window.jQueryCwm && window.jQueryCwm.jStorage) || (window.$ && window.$.jStorage) );
 		}

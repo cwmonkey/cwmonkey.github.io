@@ -5,6 +5,7 @@
 cwmJsload.load(
 	{
 		script: '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js',
+		static: true,
 		test: function() {
 			var v1 = 1;
 			var v2 = 7;

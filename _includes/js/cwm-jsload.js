@@ -9,6 +9,10 @@
 	var node_createElementScript = document.createElement('script');
 	var node_elementScript = document.getElementsByTagName('script')[0];
 
+	var step_defaults = {
+		static: false
+	};
+
 	var jsLoad = function(queue) {
 		this.buffer = [];
 		this.total = null;
@@ -18,14 +22,16 @@
 			var step = queue[i];
 
 			if ( typeof step === 'string' ) {
-				queue[i] = {script: step};
+				queue[i] = {script: step, static: step_defaults.static};
 			} else if ( toString.call(step) === "[object Array]" ) {
 				for ( var j = 0; j < step.length; j++ ) {
 					var substep = step[j];
 					if ( typeof substep === 'string' ) {
-						queue[i][j] = {script: substep};
+						queue[i][j] = {script: substep, static: step_defaults.static};
 					}
 				}
+			} else {
+				queue[i].static = queue[i].static || step_defaults.static;
 			}
 
 			this.buffer.push(queue[i]);
@@ -65,7 +71,7 @@
 		var me = this;
 		script.type = "text/javascript";
 		script.async = true;
-		script.src = scr + '?' + new Date().getTime();
+		script.src = scr + ((step.static)?'':'?' + new Date().getTime());
 		script.onload = script.onreadystatechange = function () {
 			if (!script.readyState || /loaded|complete/.test(script.readyState)) {
 				// Handle memory leak in IE
