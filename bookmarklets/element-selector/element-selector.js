@@ -59,7 +59,7 @@ var undelegate = function() {
 var get_selector = function($this, buffer) {
 	buffer = buffer || [];
 	if ( $this.is('[id]') ) {
-		return '#' + $this.attr('id') + ' ' + buffer.join(' ');
+		return '#' + $this.attr('id') + ' > ' + buffer.join(' > ');
 	}
 
 	var classes = '';
@@ -70,7 +70,7 @@ var get_selector = function($this, buffer) {
 
 	var $parent = $this.parent();
 	if ( !$parent.length || $parent[0].tagName == 'BODY' ) {
-		return buffer.join(' ');
+		return buffer.join(' > ');
 	}
 
 	// Recursion
