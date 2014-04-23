@@ -41,7 +41,6 @@ cwmJsload.load(
 	{
 		script: window.cwmBookmarkletUrl + '/element-selector.js',
 		test: function() {
-console.log(typeof window.cwmElementSelector === 'object');
 			return (typeof window.cwmElementSelector === 'object');
 		}
 	},

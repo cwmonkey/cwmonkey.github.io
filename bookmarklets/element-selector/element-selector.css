@@ -1,18 +1,28 @@
 .element-selector-hover {
-	outline: 3px dashed red !important;
+	outline: 4px dashed red !important;
+	outline-offset: -2px;
 }
 
 #element-selector-selector {
-	background: #fff;
-	background: rgba(255,255,255,.9);
-	color: #000;
+	background: #000;
+	background: rgba(0,0,0,.7);
+	color: #fff;
 	position: fixed;
 	top: 0;
 	right: 0;
 	font-size: 16px;
-	padding: .5em;
+	padding: .5em .5em 0 .5em;
 	font-family: sans-serif;
 	z-index: 9999;
+}
+
+#element-selector-selector input {
+	width: 300px;
+}
+
+#element-selector-selector p {
+	padding: 0 0 .5em 0;
+	margin: 0;
 }
 
 #element-selector-selector.element-selector-hovered {
