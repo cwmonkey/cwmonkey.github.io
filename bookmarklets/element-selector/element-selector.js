@@ -7,23 +7,6 @@ var $body;
 var $selector;
 var css = '<link rel="stylesheet" id="place-image-css"/>';
 
-var mouseover = function(e) {
-	var $this = $(this);
-	e.stopPropagation();
-	$selector.empty();
-	$selector
-		.append($('<p/>').html(get_selector($this)))
-		.append($('<p/>').html(get_selector_by_class($this)))
-		;
-	$this.addClass('element-selector-hover');
-};
-
-var mouseout = function(e) {
-	var $this = $(this);
-	e.stopPropagation();
-	$this.removeClass('element-selector-hover');
-};
-
 var get_selector = function($this, buffer) {
 	buffer = buffer || [];
 
@@ -103,6 +86,26 @@ var guesses = {
 	get_selector: get_selector,
 	//by_id: get_selector_by_id,
 	by_class: get_selector_by_class
+};
+
+var mouseover = function(e) {
+	var $this = $(this);
+	e.stopPropagation();
+	$selector.empty();
+
+	for ( var g in guesses ) {
+		var guess = guesses[g];
+		$selector
+			.append($('<p/>').html(guess($this)))
+			;
+	}
+	$this.addClass('element-selector-hover');
+};
+
+var mouseout = function(e) {
+	var $this = $(this);
+	e.stopPropagation();
+	$this.removeClass('element-selector-hover');
 };
 
 var click = function(e) {
