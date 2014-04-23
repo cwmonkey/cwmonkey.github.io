@@ -12,6 +12,7 @@
 	font-size: 16px;
 	padding: .5em;
 	font-family: sans-serif;
+	z-index: 9999;
 }
 
 #element-selector-selector.element-selector-hovered {
