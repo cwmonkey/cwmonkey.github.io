@@ -1,0 +1,22 @@
+.element-selector-hover {
+	outline: 3px dashed red !important;
+}
+
+#element-selector-selector {
+	background: #fff;
+	background: rgba(255,255,255,.9);
+	color: #000;
+	position: fixed;
+	top: 0;
+	right: 0;
+	font-size: 16px;
+	padding: .5em;
+	font-family: sans-serif;
+}
+
+#element-selector-selector.element-selector-hovered {
+	bottom: 0;
+	left: 0;
+	top: auto;
+	right: auto;
+}
