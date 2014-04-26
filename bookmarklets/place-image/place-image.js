@@ -79,8 +79,8 @@ var sections = [
 				site: 'lorempixel.com',
 				template: 'http://lorempixel.com/{type}/{width}/{height}/{category}/{text}',
 				options: {
-					type: [{text: 'grayscale', value: 'g'}],
-					category: ['abstract', 'animals', 'business', 'cats', 'city', 'food', 'nightlife', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport']
+					type: ['None', {text: 'grayscale', value: 'g'}],
+					category: ['None', 'abstract', 'animals', 'business', 'cats', 'city', 'food', 'nightlife', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport']
 				}
 			},
 			{
@@ -417,7 +417,6 @@ var setup = function() {
 				if ( !found ) val = null;
 			}
 
-			//var option = options[i];
 			if ( val !== null && val !== 'None' && val !== '' ) {
 				reg = new RegExp('\\{' + i + '\\}');
 				url = url.replace(reg, val);
@@ -439,6 +438,12 @@ var setup = function() {
 		}, 100);
 	};
 
+	var changeTO;
+	var update_image_delay = function() {
+		clearTimeout(changeTO);
+		changeTO = setTimeout(update_image, 100);
+	};
+
 	var update_sections = function() {
 		var $sections = $menu.find('.place-image-section');
 		for ( var i = 0; i < $sections.length; i++ ) {
@@ -457,12 +462,10 @@ var setup = function() {
 		}
 	};
 
-	var changeTO;
 	$menu
 		.delegate('.place-image-section legend input', 'click', function(e) {
 			var $this = $(this);
-			clearTimeout(changeTO);
-			changeTO = setTimeout(function() {
+			setTimeout(function() {
 				var $section = $this.closest('.place-image-section');
 				$section.find('.place-image-site').prop({checked: $this.is(':checked')}).change();
 			}, 100);
@@ -472,7 +475,7 @@ var setup = function() {
 			setTimeout(function() {
 				var option_name = $this.data('option_name');
 				$.jStorage.set('place-image-' + option_name, $this.val());
-				update_image();
+				update_image_delay();
 			}, 0);
 		})
 		.delegate('#place-image-update', 'click', function(e) {
@@ -516,7 +519,7 @@ var setup = function() {
 				$.jStorage.set('place-image-' + $this.data('site'), $this.prop('checked'));
 				update_sections();
 				update_options();
-				update_image();
+				update_image_delay();
 			}, 0);
 		})
 		;
