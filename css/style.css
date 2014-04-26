@@ -845,7 +845,7 @@ a:hover {
 4.) Media Queries
 ------------------------------------------------------------ */
 
-@media all and (max-width: 1000px) {
+@media all and (max-width: 960px) {
 	body {
 		background: #2C2F3F;
 	}
