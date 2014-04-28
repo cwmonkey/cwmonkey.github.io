@@ -1,3 +1,36 @@
+/*
+
+Script loader for bookmarklets.
+
+Loads scripts in order and/or at the same time.
+
+Usage:
+cwmJsload.load(
+	// Loading via an object
+	{
+		script: 'path/to/script.js',
+		static: true, // false = append date-time string (default), true = do not
+		test: function() {
+			// return true = script already loaded
+		}
+	},
+
+	// Loading via a string:
+	'path/to/script.js',
+
+	// Loading via an array (scripts loaded asynchronously)
+	[
+		// more objects/strings/functions here
+	],
+
+	// Executing a function after scripts are loaded
+	function() {
+		// do stuff
+	}
+);
+
+*/
+
 // With help from Pablo Moretti, https://github.com/pablomoretti/jcors-loader
 
 (function (window) {
@@ -13,6 +46,7 @@
 		static: false
 	};
 
+	// Setup script loading buffer and run
 	var jsLoad = function(queue) {
 		this.buffer = [];
 		this.total = null;
@@ -40,11 +74,12 @@
 		this.stepBuffer();
 	};
 
+	// Run next item in buffer
 	jsLoad.prototype.stepBuffer = function() {
 		if ( !this.buffer.length ) return;
 		var step = this.buffer.shift();
 
-		if ( typeof step == 'function' ) {
+		if ( typeof step === 'function' ) {
 			step();
 			this.stepBuffer();
 		} else if ( toString.call(step) === "[object Array]" ) {
@@ -65,6 +100,7 @@
 		}
 	};
 
+	// Add script to header
 	jsLoad.prototype.addScript = function(step) {
 		var scr = step.script;
 		var script = node_createElementScript.cloneNode(true);
@@ -91,6 +127,7 @@
 		node_elementScript.parentNode.insertBefore(script, node_elementScript);
 	};
 
+	// Check for async loading completion and run next step in buffer
 	jsLoad.prototype.addDone = function() {
 		if ( this.total ) {
 			this.count++;
@@ -105,6 +142,7 @@
 	};
 
 	/* public */
+	// Public facing function to call jsLoad
 	var load = function() {
 		var queue = [];
 		for ( var i = 0; i < arguments.length; i++ ) {
