@@ -223,23 +223,11 @@ a:hover {
 		background: #2C2F3F;
 	}
 
-	#header,
-	#footer {
+	#header {
+		padding: 0 1em;
 		margin: 0;
 		border: none;
 		display: block;
-	}
-
-	#header .content,
-	#footer .content,
-	#content {
-		max-width: 100%;
-	}
-
-	#content .content {
-		border-radius: 0;
-		display: block;
-		border-bottom: none;
 	}
 
 	#sub {
@@ -248,14 +236,6 @@ a:hover {
 
 	#secondary {
 		margin-bottom: 0;
-	}
-
-	#footer {
-		border-top: 1px solid #fff;
-	}
-
-	#footer .content {
-		padding: 1.12em 1.12em 0 1.12em ;
 	}
 }
 
