@@ -24,36 +24,35 @@
 </head>
 
 <body>
-	<header id="header" role="banner"><div class="content">
+	<header id="header" role="banner">
 		<h4 id="title">
 			<a href="/">
 				Monkey's Junk
 			</a>
 		</h4>
-	</div></header>
+	</header>
 
-	<div id="content"><div class="content">
-		<main id="main">
-			<h1 id="main_headline"><a href="">
-				<strong>{{ page.title }}</strong>
-			</a></h1>
-			<div id="sub">
-				<div class="cms">
-					{{ content }}
-				</div>
+	<nav id="secondary">
+		<h5 class="headline">Junk</h5>
+		<ul class="list">
+			<li class="item">
+				<a href="/">Home</a>
+			</li>
+			<li class="item">
+				<a href="/bookmarklets">Bookmarklets</a>
+			</li>
+		</ul>
+	</nav>
+
+	<main id="main">
+		<h1 id="main_headline"><a href="">
+			<strong>{{ page.title }}</strong>
+		</a></h1>
+		<div id="sub">
+			<div class="cms">
+				{{ content }}
 			</div>
-		</main> <!-- /#primary -->
-		<nav id="secondary">
-			<h5 class="headline">Junk</h5>
-			<ul class="list">
-				<li class="item">
-					<a href="/">Home</a>
-				</li>
-				<li class="item">
-					<a href="/bookmarklets">Bookmarklets</a>
-				</li>
-			</ul>
-		</nav>
-	</div></div>
+		</div>
+	</main>
 </body>
 </html>
