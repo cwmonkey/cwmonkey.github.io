@@ -6,8 +6,8 @@
 name: cwmonkey.github.io
 description: 
 author:
-  name: Some Name
-  email: some.email@example.com
+  name: cwmonkey
+  email: monkey@mysmilies.com
 
 domain: cwmonkey.github.io
 # Grunt handles images and assets.
