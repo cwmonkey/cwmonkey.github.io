@@ -593,6 +593,12 @@ FileETag None
 
 </IfModule>
 
+<IfModule mod_headers.c>
+    <filesMatch "\.(ico|jpg|gif|jpeg|js|css|png)$">
+    Header set Cache-Control "max-age=29030400, public"
+    </filesMatch>
+</IfModule>
+
 # ------------------------------------------------------------------------------
 # | Filename-based cache busting                                               |
 # ------------------------------------------------------------------------------

@@ -133,9 +133,6 @@ a:hover {
     width: 1px;
 }
 
-#secondary .list {
-}
-
 #secondary .item {
 	display: inline-block;
 	margin-right: 1em;
@@ -236,6 +233,7 @@ a:hover {
 
 	#secondary {
 		margin-bottom: 0;
+		padding-left: 1em;
 	}
 }
 
