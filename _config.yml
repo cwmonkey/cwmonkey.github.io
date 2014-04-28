@@ -10,6 +10,8 @@ author:
   email: monkey@mysmilies.com
 
 domain: cwmonkey.github.io
+javascripts: javascripts-minify.html
+stylesheets: stylesheets-minify.html
 # Grunt handles images and assets.
 # exclude: ['images', 'css', 'js', 'fonts',
 #           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
