@@ -371,6 +371,7 @@ a:hover {
 #secondary .item a:active,
 #secondary .item a:hover {
 	background: #6E738F;
+	color: #fff;
 }
 
 #sub {
