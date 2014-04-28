@@ -23,6 +23,8 @@ body {
 	background: #6E738F;
 	font-size: 16px;
 	color: #ddd;
+	position: relative;
+	overflow: hidden;
 }
 
 a:link {
@@ -77,6 +79,19 @@ a:hover {
 #main {
 	max-width: 50em;
 	margin-left: 3em;
+	left: 0;
+	transition: left .2s linear;
+	position: relative;
+}
+
+#main.loading {
+	left: -100%;
+}
+
+#main.unloaded {
+	transition: none;
+	right: auto;
+	left: 100%;
 }
 
 #main_headline {
