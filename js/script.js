@@ -7,37 +7,59 @@ if (!SimpleHistory.supported) {
 var $body = $('body');
 var $main = $('#main');
 var $title = $('title');
-var has_transitionend = ('ontransitionend' in window);
 var $div = $('<div/>');
 var path;
 
-var onunload = function() {
-	$div.load(path + ' #main, title', function() {
-		$main.html($div.find('#main').html());
-		$title.html($div.find('title').html());
+var has_transitionend = ('ontransitionend' in window);
 
-		if ( has_transitionend ) {
-			$main
-				.unbind('transitionend', onunload)
-				.addClass('unloaded')
-				.removeClass('loading')
-				;
+$.fn.addClassWait = function(name) {
+	var $el = this;
+	var deferred = new $.Deferred();
 
-			setTimeout(function() {
-				$main.removeClass('unloaded');
-			}, 0);
-		}
+	if ( !has_transitionend ) {
+		this.addClass(name);
+		deferred.resolve();
+		return deferred;
+	}
+
+
+	var transitionender = function() {
+		$el.unbind('transitionend', transitionender);
+		deferred.resolve();
+	};
+
+	$el
+		.bind('transitionend', transitionender)
+		.addClass(name);
+
+	return deferred;
+}
+
+$.load =  function($el, path) {
+	var deferred = new $.Deferred();
+
+	$div.load(path, function() {
+		deferred.resolve();
 	});
+
+	return deferred;
 };
 
 var load_page = function(path) {
-	if ( has_transitionend ) {
-		$main.bind('transitionend', onunload)
-		.addClass('loading')
-		;
-	} else {
-		onunload();
-	}
+	$.when(
+		$.load($div, path + ' #main, title'),
+		$main.addClassWait('loading')
+	)
+	.done(function() {
+		$main.html($div.find('#main').html());
+		$title.html($div.find('title').html());
+
+		$main
+			.addClass('unloaded')
+			.removeClass('loading')
+			$main.removeClass('unloaded');
+			;
+	});
 };
 
 $body
