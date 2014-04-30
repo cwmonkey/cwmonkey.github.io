@@ -43,7 +43,7 @@ cwmJsload.load(
 			script: '//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js',
 			static: true,
 			test: function() {
-				return typeof JSON == "object";
+				return typeof JSON === "object";
 			}
 		}
 	],
@@ -54,15 +54,13 @@ cwmJsload.load(
 			return ( (window.jQuery && window.jQuery.jStorage) || (window.jQueryCwm && window.jQueryCwm.jStorage) || (window.$ && window.$.jStorage) );
 		}
 	},
-	{
-		script: window.cwmBookmarkletUrl + '/place-image.js',
-		test: function() {
-			return typeof window.cwmPlaceImage === 'object';
-		}
-	},
 	// Load script callback
 	function() {
-		window.cwmPlaceImage.main(window.jQueryCwm || window.jQuery);
+		if ( typeof window.cwmPlaceImage.main === 'undefined' ) {
+			window.cwmPlaceImage.load(window, window.jQueryCwm || window.jQuery);
+		}
+
+		window.cwmPlaceImage.main();
 	}
 );
 
