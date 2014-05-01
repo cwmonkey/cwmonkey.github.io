@@ -152,8 +152,12 @@ a:hover {
 
 #sub {
 	background: #2C2F3F;
-	padding: 2em 3em;
+	padding: 2em 3em 2em 3em;
 	line-height: 1.5;
+}
+
+#sub .about p {
+	margin-left: 1.5em;
 }
 
 /* ------------------------------------------------------------

@@ -105,6 +105,7 @@ a{text-decoration:none;font-size:1.1em}#secondary
 a{display:inline-block;padding: .5em 1em}#secondary .item a:focus,
 #secondary .item a:active,
 #secondary .item a:hover{background:#6E738F;color:#fff}#sub{background:#2C2F3F;padding:2em
-3em;line-height:1.5}.visuallyhidden{border:0;clip:rect(0 0 0 0);height:1px;margin: -1px;overflow:hidden;padding:0;position:absolute;width:1px}.visuallyhidden.focusable:active,.visuallyhidden.focusable:focus{clip:auto;height:auto;margin:0;overflow:visible;position:static;width:auto}@media all and (max-width: 53em){#main{margin:0;max-width:100%}#main_headline{margin-left:0}}@media all and (max-width: 50em){body{background:#2C2F3F}#header{padding:0
+3em 2em 3em;line-height:1.5}#sub .about
+p{margin-left:1.5em}.visuallyhidden{border:0;clip:rect(0 0 0 0);height:1px;margin: -1px;overflow:hidden;padding:0;position:absolute;width:1px}.visuallyhidden.focusable:active,.visuallyhidden.focusable:focus{clip:auto;height:auto;margin:0;overflow:visible;position:static;width:auto}@media all and (max-width: 53em){#main{margin:0;max-width:100%}#main_headline{margin-left:0}}@media all and (max-width: 50em){body{background:#2C2F3F}#header{padding:0
 1em;margin:0;border:none;display:block}#sub{padding:1em}#secondary{margin-bottom:0;padding-left:1em}}@media all and (max-width: 600px){#title
 a{font-size:1.5em}}

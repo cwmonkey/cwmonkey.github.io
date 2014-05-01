@@ -3,30 +3,38 @@ layout: default
 title: Bookmarklets - Clean Stream
 ---
 
-<p>
-	Drag the link to your shortcuts bar:
-</p>
+<section class="usage cms">
+	<h3>Usage and description</h3>
 
-<p>
-	<a href="javascript:(function(){url='//{{ site.domain }}/bookmarklets/clean-stream/bookmarklet.js';document.body.appendChild(document.createElement('script')).src=url+'?'+new Date().getTime();})();">Clean Stream</a>
-</p>
+	<p>
+		Drag the link to your shortcuts bar:
+	</p>
 
-<p>
-	When you are on a page with a stream (or any flash player) click the bookmarklet and it will remove everything that is not a flash player from the page. It will also stretch the flash player to fit the browser window.
-</p>
+	<p>
+		<a href="javascript:(function(){url='//{{ site.domain }}/bookmarklets/clean-stream/bookmarklet.js';document.body.appendChild(document.createElement('script')).src=url+'?'+new Date().getTime();})();">Clean Stream</a>
+	</p>
 
-<p>
-	This doesn't work 100% of the time, but if it messes the page up all you have to do is refresh.
-</p>
+	<p>
+		When you are on a page with a stream (or any flash player) click the bookmarklet and it will remove everything that is not a flash player from the page. It will also stretch the flash player to fit the browser window.
+	</p>
 
-<p>
-	<strong>Update - Apr 3, 2014:</strong> Now works with the <a href="http://network.wwe.com/">WWE Network player</a>.
-</p>
+	<p>
+		This doesn't work 100% of the time, but if it messes the page up all you have to do is refresh.
+	</p>
 
-<p>
-	<strong>Update - Apr 4, 2014:</strong> Now works with https sites (like youtube). You will need to re-add the bookmarklet (and get rid of the old one) for this update to take effect.
-</p>
+	<p>
+		<strong>Update - Apr 3, 2014:</strong> Now works with the <a href="http://network.wwe.com/">WWE Network player</a>.
+	</p>
 
-<p>
-	<object width="420" height="315"><param name="movie" value="//www.youtube.com/v/dQw4w9WgXcQ?version=3&amp;hl=en_US&amp;rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="//www.youtube.com/v/dQw4w9WgXcQ?version=3&amp;hl=en_US&amp;rel=0" type="application/x-shockwave-flash" width="420" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>
-</p>
+	<p>
+		<strong>Update - Apr 4, 2014:</strong> Now works with https sites (like youtube). You will need to re-add the bookmarklet (and get rid of the old one) for this update to take effect.
+	</p>
+
+	<p>
+		<object width="420" height="315"><param name="movie" value="//www.youtube.com/v/dQw4w9WgXcQ?version=3&amp;hl=en_US&amp;rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="//www.youtube.com/v/dQw4w9WgXcQ?version=3&amp;hl=en_US&amp;rel=0" type="application/x-shockwave-flash" width="420" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>
+	</p>
+
+	<p>
+		You can <a href="https://github.com/cwmonkey/cwmonkey.github.io/blob/master/_includes/js/clean-stream.js">view the source of this bookmarklet here</a>.
+	</p>
+</section>
