@@ -14,9 +14,9 @@ cwmJsload.load(
 			var v3 = 2;
 			var hasJquery = false;
 
-			if ( typeof window.jQueryCwm != 'undefined' ) return true;
+			if ( typeof window.jQueryCwm !== 'undefined' ) return true;
 
-			if ( typeof window.jQuery != 'undefined' ) {
+			if ( typeof window.jQuery !== 'undefined' ) {
 				var vs = window.jQuery.fn.jquery.split('.');
 				if ( vs[0] > v1 ) return had_jQuery = true;
 				if ( vs[0] < v1 ) return false;
@@ -38,15 +38,13 @@ cwmJsload.load(
 			}
 		}
 	},
-	{
-		script: window.cwmBookmarkletUrl + '/element-selector.js',
-		test: function() {
-			return (typeof window.cwmElementSelector === 'object');
-		}
-	},
 	// Load script callback
 	function() {
-		window.cwmElementSelector.main(window.jQueryCwm || window.jQuery);
+		if ( typeof window.cwmElementSelector.main === 'undefined' ) {
+			window.cwmElementSelector.load(window, window.jQueryCwm || window.jQuery);
+		}
+
+		window.cwmElementSelector.main();
 	}
 );
 
