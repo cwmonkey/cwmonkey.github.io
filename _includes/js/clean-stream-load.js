@@ -12,9 +12,9 @@ cwmJsload.load(
 			var v3 = 2;
 			var hasJquery = false;
 
-			if ( typeof window.jQueryCwm != 'undefined' ) return true;
+			if ( typeof window.jQueryCwm !== 'undefined' ) return true;
 
-			if ( typeof window.jQuery != 'undefined' ) {
+			if ( typeof window.jQuery !== 'undefined' ) {
 				var vs = window.jQuery.fn.jquery.split('.');
 				if ( vs[0] > v1 ) return true;
 				if ( vs[0] < v1 ) return false;
@@ -37,10 +37,13 @@ cwmJsload.load(
 			console.log('Second jQuery: ', window.jQueryCwm.fn.jquery);*/
 		}
 	},
-	window.cwmBookmarkletUrl + '/clean-stream.js',
 	// Load script callback
 	function() {
-		window.cwmCleanStream.main(window.jQueryCwm || window.jQuery);
+		if ( typeof window.cwmCleanStream.main === 'undefined' ) {
+			window.cwmCleanStream.load(window, window.jQueryCwm || window.jQuery);
+		}
+
+		window.cwmCleanStream.main();
 	}
 );
 
