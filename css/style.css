@@ -7,6 +7,24 @@
 	5.) Media Queries
 */
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
+}
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; left: 0; }
+      to { opacity: 0; left: 0; }
+}
+@-webkit-keyframes fadeOut {
+    from { opacity: 1; left: 0; }
+      to { opacity: 0; left: 0; }
+}
+
 /* ------------------------------------------------------------
 1.) General Site Layout
 ------------------------------------------------------------ */
@@ -24,7 +42,7 @@ body {
 	font-size: 16px;
 	color: #ddd;
 	position: relative;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 a:link {
@@ -82,6 +100,7 @@ a:hover {
 	left: 0;
 	transition: left .2s linear;
 	position: relative;
+	z-index: 0;
 }
 
 #main.loading {
@@ -111,10 +130,14 @@ a:hover {
 	display: block;
 }
 
+/* Site Nav */
+
 #secondary {
 	background: #3C3F4F;
 	margin-bottom: 2em;
 	padding-left: 3em;
+	position: relative;
+	z-index: 2;
 }
 
 #secondary a {
@@ -139,17 +162,74 @@ a:hover {
 }
 
 #secondary .item a {
-	display: inline-block;
+	display: block;
 	padding: .5em 1em;
 }
 
 #secondary .item a:focus,
-#secondary .item a:active,
 #secondary .item a:hover {
 	background: #6E738F;
 	color: #fff;
 }
 
+#secondary .list .list {
+	position: absolute;
+	left: -9999px;
+	top: 100%;
+	background: #3C3F4F;
+	padding: 0;
+
+	/* one day this may work */
+	-webkit-animation: fadeOut .2s ease-in-out;
+	animation: fadeOut .2s ease-in-out;
+	z-index: -1;
+	opacity: 0;
+}
+
+#secondary .item.has_focus .list,
+#secondary .item:hover .list {
+	-webkit-animation: fadeIn .2s ease-in-out;
+	animation: fadeIn .2s ease-in-out;
+	opacity: 1;
+	z-index: 2;
+	left: 0;
+}
+
+#secondary .item {
+	position: relative;
+}
+
+#secondary .item.has_focus,
+#secondary .item:hover {
+	padding: 0;
+	z-index: 2;
+}
+
+#secondary .item .item {
+	display: block;
+	white-space: nowrap;
+	margin: 0;
+}
+
+#secondary .item .item a {
+	padding: .5em 1em;
+	display: block;
+
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+}
+
+#secondary .item .item a:focus,
+#secondary .item .item a:hover {
+	background: #6E738F;
+}
+
+#secondary .item .item:hover  {
+	border: none;
+	border-bottom: none;
+}
+
+/* Page content */
 #sub {
 	background: #2C2F3F;
 	padding: 2em 3em 2em 3em;
@@ -239,10 +319,94 @@ a:hover {
 		margin-bottom: 0;
 		padding-left: 1em;
 	}
+
+	img,
+	object,
+	embed {
+		max-width: 100%;
+	}
 }
 
 @media all and (max-width: 600px) {
+	body {
+		transition: margin .2s linear;
+		margin-top: 2.2em;
+	}
+
+	body.navopen {
+		margin-right: -10em;
+		margin-left: 10em;
+	}
+
+	#header {
+		transition: margin .2s linear;
+		position: fixed;
+		top: 0;
+		left: 0;
+		white-space: nowrap;
+		z-index: 2;
+		width: 100%;
+		background: #6C6F9F;
+	}
+
+	.navopen #header {
+		margin-left: 10em;
+	}
+
 	#title a {
-		font-size: 1.5em;
+		font-size: 1.1em;
+		background-position: 0 -5px;
+		margin-left: 2em;
+		padding-left: 95px;
+	}
+
+	#secondary {
+		transition: left .2s linear;
+		position: fixed;
+		top: 0;
+		width: 10em;
+		height: 100%;
+		padding: 0;
+		background: #a69c8a;
+		left: -10em;
+	}
+
+	.navopen #secondary {
+		left: 0;
+	}
+
+	#secondary a {
+		color: #fff;
+		display: block;
+		position: relative;
+		padding: .5em 1em;
+	}
+
+	#secondary .headline a:after {
+		content: "\00a0\00a0\00a0\00a0";
+		position: absolute;
+		right: -2em;
+		top: 0;
+		width: 1em;
+		height: 2.1em;
+		margin: 0 0 0 1em;
+		background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 24%,rgba(255,255,255,1) 25%,rgba(255,255,255,1) 35%,rgba(255,255,255,0) 36%,rgba(255,255,255,0) 44%,rgba(255,255,255,1) 45%,rgba(255,255,255,1) 55%,rgba(255,255,255,0) 56%,rgba(255,255,255,0) 64%,rgba(255,255,255,1) 65%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 76%,rgba(255,255,255,0) 100%); /* W3C */
+		text-indent: -1em;
+		line-height: 2em;
+	}
+
+	#secondary .headline {
+		clip: auto;
+		height: auto;
+		margin: 0;
+		overflow: visible;
+		position: static;
+		width: auto;
+		background: #867c6a;
+	}
+
+	#secondary .item {
+		display: block;
+		margin: 0;
 	}
 }

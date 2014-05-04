@@ -98,15 +98,29 @@ var load_page = function(path) {
 };
 
 $body
-	.delegate('a[href^="/"]', 'click', function(e) {
+	.delegate('a[href^="/"]', 'click', function(event) {
 		if (event.metaKey || event.shiftKey || event.ctrlKey) {
 			return;
 		}
 
 		event.preventDefault();
 		path = $(event.target).attr("href");
+
 		SimpleHistory.pushState(event.target.href);
-	});
+	})
+	.delegate('#secondary .headline a', 'click', function(event) {
+		event.preventDefault();
+
+		if ( $body.is('.navopen') ) {
+			$body.removeClass('navopen');
+		} else {
+			$body.addClass('navopen');
+		}
+	})
+	.delegate('#secondary .list a', 'click', function(event) {
+		$body.removeClass('navopen');
+	})
+	;
 
 SimpleHistory.start(function(path) {
 	load_page(path);
