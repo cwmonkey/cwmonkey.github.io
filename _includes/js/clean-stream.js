@@ -30,14 +30,16 @@ window.cwmCleanStream.load = function (window, $, undefined) {
 
 	// Main
 	var main = function() {
+		$('body').append('<style>embed,object{display:block}</style>');
+
 		$('iframe,embed,object').each(function() {
 			var $this = $(this);
 			//if ( $this.css('display') === 'inline' ) $this.css('display', 'block');
 
 			var width = $this.width();
-			//var height = $this.height();
+			var height = $this.height();
 
-			if ( width < 300 /* || height < 300 */ ) {
+			if ( width < 300 || height < 300 ) {
 				$this.remove();
 			}
 		});
@@ -73,7 +75,25 @@ window.cwmCleanStream.load = function (window, $, undefined) {
 		} else {
 			var $cleanStreamCss = $('#cleanStreamCss');
 			if ( !$cleanStreamCss.length ) {
-				$('body').append('<style id="cleanStreamCss">*{max-width:auto !important;max-height:auto !important;padding:0 !important;margin:0 !important;width:100% !important;height:100% !important;overflow:hidden !important;display:block !important}param{display:none !important}</style>');
+				$('body').append('<style id="cleanStreamCss">\
+					* {\
+						border: 0;\
+						max-width:auto !important;\
+						max-height:auto !important;\
+						padding:0 !important;\
+						margin:0 !important;\
+						width:100% !important;\
+						height:100% !important;\
+						overflow:hidden !important;\
+						Xdisplay:block !important\
+						font-size: 0 !important;\
+						line-height: 0 !important;\
+						border-spacing: 0 !important;\
+					}\
+					param {\
+						display:none !important\
+					}\
+				</style>');
 			}
 		}
 	};
