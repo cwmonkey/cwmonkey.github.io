@@ -47,16 +47,16 @@ window.cwmCleanStream.load = function (window, $, undefined) {
 		// TODO: fix this logic up, refactor
 		// Youtube
 		if ( document.location.hostname == 'www.youtube.com' ) {
-			$('*:not(embed,object,param,#cleanStreamCss):not(:has(embed,object,param))').remove();
+			$('*:not(video,embed,object,param,#cleanStreamCss):not(:has(video,embed,object,param))').remove();
 		} else if ( document.location.hostname != 'network.wwe.com' ) {
-			$('*:not(iframe,embed,object,param,#cleanStreamCss):not(:has(iframe,embed,object,param))').remove();
+			$('*:not(iframe,video,embed,object,param,#cleanStreamCss):not(:has(iframe,video,embed,object,param))').remove();
 		}
 
 		// WWE Network
 		if ( document.location.hostname == 'network.wwe.com' ) {
 			var $videoContainer = $('#videoContainer');
 			$videoContainer.appendTo('body');
-			$('*:not(iframe,embed,object,param,#cleanStreamCss):not(:has(iframe,embed,object,param))').remove();
+			$('*:not(iframe,video,embed,object,param,#cleanStreamCss):not(:has(iframe,video,embed,object,param))').remove();
 
 			var $cleanStreamCss = $('#cleanStreamCss');
 			if ( !$cleanStreamCss.length ) {
