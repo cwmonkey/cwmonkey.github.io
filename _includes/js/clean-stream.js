@@ -4,19 +4,31 @@ window.cwmCleanStream.load = function (window, $, undefined) {
 	'use strict';
 
 	// WWE Network Resize
+	var oldw;
+	var oldh;
 	var wwe_network_resize = function() {
 		// var $body = $('body');
 		var $videoContainer = $('#videoContainer');
 		var html = $videoContainer.html();
 		var w = $videoContainer.width();
 		var h = $videoContainer.height();
-		var r = 16 / 9;
+		// Ratio vars
+		var rw = 16;
+		var rh = 9;
+		var r = rw / rh;
 		var tr = w / h;
 
 		if ( tr < r ) {
-			h = Math.floor(9 / 16 * w);
+			h = Math.floor(rh / rw * w);
 		} else {
-			w = Math.floor(16 / 9 * h);
+			w = Math.floor(rw / rh * h);
+		}
+
+		if ( h != oldh || w != oldw ) {
+			oldh = h;
+			oldw = w;
+		} else {
+			return;
 		}
 
 		html = html
