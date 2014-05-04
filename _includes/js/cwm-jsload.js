@@ -57,7 +57,7 @@ cwmJsload.load(
 
 			if ( typeof step === 'string' ) {
 				queue[i] = {script: step, static: step_defaults.static};
-			} else if ( toString.call(step) === "[object Array]" ) {
+			} else if ( step.toString() === "[object Array]" ) {
 				for ( var j = 0; j < step.length; j++ ) {
 					var substep = step[j];
 					if ( typeof substep === 'string' ) {
@@ -82,7 +82,7 @@ cwmJsload.load(
 		if ( typeof step === 'function' ) {
 			step();
 			this.stepBuffer();
-		} else if ( toString.call(step) === "[object Array]" ) {
+		} else if ( step.toString() === "[object Array]" ) {
 			this.total = step.length;
 			this.count = 0;
 			for ( var i = 0; i < step.length; i++ ) {
