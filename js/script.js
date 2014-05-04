@@ -34,20 +34,26 @@ var $title = $('title');
 var $div = $('<div/>');
 var path;
 
+/* addClassWait:
+	returns a jQuery promise after adding a class which is resolved when animation is done */
+
+// TODO: broswer prefixes
 var has_transitionend = ('ontransitionend' in window);
 
 $.fn.addClassWait = function(name) {
 	var $el = this;
 	var deferred = new $.Deferred();
+	// TODO: broswer prefixes
+	var duration = parseFloat($el.css('transition-duration'));
 
-	if ( !has_transitionend ) {
+	if ( !has_transitionend || isNaN(duration) || !duration ) {
 		this.addClass(name);
 		deferred.resolve();
 		return deferred;
 	}
 
-
 	var transitionender = function() {
+		// TODO: broswer prefixes
 		$el.unbind('transitionend', transitionender);
 		deferred.resolve();
 	};
@@ -58,7 +64,9 @@ $.fn.addClassWait = function(name) {
 
 	return deferred;
 }
+/* /addClassWait */
 
+/* jQuery.fn.load wrapper which returns a promise */
 $.load =  function($el, path) {
 	var deferred = new $.Deferred();
 
