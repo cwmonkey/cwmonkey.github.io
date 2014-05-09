@@ -3,25 +3,20 @@
 var $body = $('body');
 
 /* Nav dropdown */
-if ( false ) {
 $body
-	.delegate('#secondary .item', 'mouseover focusin', function() {
+	.delegate('#secondary .item', 'mouseenter focusin', function() {
 		var $this = $(this);
 		$this.addClass('has_focus');
 	})
-	.delegate('#secondary .item', 'mouseout focusout', function() {
+	.delegate('#secondary .item', 'mouseleave focusout', function() {
 		var $this = $(this);
 		$this.removeClass('has_focus');
 	})
 	.delegate('#secondary .item', 'click', function() {
 		var $this = $(this);
-		$this
-			.addClass('click')
-			.removeClass('click')
-			;
+		$this.closest('.has_focus').removeClass('has_focus');
 	})
 	;
-}
 /* /Nav dropdown */
 
 /* Faux ajax */
@@ -34,14 +29,13 @@ var $title = $('title');
 var $div = $('<div/>');
 var path;
 
-/* addClassWait:
+/* jQuery.addClassWait:
 	returns a jQuery promise after adding a class which is resolved when animation is done */
 
 // TODO: broswer prefixes
 var has_transitionend = ('ontransitionend' in window);
 
-$.fn.addClassWait = function(name) {
-	var $el = this;
+$.addClassWait = function($el, name) {
 	var deferred = new $.Deferred();
 	// TODO: broswer prefixes
 	var duration = parseFloat($el.css('transition-duration'));
@@ -64,7 +58,7 @@ $.fn.addClassWait = function(name) {
 
 	return deferred;
 }
-/* /addClassWait */
+/* /jQuery.addClassWait */
 
 /* jQuery.fn.load wrapper which returns a promise */
 $.load =  function($el, path) {
@@ -76,11 +70,12 @@ $.load =  function($el, path) {
 
 	return deferred;
 };
+/* /jQuery.load */
 
 var load_page = function(path) {
 	$.when(
 		$.load($div, path + ' #main, title'),
-		$main.addClassWait('loading')
+		$.addClassWait($main, 'loading')
 	)
 	.done(function() {
 		$main.html($div.find('#main').html());
