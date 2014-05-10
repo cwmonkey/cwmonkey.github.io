@@ -5,7 +5,7 @@
 (function(window, $, undefined) {
 
 // TODO: broswer prefixes
-var has_transitionend = ('ontransitionend' in window);
+var has_transitionend = ('TransitionEvent' in window);
 
 $.addClassWait = function($el, name) {
 	var deferred = new $.Deferred();
