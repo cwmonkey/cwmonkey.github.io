@@ -12,7 +12,7 @@ $.addClassWait = function($el, name) {
 	var duration = parseFloat($el.css('transition-duration'));
 
 	if ( !has_transitionend || isNaN(duration) || !duration ) {
-		this.addClass(name);
+		$el.addClass(name);
 		deferred.resolve();
 		return deferred;
 	}

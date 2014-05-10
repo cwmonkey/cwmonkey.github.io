@@ -41,7 +41,7 @@ var load_page = function(path) {
 		$main
 			.addClass('unloaded')
 			.removeClass('loading')
-			$main.removeClass('unloaded');
+			.removeClass('unloaded')
 			;
 
 		// Analytics
