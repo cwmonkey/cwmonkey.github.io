@@ -5,12 +5,13 @@ $('html').removeClass('no-js').addClass('js');
 var $body = $('body');
 
 /* Nav dropdown */
-var nav_TO;
+var nav_focus_TO;
+var nav_unfocus_TO;
 $body
 	.delegate('#secondary .item', 'mouseenter focusin', function() {
 		var $this = $(this);
-		clearTimeout(nav_TO);
-		nav_TO = setTimeout(function() {
+		clearTimeout(nav_focus_TO);
+		nav_focus_TO = setTimeout(function() {
 			$this
 				.removeClass('has_no_focus')
 				.addClass('has_focus');
@@ -18,8 +19,8 @@ $body
 	})
 	.delegate('#secondary .item', 'mouseleave focusout', function() {
 		var $this = $(this);
-		clearTimeout(nav_TO);
-		nav_TO = setTimeout(function() {
+		clearTimeout(nav_unfocus_TO);
+		nav_unfocus_TO = setTimeout(function() {
 			$this
 				.removeClass('has_focus')
 				.addClass('has_no_focus');
