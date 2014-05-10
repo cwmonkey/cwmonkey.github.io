@@ -100,7 +100,7 @@ fadeOut{from{opacity:1;left:0}to{opacity:0;left:0}}*,*:before,*:after{-moz-box-s
 0 0 3em;position:relative}#header
 a{color:#fff;text-decoration:none}#header a:focus,
 #header a:hover,
-#header a:active{color:#6E738F}#title
+#header a:active{color:#FFE7BF}#title
 a{padding-left:110px;font-family:"Ranchers",sans-serif;font-size:2.5em;text-shadow:2px 2px 2px #000;line-height:2;background:url(http://mysmilies.com/images/monkey.png) left -5px no-repeat;display:block}#main{max-width:50em;margin-left:3em;left:0;transition:margin .2s linear, left .2s linear;position:relative;z-index:0}#main.loading{left: -100%}#main.unloaded{transition:none;right:auto;left:100%}#main_headline{position:relative;font-weight:bold;padding: .5em 1em;border-bottom:none;background:#f6ecda;margin-left: -3em}#main_headline
 a{color:#000;text-decoration:none;font-weight:bold;font-size:1.2em;display:block}#secondary{background:#3C3F4F;margin-bottom:2em;padding-left:3em;position:relative;z-index:2}#secondary
 a{text-decoration:none;font-size:1.1em}#secondary
@@ -108,7 +108,8 @@ a{text-decoration:none;font-size:1.1em}#secondary
 .item{display:inline-block;margin-right:1em;vertical-align:bottom}#secondary .item
 a{display:block;padding: .5em 1em}#secondary .item a:focus,
 #secondary .item a:hover{background:#2C2F3F;color:#fff}#secondary .list
-.list{position:absolute;left: -9999px;top:100%;background:#3C3F4F;padding:0;-webkit-animation:fadeOut .2s linear;animation:fadeOut .2s linear;z-index: -1;opacity:0}#secondary .item.has_focus
+.list{position:absolute;left: -9999px;top:100%;background:#3C3F4F;padding:0;z-index: -1;opacity:0}#secondary .has_no_focus
+.list{-webkit-animation:fadeOut .2s linear;animation:fadeOut .2s linear}#secondary .item.has_focus
 .list{-webkit-animation:fadeIn .2s linear;animation:fadeIn .2s linear;opacity:1;z-index:2;left:0}#secondary
 .item{position:relative}#secondary
 .item.has_focus{padding:0;z-index:2}#secondary .item

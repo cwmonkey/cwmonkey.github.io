@@ -1,20 +1,35 @@
 (function(window, $, undefined){
 
+$('html').removeClass('no-js').addClass('js');
+
 var $body = $('body');
 
 /* Nav dropdown */
+var nav_TO;
 $body
 	.delegate('#secondary .item', 'mouseenter focusin', function() {
 		var $this = $(this);
-		$this.addClass('has_focus');
+		clearTimeout(nav_TO);
+		nav_TO = setTimeout(function() {
+			$this
+				.removeClass('has_no_focus')
+				.addClass('has_focus');
+		}, 0);
 	})
 	.delegate('#secondary .item', 'mouseleave focusout', function() {
 		var $this = $(this);
-		$this.removeClass('has_focus');
+		clearTimeout(nav_TO);
+		nav_TO = setTimeout(function() {
+			$this
+				.removeClass('has_focus')
+				.addClass('has_no_focus');
+		}, 0);
 	})
 	.delegate('#secondary .item', 'click', function() {
 		var $this = $(this);
-		$this.closest('.has_focus').removeClass('has_focus');
+		$this.closest('.has_focus')
+			.removeClass('has_focus')
+			.addClass('has_no_focus');
 	})
 	;
 /* /Nav dropdown */
@@ -24,7 +39,7 @@ if (!SimpleHistory.supported) {
 	return;
 }
 
-var $main = $('#main');
+var $main = $('#main').attr('tabIndex', '-1');
 var $title = $('title');
 var $div = $('<div/>');
 var path;
@@ -42,6 +57,7 @@ var load_page = function(path) {
 			.addClass('unloaded')
 			.removeClass('loading')
 			.removeClass('unloaded')
+			.focus()
 			;
 
 		// Analytics

@@ -79,7 +79,7 @@ a:hover {
 #header a:focus,
 #header a:hover,
 #header a:active {
-	color: #6E738F;
+	color: #FFE7BF;
 }
 
 #title a {
@@ -179,12 +179,13 @@ a:hover {
 	top: 100%;
 	background: #3C3F4F;
 	padding: 0;
-
-	/* one day this may work */
-	-webkit-animation: fadeOut .2s linear;
-	animation: fadeOut .2s linear;
 	z-index: -1;
 	opacity: 0;
+}
+
+#secondary .has_no_focus .list {
+	-webkit-animation: fadeOut .2s linear;
+	animation: fadeOut .2s linear;
 }
 
 #secondary .item.has_focus .list {
