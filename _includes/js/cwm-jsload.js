@@ -82,7 +82,7 @@ cwmJsload.load(
 		if ( typeof step === 'function' ) {
 			step();
 			this.stepBuffer();
-		} else if ( step.toString() === "[object Array]" ) {
+		} else if ( step instanceof Array ) {
 			this.total = step.length;
 			this.count = 0;
 			for ( var i = 0; i < step.length; i++ ) {
