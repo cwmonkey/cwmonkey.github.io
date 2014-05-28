@@ -217,7 +217,7 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 	var setup = function() {
 		$body = $('body');
 
-		$last_input = $('input[type="text"]:focus');
+		$last_input = $('input[type="text"]:focus, textarea:focus');
 
 		$menu = $(tpl)
 			.attr({tabIndex: '-1'})
@@ -526,7 +526,7 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 			;
 
 		$body
-			.delegate('input:not(#place-image-menu input)', 'focus', function(e) {
+			.delegate('input:not(#place-image-menu input), textarea', 'focus', function(e) {
 				$last_input = $(this);
 				$update.show();
 			})
