@@ -1,5 +1,3 @@
-// WTF
-
 window.cwmCleanStream = window.cwmCleanStream || {};
 
 window.cwmCleanStream.load = function (window, $, undefined) {
