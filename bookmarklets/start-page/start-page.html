@@ -39,19 +39,30 @@ main {
 	vertical-align: middle;
 }
 
-article {
+.bookmark {
 	display: inline-block;
 	vertical-align: top;
-	margin: 0 10px;
+	margin: 5px;
 	position: relative;
 	width: 138px;
+	text-decoration: none;
+	padding: 5px;
+	border-radius: 5px;
+	color: #7f7f7f;
+	background: #fff;
+	transition: background-color .1s linear;
+}
+
+.bookmark:focus,
+.bookmark:hover {
+	background: #eeeeee;
 }
 
 .icon {
 	position: absolute;
 	left: 50%;
 	margin-left: -8px;
-	top: 75px;
+	top: 80px;
 }
 
 img {
@@ -63,10 +74,6 @@ img {
 	border-radius: 5px;
 }
 
-a:hover .thumb {
-	border-color: #7f7f7f;
-}
-
 h1 {
 	width: 100%;
 	overflow: hidden;
@@ -74,9 +81,20 @@ h1 {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	font-size: 11px;
-	color: rgb(119, 119, 119);
 	font-weight: normal;
-	margin: 5px 0 25px 0;
+	margin: 5px 0 5px 0;
+}
+
+.edit {
+	color: #ddd;
+	text-decoration: none;
+	margin-top: 2em;
+	display: block;
+}
+
+.edit:hover,
+.edit:focus {
+	text-decoration: underline;
 }
 </style>
 
@@ -89,15 +107,17 @@ h1 {
 
 <div id="wrapper">
 	<main>
+		<div></div>
+		<a class="edit" href="start-page-edit.html">Edit</a>
 	</main>
 </div>
 
 <script>
 
 var wrapper = document.getElementById('wrapper');
-var main = wrapper.getElementsByTagName('main')[0];
+var main = wrapper.getElementsByTagName('main')[0].getElementsByTagName('div')[0];
 
-var a, article, thumb, icon, h1, i, l, site, sites, hashes, keyval;
+var a, article, thumb, icon, h1, i, l, newsite, site, site_found = false, sites, hashes, keyval;
 
 sites = localStorage.getItem('sites') || [
 	{
@@ -115,15 +135,24 @@ if ( typeof sites == 'string' ) {
 }
 
 if ( document.location.hash ) {
-	hashes = document.location.hash.split('&');
+	hashes = document.location.hash.substring(1).split('&');
 	l = hashes.length;
-	site = {};
+	newsite = {};
 	for ( i = 0; i < l; i++ ) {
 		keyval = hashes[i].split('=');
-		site[keyval[0]] = decodeURIComponent(keyval[1]);
+		newsite[keyval[0]] = decodeURIComponent(keyval[1]);
 	}
 
-	sites.push(site);
+	l = sites.length;
+	for ( i = 0; i < l; i++ ) {
+		site = sites[i];
+		if ( newsite && site.href === newsite.href ) {
+			site = sites[i] = newsite;
+			site_found = true;
+		}
+	}
+
+	if ( !site_found ) sites.push(newsite);
 	localStorage.setItem('sites', JSON.stringify(sites));
 }
 
@@ -131,25 +160,33 @@ l = sites.length;
 
 for ( i = 0; i < l; i++ ) {
 	site = sites[i];
+
 	a = document.createElement('a');
 	a.href = site.href;
+	a.className = 'bookmark';
+
 	article = document.createElement('article');
+
 	thumb = new Image();
 	thumb.src = site.thumb;
 	thumb.width = 138;
 	thumb.height = 83;
 	thumb.className = 'thumb';
 	article.appendChild(thumb);
+
 	icon = new Image();
 	icon.src = site.icon;
 	icon.width = 16;
 	icon.height = 16;
 	icon.className = 'icon';
 	article.appendChild(icon);
+
 	h1 = document.createElement('h1');
 	h1.innerHTML = site.title;
 	article.appendChild(h1);
+
 	a.appendChild(article);
+
 	main.appendChild(a);
 }
 
