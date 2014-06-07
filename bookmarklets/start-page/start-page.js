@@ -51,6 +51,11 @@ window.cwmStartPage.load = function (window, $, undefined) {
 					check_forward();
 				}
 
+				img.onerror = function() {
+					thumb = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+					check_forward();
+				};
+
 				img.src = canvas.toDataURL('image/gif');
 			}
 		});
