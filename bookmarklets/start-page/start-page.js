@@ -13,10 +13,11 @@ window.cwmStartPage.load = function (window, $, undefined) {
 	var main = function() {
 		var check_forward = function() {
 			if ( !thumb || !favicon ) return;
-			document.location = (window.cwmBookmarkletUrl + '/start-page.html#href=' + encodeURIComponent(document.location.href) + '&title=' + encodeURIComponent(document.title) + '&thumb=' + encodeURIComponent(thumb) + '&icon=' + favicon);
+			document.location = (window.cwmBookmarkletUrl + '/start-page.html#href=' + encodeURIComponent(document.location.href) + '&title=' + encodeURIComponent(document.title) + '&thumb=' + encodeURIComponent(thumb) + '&icon=' + encodeURIComponent(favicon));
 		};
 
 		html2canvas(document.body, {
+			useCORS: true,
 			onrendered: function(canvas) {
 				var img = new Image();
 				var ctx = canvas.getContext('2d');
@@ -25,13 +26,18 @@ window.cwmStartPage.load = function (window, $, undefined) {
 				var ratio = 1;
 				var maxWidth = 138;
 				var maxHeight = 83;
+				var maxRatio = maxWidth / maxHeight;
 				var src;
+				var wR;
+				var hR;
 
 				img.onload = function() {
-					if ( img.width > maxWidth ) {
-						ratio = maxWidth / img.width;
-					} else if ( img.height > maxHeight ) {
-						ratio = maxHeight / img.height;
+					if ( img.width / img.height > maxRatio ) {
+						wR =  maxWidth / maxHeight * img.height;
+						hR = img.height;
+					} else if ( img.width / img.height < maxRatio ) {
+						wR = img.width;
+						hR =  maxHeight / maxWidth * img.width;
 					}
 
 					canvasCopy.width = img.width;
@@ -40,7 +46,7 @@ window.cwmStartPage.load = function (window, $, undefined) {
 
 					canvas.width = maxWidth;
 					canvas.height = maxHeight;
-					ctx.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height - 300, 0, 0, maxWidth, maxHeight);
+					ctx.drawImage(canvasCopy, 0, 0, wR, hR, 0, 0, maxWidth, maxHeight);
 					thumb = canvas.toDataURL('image/gif');
 					check_forward();
 				}
