@@ -13,7 +13,7 @@ window.cwmStartPage.load = function (window, $, undefined) {
 	var main = function() {
 		var check_forward = function() {
 			if ( !thumb || !favicon ) return;
-			document.location = (window.cwmBookmarkletUrl + '/start-page.html#href=' + encodeURIComponent(document.location.href) + '&title=' + encodeURIComponent(document.title) + '&thumb=' + encodeURIComponent(thumb) + '&icon=' + encodeURIComponent(favicon));
+			document.location = ('https' + window.cwmBookmarkletUrl + '/start-page.html#href=' + encodeURIComponent(document.location.href) + '&title=' + encodeURIComponent(document.title) + '&thumb=' + encodeURIComponent(thumb) + '&icon=' + encodeURIComponent(favicon));
 		};
 
 		html2canvas(document.body, {
