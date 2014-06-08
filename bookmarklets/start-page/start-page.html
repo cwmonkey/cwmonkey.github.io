@@ -188,12 +188,16 @@ var make_sites_html = function() {
 	localStorage.setItem('sitesHTML', main.innerHTML);
 };
 
-sitesHTML = localStorage.getItem('sitesHTML');
-
-if ( sitesHTML ) {
-	main.innerHTML = sitesHTML;
-} else {
+if ( document.location.hash ) {
 	make_sites_html();
+} else {
+	sitesHTML = localStorage.getItem('sitesHTML');
+
+	if ( sitesHTML ) {
+		main.innerHTML = sitesHTML;
+	} else {
+		make_sites_html();
+	}
 }
 
 </script>
