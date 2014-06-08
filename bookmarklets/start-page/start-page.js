@@ -96,7 +96,11 @@ window.cwmStartPage.load = function (window, $, undefined) {
 					ctx.drawImage(canvasCopy, 0, 0, wR, hR, 0, 0, wR, hR);
 
 					try {
-						thumb = canvas.toDataURL('image/gif');
+						if ( navigator.userAgent.toLowerCase().indexOf('chrome') > -1 ) {
+							thumb = canvas.toDataURL('image/webp', 0.6);
+						} else {
+							thumb = canvas.toDataURL('image/jpeg', 0.8);
+						}
 					} catch (e) {
 						thumb = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 					}

@@ -121,7 +121,9 @@ var main = wrapper.getElementsByTagName('main')[0].getElementsByTagName('div')[0
 var a, article, thumb, icon, h1, i, l, newsite, site, site_found = false, sites, hashes, keyval, sitesHTML;
 
 var make_sites_html = function() {
-	sites = localStorage.getItem('sites');
+	localStorage.removeItem('sitesHTML');
+
+ 	sites = localStorage.getItem('sites');
 
 	if ( typeof sites == 'string' ) {
 		sites = JSON.parse(sites);
