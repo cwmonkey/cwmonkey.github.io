@@ -116,6 +116,8 @@ var save = function() {
 		$form.empty();
 		setup();
 	}
+
+	localStorage.removeItem('sitesHTML');
 };
 
 $('#save').bind('click', function() {
