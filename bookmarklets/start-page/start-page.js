@@ -47,7 +47,12 @@ window.cwmStartPage.load = function (window, $, undefined) {
 					canvas.width = maxWidth;
 					canvas.height = maxHeight;
 					ctx.drawImage(canvasCopy, 0, 0, wR, hR, 0, 0, maxWidth, maxHeight);
-					thumb = canvas.toDataURL('image/gif');
+					try {
+						thumb = canvas.toDataURL('image/gif');
+					} catch (e) {
+						thumb = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+					}
+
 					check_forward();
 				}
 
@@ -69,7 +74,11 @@ window.cwmStartPage.load = function (window, $, undefined) {
 			canvasCopy.width = 16;
 			canvasCopy.height = 16;
 			copyContext.drawImage(img, 0, 0, 16, 16);
-			favicon = canvasCopy.toDataURL('image/gif');
+			try {
+				favicon = canvasCopy.toDataURL('image/gif');
+			} catch (e) {
+				favicon = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+			}
 			check_forward();
 		}
 
