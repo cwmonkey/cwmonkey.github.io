@@ -36,7 +36,8 @@ window.cwmStartPage.load = function (window, $, undefined) {
 			var lastHeight = canvas.height;
 
 			var end = false;
-			var scale = 0.75;
+			//var scale = 0.75;
+			var scale = 0.55;
 			while ( end == false ) {
 				scalingSteps += 1;
 				curWidth *= scale;
@@ -95,12 +96,15 @@ window.cwmStartPage.load = function (window, $, undefined) {
 					//ctx.drawImage(canvasCopy, 0, 0, wR, hR, 0, 0, maxWidth, maxHeight);
 					ctx.drawImage(canvasCopy, 0, 0, wR, hR, 0, 0, wR, hR);
 
+					scale(canvas, maxWidth, maxHeight);
+
 					try {
-						if ( navigator.userAgent.toLowerCase().indexOf('chrome') > -1 ) {
-							thumb = canvas.toDataURL('image/webp', 0.6);
+						thumb = canvas.toDataURL('image/png');
+						/*if ( navigator.userAgent.toLowerCase().indexOf('chrome') > -1 ) {
+							thumb = canvas.toDataURL('image/webp', 1);
 						} else {
 							thumb = canvas.toDataURL('image/jpeg', 0.8);
-						}
+						}*/
 					} catch (e) {
 						thumb = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 					}
