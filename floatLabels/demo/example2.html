@@ -1,0 +1,67 @@
+---
+layout: default
+title: floatLabels.js Example 2
+---
+
+<link rel="stylesheet" type="text/css" href="example2.css" />
+
+<div class="cms">
+	<p><a href="..">Back to floatLabels.js home</a></p>
+</div>
+
+<div class="cms">
+	<form action="http://example.com/some-remote-site">
+		<input type="hidden" name="source" value="blog">
+		<p class="input text filled">
+			<input type="text" name="name" id="test-name" placeholder="*Your name no label" value="My Name">
+		</p>
+		<p class="input text email">
+			<label for="test-email">* Your email</label>
+			<input type="email" name="email" id="test-email" placeholder="*Your name">
+		</p>
+		<p class="input text number">
+			<input type="number" name="age" placeholder="*Your age (no label/id)">
+		</p>
+		<p class="input date">
+			<label for="test-date">* Some date</label>
+			<input type="date" name="date" id="test-date">
+		</p>
+		<p class="input text textarea">
+			<label for="test-bio">* Your bio</label>
+			<textarea name="bio" id="test-bio" placeholder="*Your bio"></textarea>
+		</p>
+		<p class="input select">
+			<label for="test-hear">Hear about us</label>
+			<select name="email" id="test-hear">
+				<option>- Some Select</option>
+				<option value="1">Some value</option>
+			</select>
+		</p>
+		<p class="input submit">
+			<input type="submit" value="Submit">
+		</p>
+	</form>
+
+	<div>
+		<a href="#" id="show-form">Make New Form</a>
+	</div>
+</div>
+
+<script type="text/x-javascript-template" id="form-template">
+<form action="http://example.com/some-remote-site">
+	<p class="input text filled">
+		<label for="test-name2">* Your name 2</label>
+		<input type="text" name="name" id="test-name2" placeholder="*Your name 2" value="My Name 2">
+	</p>
+	<p class="input text email">
+		<label for="test-email2">* Your email 2</label>
+		<input type="email" name="email" id="test-email2" placeholder="*Your name 2">
+	</p>
+	<p class="input submit">
+		<input type="submit" value="Submit">
+	</p>
+</form>
+</script>
+
+<script src="../floatLabels.js" defer></script>
+<script src="example2.js" defer></script>

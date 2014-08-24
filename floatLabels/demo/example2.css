@@ -1,0 +1,61 @@
+/* Disable transitions from browser defaults */
+.preload * {
+	transition: none !important;
+}
+
+/* jquery.floatLabels Plugin styles */
+
+.input.select,
+.input.text {
+	position: relative;
+}
+
+.input.select label,
+.input.text label {
+	position: absolute;
+	color: #999;
+	top: .35em;
+	left: .5em;
+	transition: all .2s ease-in-out;
+	border: 1px solid transparent;
+	pointer-events: none;
+}
+
+.input.text input,
+.input.select select,
+.input.text textarea {
+	padding-top: .5em;
+}
+
+.input.text input::-webkit-input-placeholder,
+.input.text textarea::-webkit-input-placeholder {
+   color: transparent;
+}
+
+.input.text input:-moz-placeholder, /* Firefox 18- */
+.input.text textarea:-moz-placeholder { /* Firefox 18- */
+   color: transparent;  
+}
+
+.input.text input::-moz-placeholder,  /* Firefox 19+ */
+.input.text textarea::-moz-placeholder {  /* Firefox 19+ */
+   color: transparent;  
+}
+
+.input.text input:-ms-input-placeholder,  
+.input.text textarea:-ms-input-placeholder {  
+   color: transparent;  
+}
+
+.input.select label,
+.input.text.filled label {
+	top: -.65em;
+	left: .5em;
+	font-size: .8em;
+	background: #fff;
+	opacity: 1;
+	border-color: #ccc;
+	border-radius: .25em;
+	line-height: .8em;
+	padding: .25em;
+}

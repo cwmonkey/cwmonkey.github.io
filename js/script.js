@@ -36,7 +36,7 @@ $body
 /* /Nav dropdown */
 
 /* Faux ajax */
-if (!SimpleHistory.supported) {
+if ( !SimpleHistory.supported ) {
 	return;
 }
 
@@ -68,7 +68,7 @@ var load_page = function(path) {
 
 $body
 	.delegate('a[href^="/"]', 'click', function(event) {
-		if (event.metaKey || event.shiftKey || event.ctrlKey) {
+		if ( event.metaKey || event.shiftKey || event.ctrlKey || $(this).data('noajax') ) {
 			return;
 		}
 

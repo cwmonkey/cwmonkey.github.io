@@ -244,6 +244,12 @@ a:hover {
 2.) Reusables/Modules
 ------------------------------------------------------------ */
 
+/* floatLabels */
+
+.js-float-labels-wrapper label {
+	color: #000;
+}
+
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */

@@ -1,0 +1,30 @@
+.js-float-labels-wrapper {
+	position: relative;
+}
+
+.js-float-labels-wrapper label {
+	position: absolute;
+	opacity: .6;
+	transition: all .2s ease-in-out;
+	top: .35em;
+	left: .5em;
+	border: 1px solid transparent;
+	pointer-events: none;
+}
+
+.js-float-labels-wrapper input,
+.js-float-labels-wrapper textarea {
+	padding-top: .5em;
+}
+
+.js-float-labels-wrapper.filled label {
+	top: -.65em;
+	left: .5em;
+	font-size: .8em;
+	background: #fff;
+	opacity: 1;
+	border-color: #ccc;
+	border-radius: .25em;
+	line-height: .8em;
+	padding: .25em;
+}
