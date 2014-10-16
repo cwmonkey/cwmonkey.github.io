@@ -77,6 +77,7 @@ window.cwmElementStyles.load = function (window, $, undefined) {
 		var sheets = document.styleSheets;
 		for (var i in sheets) {
 			var rs = sheets[i].rules || sheets[i].cssRules;
+console.log(sheets[i]);
 			for (var r in rs) {
 				if (
 					undefined !== rs[r].selectorText
