@@ -34,6 +34,7 @@
 			$lanes.each(function() {
 				var $this = $(this);
 				var name = $this.find('.list-header-name').text();
+				if ( !name ) return;
 				var $button = $('<button/>').html(name);
 				$button.data('target', $this);
 			
