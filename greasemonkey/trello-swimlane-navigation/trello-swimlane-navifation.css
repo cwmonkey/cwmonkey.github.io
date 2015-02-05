@@ -1,0 +1,20 @@
+.lane-menu {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 1000;
+	padding: 0;
+	margin: 0;
+	background: #fff;
+	height: 100%;
+	overflow-y: scroll;
+}
+
+.lane-menu button {
+	display: block;
+	padding: .5em 1em;
+	margin: 0 0 3px 0;
+	width: 100%;
+	text-align: left;
+	border-radius: 0;
+}
