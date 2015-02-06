@@ -22,7 +22,7 @@
 			$css = $(css)
 				.appendTo('head');
 
-			$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navifation.css?1'});
+			$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navigation.css?1'});
 
 			if ( !$content.length || !$board.length || !$board_wrapper.length || !$lanes.length || !$board_canvas.length ) {
 				setTimeout(show_menu, 500);
