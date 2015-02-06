@@ -32,7 +32,7 @@
 			$trello_swimlane_navigation_css = $('#trello-swimlane-navigation-css');
 
 			// Make sure board stuff exists before continuing
-			if ( !$trello_swimlane_navigation_css.length || $trello_swimlane_navigation_css.css('content') != 'loaded' || !$content.length || !$board_wrapper.length || !$board_canvas.length || !$board.length || !$lanes.length || !$list_cards.length ) {
+			if ( !$trello_swimlane_navigation_css.length || ($trello_swimlane_navigation_css.css('content') != 'loaded' && $trello_swimlane_navigation_css.css('content') != '"loaded"') || !$content.length || !$board_wrapper.length || !$board_canvas.length || !$board.length || !$lanes.length || !$list_cards.length ) {
 				setTimeout(show_menu, 500);
 				return;
 			}
