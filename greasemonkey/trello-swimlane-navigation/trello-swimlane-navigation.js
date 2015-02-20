@@ -37,8 +37,18 @@
 				return;
 			}
 			
-			var $lane_menu = $('<menu/>').addClass('lane-menu');
-			
+			var $lane_menu = $('<menu/>')
+				.addClass('lane-menu')
+				;
+
+			var order = localStorage.getItem('order:' + document.location.pathname);
+			var buttons = null;
+
+			if ( order ) {
+				order = JSON.parse(order);
+				buttons = {};
+			}
+
 			// For each lane, make a button and toss it in the menu
 			$lanes.each(function() {
 				var $this = $(this);
@@ -47,9 +57,28 @@
 				var $button = $('<button/>').html(name);
 				$button.data('target', $this);
 			
-				$lane_menu.append($button);
+				if ( order ) {
+					buttons[name] = $button;
+				} else {
+					$lane_menu.append($button);
+				}
 			});
-			
+
+			// If order has been set place the buttons in that order and dump any new ones at the bottom
+			if ( order ) {
+				for ( var i = 0; i < order.length; i++ ) {
+					var $button = buttons[order[i]];
+					$lane_menu.append($button);
+					buttons[order[i]] = '';
+				}
+
+				for ( var prop in buttons ) {
+					if ( buttons.hasOwnProperty(prop) && buttons[prop] != '' ){
+						$lane_menu.append(buttons[prop]);
+					}
+				}
+			}
+
 			// Add menu to content div
 			$content.prepend($lane_menu);
 
@@ -60,14 +89,31 @@
 			});
 
 			// Set up events on buttons to scroll to swim lanes
-			$lane_menu.delegate('button', 'click', function(e) {
-				e.preventDefault();
-				var $this = $(this);
-				var $list = $this.data('target');
-				var scrollTo = $list.position().left + $board.scrollLeft();
-				$board.animate({scrollLeft: scrollTo}, 'fast');
-				localStorage.setItem("scrollToLeft", scrollTo);
-			});
+			$lane_menu
+				.delegate('button', 'click', function(e) {
+					e.preventDefault();
+					var $this = $(this);
+					var $list = $this.data('target');
+					var scrollTo = $list.position().left + $board.scrollLeft();
+					$board.animate({scrollLeft: scrollTo}, 'fast');
+					localStorage.setItem('scrollToLeft', scrollTo);
+				})
+				.sortable({
+					items: '> button',
+					cancel: '',
+					stop: function() {
+						var $buttons = $lane_menu.find('button');
+						var order = [];
+						$buttons.each(function() {
+							var $button = $(this);
+							order.push($button.html());
+						});
+
+						localStorage.setItem('order:' + document.location.pathname, JSON.stringify(order));
+					}
+				})
+				.disableSelection()
+				;
 
 			// Remember last scroll position
 			if ( !scroll_bound ) {
@@ -77,7 +123,7 @@
 					if ( scrolling ) return;
 					scrolling = true;
 					setTimeout(function() {
-						localStorage.setItem("scrollToLeft", $board.scrollLeft());
+						localStorage.setItem('scrollToLeft', $board.scrollLeft());
 						scrolling = false;
 					}, 100);
 				});
