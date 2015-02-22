@@ -13,7 +13,7 @@
 	$css = $(css)
 		.appendTo('head');
 
-	$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navigation.css?1'});
+	$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navigation.css?2'});
 
 	var show_menu = function() {
 		// Make sure jQuery is loaded before continuing
