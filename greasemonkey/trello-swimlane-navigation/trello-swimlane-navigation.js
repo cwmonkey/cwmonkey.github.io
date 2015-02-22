@@ -63,7 +63,7 @@
 
 				var $img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
 
-				var $button = $('<button/>').html(name);
+				var $button = $('<button/>').html('<span>' + name + '</span>');
 				if ( $img.length ) $button.prepend($img.eq(0).clone());
 				$button.data('target', $this);
 
