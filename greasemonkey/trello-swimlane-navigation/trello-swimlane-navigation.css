@@ -2,25 +2,76 @@
 	content: "loaded";
 }
 
-.lane-menu {
+.lane-menu-wrapper {
 	position: absolute;
 	left: 0;
 	top: 0;
 	z-index: 3;
-	padding: 0;
-	margin: 0;
-	background: #fff;
 	height: 100%;
+	background: #edeff0;
+	border-top-right-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	box-shadow: 0 0 6px rgba(0,0,0,.4);
+	padding: 12px 4px 12px 0;
+}
+
+.lane-menu {
+	padding: 0 4px;
+	margin: 0;
 	overflow-y: scroll;
 	max-width: 200px;
+	height: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .lane-menu button {
 	display: block;
-	padding: .5em 1em;
+	padding: 0 8px 0 38px;
 	margin: 0 0 3px 0;
 	width: 100%;
 	text-align: left;
 	border-radius: 0;
 	min-height: 0;
+	background: #d6dadc;
+	border-radius: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	box-shadow: none;
+	line-height: 30px;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
+
+.lane-menu button img,
+.lane-menu button .member-initials {
+	display: inline-block;
+	margin-right: 8px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+	background: #c4c9cc;
+	border-radius: 3px;
+	line-height: 30px;
+}
+
+.lane-menu button:hover,
+.lane-menu button:focus {
+	background: #c4c9cc;
+}
+
+.lane-menu button:hover img,
+.lane-menu button:hover .member-initials,
+.lane-menu button:focus img,
+.lane-menu button:focus .member-initials {
+	opacity: .75;
+}
+

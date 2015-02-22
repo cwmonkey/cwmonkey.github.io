@@ -38,7 +38,7 @@
 			}
 			
 			var $lane_menu = $('<menu/>')
-				.addClass('lane-menu')
+				.addClass('lane-menu u-fancy-scrollbar')
 				;
 
 			var order = localStorage.getItem('order:' + document.location.pathname);
@@ -49,14 +49,24 @@
 				buttons = {};
 			}
 
+			$members = $('.board-widget--members');
+
 			// For each lane, make a button and toss it in the menu
 			$lanes.each(function() {
 				var $this = $(this);
 				var name = $this.find('.list-header-name').text();
 				if ( !name ) return;
+
+				// Try to match the names to the avatar and add it to the nav button
+				var words = name.split(/[ \-]/);
+				var first = words[0];
+
+				var $img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
+
 				var $button = $('<button/>').html(name);
+				if ( $img.length ) $button.prepend($img.eq(0).clone());
 				$button.data('target', $this);
-			
+
 				if ( order ) {
 					buttons[name] = $button;
 				} else {
@@ -80,10 +90,11 @@
 			}
 
 			// Add menu to content div
-			$content.prepend($lane_menu);
+			var $lane_menu_wrapper = $('<div/>').addClass('lane-menu-wrapper');
+			$content.prepend($lane_menu_wrapper.append($lane_menu));
 
 			// Move board over so menu can stay on top
-			var width = $lane_menu.width();
+			var width = $lane_menu_wrapper.width();
 			$content.css({
 				'padding-left': width + 10
 			});
@@ -135,8 +146,8 @@
 
 			// Check to see if the board has been changed and start over if so
 			var check_me = setInterval(function() {
-				if ( !$lane_menu.parent().length ) {
-					$lane_menu.remove();
+				if ( !$lane_menu_wrapper.parent().length ) {
+					$lane_menu_wrapper.remove();
 					clearInterval(check_me);
 					show_menu();
 				}
