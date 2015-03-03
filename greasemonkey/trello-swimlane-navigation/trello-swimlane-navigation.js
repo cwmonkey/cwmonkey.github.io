@@ -41,7 +41,7 @@
 				.addClass('lane-menu u-fancy-scrollbar')
 				;
 
-			var order = localStorage.getItem('order:' + document.location.pathname);
+			var order = localStorage.getItem('order:' + document.location.pathname.split('/')[2]);
 			var buttons = null;
 
 			if ( order ) {
@@ -117,10 +117,10 @@
 						var order = [];
 						$buttons.each(function() {
 							var $button = $(this);
-							order.push($button.html());
+							order.push($button.find('.lane-menu-name').text());
 						});
 
-						localStorage.setItem('order:' + document.location.pathname, JSON.stringify(order));
+						localStorage.setItem('order:' + document.location.pathname.split('/')[2], JSON.stringify(order));
 					}
 				})
 				.disableSelection()
