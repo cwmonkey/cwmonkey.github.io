@@ -136,3 +136,13 @@
 .board-header {
 	padding-left: 27px;
 }
+
+/* Card age opacity override */
+
+.list-card {
+	transition: opacity .1s ease-in-out;
+}
+
+.list-card.active-card {
+	opacity: 1;
+}
