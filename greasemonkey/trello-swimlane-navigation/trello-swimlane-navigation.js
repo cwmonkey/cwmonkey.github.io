@@ -7,6 +7,8 @@
 	var $list_cards;
 	var $trello_swimlane_navigation_css;
 	var scroll_bound = false;
+	var $body = $('body');
+	var hide;
 
 	// Add menu styling
 	var css = '<link rel="stylesheet" id="trello-swimlane-navigation-css"/>';
@@ -14,6 +16,23 @@
 		.appendTo('head');
 
 	$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navigation.css?2'});
+
+	var get_id = function() {
+		return document.location.pathname.split('/')[2];
+	};
+
+	$body
+		.delegate('.lane-menu-toggle', 'click', function(e) {
+			e.preventDefault();
+			if ( $content.is('.lane-menu-hide') ) {
+				$content.removeClass('lane-menu-hide');
+				localStorage.removeItem('lane-menu-hide');
+			} else {
+				$content.addClass('lane-menu-hide');
+				localStorage.setItem('lane-menu-hide', 1);
+			}
+		})
+		;
 
 	var show_menu = function() {
 		// Make sure jQuery is loaded before continuing
@@ -26,6 +45,10 @@
 			$board = $('#board');
 			$board_canvas = $('.board-canvas');
 			$content = $('#content');
+			hide = localStorage.getItem('lane-menu-hide');
+			if ( hide ) {
+				$content.addClass('lane-menu-hide');
+			}
 			$board_wrapper = $('.board-wrapper');
 			$lanes = $board.find('.list');
 			$list_cards = $board.find('.list-card');
@@ -41,7 +64,7 @@
 				.addClass('lane-menu u-fancy-scrollbar')
 				;
 
-			var order = localStorage.getItem('order:' + document.location.pathname.split('/')[2]);
+			var order = localStorage.getItem('order:' + get_id());
 			var buttons = null;
 
 			if ( order ) {
@@ -91,12 +114,22 @@
 
 			// Add menu to content div
 			var $lane_menu_wrapper = $('<div/>').addClass('lane-menu-wrapper');
-			$content.prepend($lane_menu_wrapper.append($lane_menu));
+
+			$lane_menu_wrapper
+				.append('<a href="#" class="lane-menu-toggle dark-hover js-hide-sidebar" title="Show/hide swimlane navbar."><span class="icon-sm icon-leftarrow"></span><span class="icon-sm icon-rightarrow"></span></a>')
+				.append($lane_menu)
+				;
+
+			$content.prepend($lane_menu_wrapper);
 
 			// Move board over so menu can stay on top
 			var width = $lane_menu_wrapper.width();
 			$content.css({
 				'padding-left': width + 10
+			});
+
+			$lane_menu_wrapper.css({
+				left: (width + 10) * -1
 			});
 
 			// Set up events on buttons to scroll to swim lanes
@@ -120,7 +153,7 @@
 							order.push($button.find('.lane-menu-name').text());
 						});
 
-						localStorage.setItem('order:' + document.location.pathname.split('/')[2], JSON.stringify(order));
+						localStorage.setItem('order:' + get_id(), JSON.stringify(order));
 					}
 				})
 				.disableSelection()
