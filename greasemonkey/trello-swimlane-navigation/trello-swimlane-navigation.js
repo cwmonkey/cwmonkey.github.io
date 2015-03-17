@@ -84,7 +84,10 @@
 				var words = name.split(/[ \-]/);
 				var first = words[0];
 
-				var $img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
+				var $img = $members.find('img[alt^="' + name + '"], img[alt^="' + name.toLowerCase() + '"], .member-initials[title^="' + name + '"], .member-initials[title^="' + name.toLowerCase() + '"]');
+				if ( !$img.length ) {
+					$img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
+				}
 
 				var $button = $('<button/>').html('<span class="lane-menu-name">' + name + '</span>');
 				if ( $img.length ) $button.prepend($img.eq(0).clone());
