@@ -72,7 +72,7 @@
 				buttons = {};
 			}
 
-			$members = $('.board-widget--members');
+			$members = $('.board-widget-members');
 
 			// For each lane, make a button and toss it in the menu
 			$lanes.each(function() {
@@ -85,6 +85,7 @@
 				var first = words[0];
 
 				var $img = $members.find('img[alt^="' + name + '"], img[alt^="' + name.toLowerCase() + '"], .member-initials[title^="' + name + '"], .member-initials[title^="' + name.toLowerCase() + '"]');
+
 				if ( !$img.length ) {
 					$img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
 				}
