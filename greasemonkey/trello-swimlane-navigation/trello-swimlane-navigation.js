@@ -336,6 +336,15 @@
 			////////////////
 			update_filters();
 
+			var update_filters_timeout;
+			$board.bind('DOMNodeInserted DOMNodeRemoved', function(e) {
+				if ( e.target.className.match(/js-member-on-card-menu/) ) {
+					clearTimeout(update_filters_timeout);
+					update_filters_timeout = setTimeout(update_filters, 1000);
+				}
+			})
+			;
+
 			// Move board over so menu can stay on top
 			var width = $lane_menu_wrapper.width();
 			$content.css({
