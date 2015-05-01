@@ -50,6 +50,9 @@
 				$content.addClass('lane-menu-hide');
 			}
 			$board_wrapper = $('.board-wrapper');
+
+			$('.js-show-extra-members').trigger('click');
+
 			$lanes = $board.find('.list');
 			$list_cards = $board.find('.list-card');
 			$trello_swimlane_navigation_css = $('#trello-swimlane-navigation-css');
@@ -126,16 +129,6 @@
 
 			$content.prepend($lane_menu_wrapper);
 
-			// Move board over so menu can stay on top
-			var width = $lane_menu_wrapper.width();
-			$content.css({
-				'padding-left': width + 10
-			});
-
-			$lane_menu_wrapper.css({
-				left: (width + 10) * -1
-			});
-
 			// Set up events on buttons to scroll to swim lanes
 			$lane_menu
 				.delegate('button', 'click', function(e) {
@@ -180,6 +173,178 @@
 				var scrollToLeft = localStorage.getItem('scrollToLeft');
 				if ( scrollToLeft ) $board.animate({scrollLeft: scrollToLeft}, 'fast');
 			}
+
+			////////////////////////////////////////////////////////////////////////////////////////
+			// Filters ////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////////
+
+			// Show/hide cards
+			var update_filters = function() {
+				// Members
+				var members_filtered = false;
+
+				$('.list-card').removeClass('lane-menu-member-filters-show');
+
+				for ( i in members ) {
+					members_filtered = true;
+
+					$('.list-card:has(img[title$="(' + i + ')"])')
+						.addClass('lane-menu-member-filters-show')
+						;
+				}
+
+				if ( members_filtered ) {
+					$board.addClass('lane-menu-member-filters-filtered');
+				} else {
+					$board.removeClass('lane-menu-member-filters-filtered');
+				}
+
+				localStorage.setItem('filter_members:' + get_id(), JSON.stringify(members));
+
+				// Lanes
+				var lanes_filtered = false;
+
+				$('.lane').removeClass('lane-menu-member-filters-hide');
+
+				for ( i in lanes ) {
+					lanes_filtered = true;
+					break;
+				}
+
+				if ( lanes_filtered ) {
+					$board.addClass('lane-menu-lane-filters-filtered');
+				} else {
+					$board.removeClass('lane-menu-lane-filters-filtered');
+				}
+
+				localStorage.setItem('filter_lanes:' + get_id(), JSON.stringify(lanes));
+			};
+
+			//////////////////
+			// Members
+			////////////////
+			var $headline = $('<h2>').addClass('lane-menu-headline').html('Filters');
+			var $members = $('.board-widget-members .member :first-child');
+			var $member_filters = $('<div/>').addClass('lane-menu-member-filters');
+
+			var members = localStorage.getItem('filter_members:' + get_id());
+			if ( !members ) {
+				members = {};
+			} else {
+				members = JSON.parse(members);
+			}
+
+			// Add members to filters
+			$members.each(function() {
+				var name = this.title.match(/\(([^\)]+)\)$/)[1];
+				var $member = $('<div/>')
+					.addClass('lane-menu-member-filters-member')
+					.append($(this).clone().attr('class', ''))
+					.data('name', name)
+					;
+
+				if ( members[name] ) {
+					$member.addClass('lane-menu-member-filters-active');
+				}
+
+				$member_filters.append($member);
+			});
+
+			$lane_menu
+				.append($headline, $member_filters)
+				;
+
+			// Filter delegates
+			$member_filters
+				.delegate('.lane-menu-member-filters-member', 'click', function() {
+					var $this = $(this);
+					var name = $this.data('name');
+
+					if ( $this.is('.lane-menu-member-filters-active') ) {
+						$this.removeClass('lane-menu-member-filters-active');
+						delete members[name];
+					} else {
+						$this.addClass('lane-menu-member-filters-active');
+						members[name] = true;
+					}
+
+					update_filters();
+				})
+				;
+
+			///////////////////
+			// Lanes
+			/////////////////
+			var $lanes = $('.list:not(.mod-add)');
+			var $lane_filters = $('<div/>').addClass('lane-menu-lane-filters');
+
+			var lanes = localStorage.getItem('filter_lanes:' + get_id());
+			if ( !lanes ) {
+				lanes = {};
+			} else {
+				lanes = JSON.parse(lanes);
+			}
+
+			// Add members to filters
+			$lanes.each(function() {
+				var $this = $(this);
+				var id = 'lane' + (new Date()).getTime();
+				$this.data('laneid', id);
+				var name = $this.find('.list-header-name').text();
+
+				var $lane = $('<div/>')
+					.addClass('lane-menu-lane-filters-lane')
+					.html(name)
+					.data('lane', $this)
+					;
+
+				if ( lanes[name] ) {
+					$lane.addClass('lane-menu-lane-filters-active');
+					$this.addClass('lane-menu-member-filters-hide');
+				}
+
+				$lane_filters.append($lane);
+			});
+
+			$lane_menu
+				.append($lane_filters)
+				;
+
+			// Filter delegates
+			$lane_filters
+				.delegate('.lane-menu-lane-filters-lane', 'click', function() {
+					var $this = $(this);
+					var $lane = $this.data('lane');
+					var id = $lane.find('.list-header-name').text();
+
+					if ( $this.is('.lane-menu-lane-filters-active') ) {
+						$lane.removeClass('lane-menu-member-filters-hide');
+						$this.removeClass('lane-menu-lane-filters-active');
+						delete lanes[id];
+					} else {
+						$lane.addClass('lane-menu-member-filters-hide');
+						$this.addClass('lane-menu-lane-filters-active');
+						lanes[id] = true;
+					}
+
+					update_filters();
+				})
+				;
+
+			//////////////////
+			// First time
+			////////////////
+			update_filters();
+
+			// Move board over so menu can stay on top
+			var width = $lane_menu_wrapper.width();
+			$content.css({
+				'padding-left': width + 10
+			});
+
+			$lane_menu_wrapper.css({
+				left: (width + 10) * -1
+			});
 
 			// Check to see if the board has been changed and start over if so
 			var check_me = setInterval(function() {
