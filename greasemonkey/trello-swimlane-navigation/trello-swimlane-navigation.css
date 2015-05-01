@@ -113,12 +113,19 @@
 	padding: 6px 6px 6px 2px;
 }
 
-.lane-menu-hide .lane-menu-toggle .icon-leftarrow,
-.lane-menu-toggle .icon-rightarrow {
+.lane-menu-hide .lane-menu-toggle .lane-menu-open,
+.lane-menu-toggle .lane-menu-closed {
 	display: none;
 }
 
-.lane-menu-hide .lane-menu-toggle .icon-rightarrow {
+.lane-menu-open:before {
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+	position: relative;
+	display: block;
+}
+
+.lane-menu-hide .lane-menu-toggle .lane-menu-closed {
 	display: inline-block;
 	text-align: right;
 }

@@ -123,7 +123,7 @@
 			var $lane_menu_wrapper = $('<div/>').addClass('lane-menu-wrapper');
 
 			$lane_menu_wrapper
-				.append('<a href="#" class="lane-menu-toggle dark-hover js-hide-sidebar" title="Show/hide swimlane navbar."><span class="icon-sm icon-leftarrow"></span><span class="icon-sm icon-rightarrow"></span></a>')
+				.append('<a href="#" class="lane-menu-toggle dark-hover js-hide-sidebar" title="Show/hide swimlane navbar."><span class="icon-sm icon-forward lane-menu-open"></span><span class="icon-sm icon-forward lane-menu-closed"></span></a>')
 				.append($lane_menu)
 				;
 
