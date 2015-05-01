@@ -188,7 +188,7 @@
 				for ( i in members ) {
 					members_filtered = true;
 
-					$('.list-card:has(img[title$="(' + i + ')"])')
+					$('.list-card:has([title$="(' + i + ')"])')
 						.addClass('lane-menu-member-filters-show')
 						;
 				}
