@@ -260,3 +260,6 @@
 	display: none;
 }
 
+#board .js-composer {
+	display: block;
+}
