@@ -63,8 +63,13 @@
 				return;
 			}
 			
-			var $lane_menu = $('<menu/>')
+			var $lane_menu = $('<div/>')
 				.addClass('lane-menu u-fancy-scrollbar')
+				;
+
+			var $lane_nav = $('<menu/>')
+				.addClass('lane-menu-nav')
+				.appendTo($lane_menu)
 				;
 
 			var order = localStorage.getItem('order:' + get_id());
@@ -100,7 +105,7 @@
 				if ( order ) {
 					buttons[name] = $button;
 				} else {
-					$lane_menu.append($button);
+					$lane_nav.append($button);
 				}
 			});
 
@@ -108,13 +113,13 @@
 			if ( order ) {
 				for ( var i = 0; i < order.length; i++ ) {
 					var $button = buttons[order[i]];
-					$lane_menu.append($button);
+					$lane_nav.append($button);
 					buttons[order[i]] = '';
 				}
 
 				for ( var prop in buttons ) {
 					if ( buttons.hasOwnProperty(prop) && buttons[prop] != '' ){
-						$lane_menu.append(buttons[prop]);
+						$lane_nav.append(buttons[prop]);
 					}
 				}
 			}
@@ -130,7 +135,7 @@
 			$content.prepend($lane_menu_wrapper);
 
 			// Set up events on buttons to scroll to swim lanes
-			$lane_menu
+			$lane_nav
 				.delegate('button', 'click', function(e) {
 					e.preventDefault();
 					var $this = $(this);
@@ -218,14 +223,53 @@
 				}
 
 				localStorage.setItem('filter_lanes:' + get_id(), JSON.stringify(lanes));
+
+				// Labels
+				var labels_filtered = false;
+
+				$('.list-card').removeClass('lane-menu-label-filters-show');
+
+				for ( i in labels ) {
+					labels_filtered = true;
+
+					$('.list-card:has([title="' + i + '"])')
+						.addClass('lane-menu-label-filters-show')
+						;
+				}
+
+				if ( labels_filtered ) {
+					$board.addClass('lane-menu-label-filters-filtered');
+				} else {
+					$board.removeClass('lane-menu-label-filters-filtered');
+				}
+
+				localStorage.setItem('filter_labels:' + get_id(), JSON.stringify(labels));
 			};
 
 			//////////////////
 			// Members
 			////////////////
-			var $headline = $('<h2>').addClass('lane-menu-headline').html('Filters');
+			var $headline = $('<h2>')
+				.addClass('lane-menu-headline')
+				.html('Filters')
+				.appendTo($lane_menu)
+				;
 			var $members = $('.board-widget-members .member :first-child');
-			var $member_filters = $('<div/>').addClass('lane-menu-member-filters');
+			var $member_filters = $('<menu/>')
+				.addClass('lane-menu-member-filters')
+				.appendTo($lane_menu)
+				;
+
+			var $clear_filters = $('<button>(Clear Filters)</button>').bind('click', function() {
+				members = {};
+				lanes = {};
+				$('.lane-menu-member-filters-member').removeClass('lane-menu-member-filters-active');
+				$('.lane-menu-lane-filters-lane').removeClass('lane-menu-lane-filters-active');
+				$('.list:not(.mod-add)').removeClass('lane-menu-member-filters-hide');
+
+				update_filters();
+			})
+			.appendTo($headline);
 
 			var members = localStorage.getItem('filter_members:' + get_id());
 			if ( !members ) {
@@ -250,10 +294,6 @@
 				$member_filters.append($member);
 			});
 
-			$lane_menu
-				.append($headline, $member_filters)
-				;
-
 			// Filter delegates
 			$member_filters
 				.delegate('.lane-menu-member-filters-member', 'click', function() {
@@ -276,7 +316,10 @@
 			// Lanes
 			/////////////////
 			var $lanes = $('.list:not(.mod-add)');
-			var $lane_filters = $('<div/>').addClass('lane-menu-lane-filters');
+			var $lane_filters = $('<menu/>')
+				.addClass('lane-menu-lane-filters')
+				.appendTo($lane_menu)
+				;
 
 			var lanes = localStorage.getItem('filter_lanes:' + get_id());
 			if ( !lanes ) {
@@ -306,10 +349,6 @@
 				$lane_filters.append($lane);
 			});
 
-			$lane_menu
-				.append($lane_filters)
-				;
-
 			// Filter delegates
 			$lane_filters
 				.delegate('.lane-menu-lane-filters-lane', 'click', function() {
@@ -332,37 +371,102 @@
 				;
 
 			//////////////////
-			// First time
+			// Labels
 			////////////////
-			update_filters();
 
-			var update_filters_timeout;
-			$board.bind('DOMNodeInserted DOMNodeRemoved', function(e) {
-				if ( e.target.className.match(/js-member-on-card-menu/) ) {
-					clearTimeout(update_filters_timeout);
-					update_filters_timeout = setTimeout(update_filters, 1000);
-				}
+			$label_filters = $('<menu/>')
+				.addClass('lane-menu-label-filters')
+				.appendTo($lane_menu)
+				;
+
+			var labels = localStorage.getItem('filter_labels:' + get_id());
+			if ( !labels ) {
+				labels = {};
+			} else {
+				labels = JSON.parse(labels);
+			}
+
+			$('.js-open-labels').click();
+
+			var label_list_timeout;
+			$('.js-labels-list').bind('DOMNodeInserted', function(e) {
+				clearTimeout(label_list_timeout);
+				label_list_timeout = setTimeout(function() {
+					$('.js-labels-list .card-label').each(function() {
+						var $label = $(this).clone().addClass('lane-menu-label-filters-label');
+						// var idlabel = $label.data('idlabel');
+						var name = $label.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+						if ( labels[name] ) {
+							$label.addClass('lane-menu-label-filters-active');
+						}
+						$label.find('*').detach();
+						$label_filters.append($label);
+					});
+
+					$('.js-pop-widget-view').click();
+
+					do_label_filters();
+
+					first_time();
+				}, 100);
 			})
 			;
 
-			// Move board over so menu can stay on top
-			var width = $lane_menu_wrapper.width();
-			$content.css({
-				'padding-left': width + 10
-			});
+			var do_label_filters = function() {
+				// Filter delegates
+				$label_filters
+					.delegate('.lane-menu-label-filters-label', 'click', function() {
+						var $this = $(this);
+						var name = $this.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 
-			$lane_menu_wrapper.css({
-				left: (width + 10) * -1
-			});
+						if ( $this.is('.lane-menu-label-filters-active') ) {
+							$this.removeClass('lane-menu-label-filters-active');
+							delete labels[name];
+						} else {
+							$this.addClass('lane-menu-label-filters-active');
+							labels[name] = true;
+						}
 
-			// Check to see if the board has been changed and start over if so
-			var check_me = setInterval(function() {
-				if ( !$lane_menu_wrapper.parent().length ) {
-					$lane_menu_wrapper.remove();
-					clearInterval(check_me);
-					show_menu();
-				}
-			}, 500);
+						update_filters();
+					})
+					;
+			};
+
+			//////////////////
+			// First time
+			////////////////
+
+			var first_time = function() {
+				var update_filters_timeout;
+				$board.bind('DOMNodeInserted DOMNodeRemoved', function(e) {
+					if ( e.target.className.match(/js-member-on-card-menu/) ) {
+						clearTimeout(update_filters_timeout);
+						update_filters_timeout = setTimeout(update_filters, 1000);
+					}
+				})
+				;
+
+				// Move board over so menu can stay on top
+				var width = $lane_menu_wrapper.width();
+				$content.css({
+					'padding-left': width + 10
+				});
+
+				$lane_menu_wrapper.css({
+					left: (width + 10) * -1
+				});
+
+				// Check to see if the board has been changed and start over if so
+				var check_me = setInterval(function() {
+					if ( !$lane_menu_wrapper.parent().length ) {
+						$lane_menu_wrapper.remove();
+						clearInterval(check_me);
+						show_menu();
+					}
+				}, 500);
+
+				update_filters();
+			}
 		})})(window.jQuery);
 	};
 
