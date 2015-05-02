@@ -439,7 +439,7 @@
 			var first_time = function() {
 				var update_filters_timeout;
 				$board.bind('DOMNodeInserted DOMNodeRemoved', function(e) {
-					if ( e.target.className.match(/js-member-on-card-menu/) ) {
+					if ( e.target.className.match(/js-member-on-card-menu/) || e.target.className.match(/list-card/) ) {
 						clearTimeout(update_filters_timeout);
 						update_filters_timeout = setTimeout(update_filters, 1000);
 					}
