@@ -388,27 +388,37 @@
 
 			$('.js-open-labels').click();
 
+			var setup_labels = function() {
+				var $card_labels = $('.js-labels-list .card-label');
+
+				if ( !$card_labels.length ) {
+					clearTimeout(label_list_timeout);
+					label_list_timeout = setTimeout(setup_labels, 100);
+					return;
+				}
+
+				$card_labels.each(function() {
+					var $label = $(this).clone().addClass('lane-menu-label-filters-label');
+					// var idlabel = $label.data('idlabel');
+					var name = $label.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+					if ( labels[name] ) {
+						$label.addClass('lane-menu-label-filters-active');
+					}
+					$label.find('*').detach();
+					$label_filters.append($label);
+				});
+
+				$('.js-pop-widget-view').click();
+
+				do_label_filters();
+
+				first_time();
+			};
+
 			var label_list_timeout;
 			$('.js-labels-list').bind('DOMNodeInserted', function(e) {
 				clearTimeout(label_list_timeout);
-				label_list_timeout = setTimeout(function() {
-					$('.js-labels-list .card-label').each(function() {
-						var $label = $(this).clone().addClass('lane-menu-label-filters-label');
-						// var idlabel = $label.data('idlabel');
-						var name = $label.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-						if ( labels[name] ) {
-							$label.addClass('lane-menu-label-filters-active');
-						}
-						$label.find('*').detach();
-						$label_filters.append($label);
-					});
-
-					$('.js-pop-widget-view').click();
-
-					do_label_filters();
-
-					first_time();
-				}, 100);
+				label_list_timeout = setTimeout(setup_labels, 100);
 			})
 			;
 
