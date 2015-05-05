@@ -34,6 +34,23 @@
 		})
 		;
 
+	// Complete a promise when a selector exists
+	var exists = function(selector, wait) {
+		var promise = new $.Deferred();
+
+		var check = function() {
+			if ( $(selector).length ) {
+				promise.resolve();
+			} else {
+				setTimeout(check, wait || 100);
+			}
+		};
+
+		setTimeout(check, wait || 100);
+
+		return promise;
+	};
+
 	var show_menu = function() {
 		// Make sure jQuery is loaded before continuing
 		if ( typeof jQuery == 'undefined' ) {
@@ -72,6 +89,40 @@
 				.appendTo($lane_menu)
 				;
 
+			var $lane_headline = $('<h2/>')
+				.addClass('lane-menu-headline')
+				.html('Navigation')
+				.appendTo($lane_nav)
+				;
+
+			var hide_lane_nav_menu = function() {
+				$lane_nav.addClass('lane-menu-hidden');
+				localStorage.setItem('hide_lane_nav:' + get_id(), 1);
+			};
+
+			var $lane_hide = $('<button/>')
+				.html('(Hide)')
+				.addClass('lane-menu-hide')
+				.bind('click', hide_lane_nav_menu)
+				.appendTo($lane_headline)
+				;
+
+			var $lane_show = $('<button/>')
+				.html('(Show)')
+				.addClass('lane-menu-show')
+				.bind('click', function() {
+					$lane_nav.removeClass('lane-menu-hidden');
+					localStorage.removeItem('hide_lane_nav:' + get_id());
+				})
+				.appendTo($lane_headline)
+				;
+
+			var hide_lane_nav = localStorage.getItem('hide_lane_nav:' + get_id());
+
+			if ( hide_lane_nav ) {
+				hide_lane_nav_menu();
+			}
+
 			var order = localStorage.getItem('order:' + get_id());
 			var buttons = null;
 
@@ -98,7 +149,7 @@
 					$img = $members.find('img[alt^="' + first + '"], img[alt^="' + first.toLowerCase() + '"], .member-initials[title^="' + first + '"], .member-initials[title^="' + first.toLowerCase() + '"]');
 				}
 
-				var $button = $('<button/>').html('<span class="lane-menu-name">' + name + '</span>');
+				var $button = $('<button/>').addClass('lane-menu-nav-item').html('<span class="lane-menu-name">' + name + '</span>');
 				if ( $img.length ) $button.prepend($img.eq(0).clone());
 				$button.data('target', $this);
 
@@ -136,7 +187,7 @@
 
 			// Set up events on buttons to scroll to swim lanes
 			$lane_nav
-				.delegate('button', 'click', function(e) {
+				.delegate('.lane-menu-nav-item', 'click', function(e) {
 					e.preventDefault();
 					var $this = $(this);
 					var $list = $this.data('target');
@@ -145,10 +196,10 @@
 					localStorage.setItem('scrollToLeft', scrollTo);
 				})
 				.sortable({
-					items: '> button',
+					items: '> .lane-menu-nav-item',
 					cancel: '',
 					stop: function() {
-						var $buttons = $lane_menu.find('button');
+						var $buttons = $lane_menu.find('.lane-menu-nav-item');
 						var order = [];
 						$buttons.each(function() {
 							var $button = $(this);
@@ -246,30 +297,48 @@
 				localStorage.setItem('filter_labels:' + get_id(), JSON.stringify(labels));
 			};
 
-			//////////////////
-			// Members
-			////////////////
-			var $headline = $('<h2>')
+			/*var $headline = $('<h2>')
 				.addClass('lane-menu-headline')
 				.html('Filters')
 				.appendTo($lane_menu)
 				;
+
+			var $clear_filters = $('<button>(Clear All Filters)</button>').bind('click', function() {
+				members = {};
+				lanes = {};
+				labels = {};
+				$('.lane-menu-member-filters-member').removeClass('lane-menu-member-filters-active');
+				$('.lane-menu-lane-filters-lane').removeClass('lane-menu-lane-filters-active');
+				$('.list:not(.mod-add)').removeClass('lane-menu-member-filters-hide');
+				$('.lane-menu-label-filters-label').removeClass('lane-menu-label-filters-active');
+
+				update_filters();
+			})
+			.appendTo($headline);*/
+
+			//////////////////
+			// Members
+			////////////////
 			var $members = $('.board-widget-members .member :first-child');
 			var $member_filters = $('<menu/>')
 				.addClass('lane-menu-member-filters')
 				.appendTo($lane_menu)
 				;
 
-			var $clear_filters = $('<button>(Clear Filters)</button>').bind('click', function() {
+			var $members_headline = $('<h2>')
+				.addClass('lane-menu-headline')
+				.html('Member Filters')
+				.appendTo($member_filters)
+				;
+
+			var $members_clear_filters = $('<button>(Clear)</button>').bind('click', function() {
 				members = {};
-				lanes = {};
 				$('.lane-menu-member-filters-member').removeClass('lane-menu-member-filters-active');
-				$('.lane-menu-lane-filters-lane').removeClass('lane-menu-lane-filters-active');
 				$('.list:not(.mod-add)').removeClass('lane-menu-member-filters-hide');
 
 				update_filters();
 			})
-			.appendTo($headline);
+			.appendTo($members_headline);
 
 			var members = localStorage.getItem('filter_members:' + get_id());
 			if ( !members ) {
@@ -320,6 +389,20 @@
 				.addClass('lane-menu-lane-filters')
 				.appendTo($lane_menu)
 				;
+
+			var $lanes_headline = $('<h2>')
+				.addClass('lane-menu-headline')
+				.html('Lane Filters')
+				.appendTo($lane_filters)
+				;
+
+			var $lanes_clear_filters = $('<button>(Clear)</button>').bind('click', function() {
+				lanes = {};
+				$('.lane-menu-lane-filters-lane').removeClass('lane-menu-lane-filters-active');
+
+				update_filters();
+			})
+			.appendTo($lanes_headline);
 
 			var lanes = localStorage.getItem('filter_lanes:' + get_id());
 			if ( !lanes ) {
@@ -373,11 +456,24 @@
 			//////////////////
 			// Labels
 			////////////////
-
 			$label_filters = $('<menu/>')
 				.addClass('lane-menu-label-filters')
-				.appendTo($lane_menu)
+				.insertBefore($lane_filters)
 				;
+
+			var $labels_headline = $('<h2>')
+				.addClass('lane-menu-headline')
+				.html('Label Filters')
+				.appendTo($label_filters)
+				;
+
+			var $labels_filters = $('<button>(Clear)</button>').bind('click', function() {
+				labels = {};
+				$('.lane-menu-label-filters-label').removeClass('lane-menu-label-filters-active');
+
+				update_filters();
+			})
+			.appendTo($labels_headline);
 
 			var labels = localStorage.getItem('filter_labels:' + get_id());
 			if ( !labels ) {
@@ -385,42 +481,6 @@
 			} else {
 				labels = JSON.parse(labels);
 			}
-
-			$('.js-open-labels').click();
-
-			var setup_labels = function() {
-				var $card_labels = $('.js-labels-list .card-label');
-
-				if ( !$card_labels.length ) {
-					clearTimeout(label_list_timeout);
-					label_list_timeout = setTimeout(setup_labels, 100);
-					return;
-				}
-
-				$card_labels.each(function() {
-					var $label = $(this).clone().addClass('lane-menu-label-filters-label');
-					// var idlabel = $label.data('idlabel');
-					var name = $label.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-					if ( labels[name] ) {
-						$label.addClass('lane-menu-label-filters-active');
-					}
-					$label.find('*').detach();
-					$label_filters.append($label);
-				});
-
-				$('.js-pop-widget-view').click();
-
-				do_label_filters();
-
-				first_time();
-			};
-
-			var label_list_timeout;
-			$('.js-labels-list').bind('DOMNodeInserted', function(e) {
-				clearTimeout(label_list_timeout);
-				label_list_timeout = setTimeout(setup_labels, 100);
-			})
-			;
 
 			var do_label_filters = function() {
 				// Filter delegates
@@ -441,6 +501,29 @@
 					})
 					;
 			};
+
+			$.when(exists('.edit-labels-pop-over .card-label', 1000)).then(function() {
+				var $card_labels = $('.js-labels-list .card-label');
+
+				$card_labels.each(function() {
+					var $label = $(this).clone().addClass('lane-menu-label-filters-label');
+					// var idlabel = $label.data('idlabel');
+					var name = $label.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+					if ( labels[name] ) {
+						$label.addClass('lane-menu-label-filters-active');
+					}
+					$label.find('*').detach();
+					$label_filters.append($label);
+				});
+
+				$('.js-pop-widget-view').click();
+
+				do_label_filters();
+
+				first_time();
+			});
+
+			$('.js-open-labels').click();
 
 			//////////////////
 			// First time
