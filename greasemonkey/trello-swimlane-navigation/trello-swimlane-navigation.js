@@ -204,7 +204,7 @@ $.fn.tooltip = function() {
 
 })(window.jQuery);
 
-				$('[title]').tooltip();
+				$('.member-avatar, .member-initials, .lane-menu-member-filters-member [title]').tooltip();
 			}
 
 			////////////////////
