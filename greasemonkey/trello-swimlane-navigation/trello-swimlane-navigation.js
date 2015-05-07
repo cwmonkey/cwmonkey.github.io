@@ -773,7 +773,7 @@ $.fn.tooltip = function() {
 			var do_labels_timeout;
 			var try_do_labels = function() {
 				clearTimeout(do_labels_timeout);
-				do_labels_timeout = setTimeout(do_labels, 1000);
+				do_labels_timeout = setTimeout(do_labels, 2000);
 			};
 
 			try_do_labels();
