@@ -771,9 +771,11 @@ $.fn.tooltip = function() {
 
 			// Some timeout jankyness since labels seem to be loaded async
 			var do_labels_timeout;
+			var delay = 5000;
 			var try_do_labels = function() {
 				clearTimeout(do_labels_timeout);
-				do_labels_timeout = setTimeout(do_labels, 2000);
+				do_labels_timeout = setTimeout(do_labels, delay);
+				delay = 100;
 			};
 
 			try_do_labels();
