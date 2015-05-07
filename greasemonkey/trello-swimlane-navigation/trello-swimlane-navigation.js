@@ -236,8 +236,70 @@ $.fn.tooltip = function() {
 				.addClass('lane-menu u-fancy-scrollbar')
 				;
 
+			// Move board over so menu can stay on top
+			var adjust_board = function() {
+				var width = $lane_menu_wrapper.width();
+				$content.css({
+					'padding-left': width + 10
+				});
+
+				$lane_menu_wrapper.css({
+					left: (width + 10) * -1
+				});
+			};
+
+			// Show/hide menus
+			var show_hide_menu = function($menu) {
+				var hide_key = $menu.data('hide_key');
+				var hide = localStorage.getItem(hide_key + ':' + get_id());
+				var $headline = $menu.find('.lane-menu-headline').eq(0);
+				var text = $headline.text();
+				$headline.html('');
+
+				var $hide = $('<button/>')
+					.html('- ' + text)
+					.attr('title', 'Hide')
+					.addClass('lane-menu-hide')
+					.prependTo($headline)
+					;
+
+				var $show = $('<button/>')
+					.html('+ ' + text)
+					.attr('title', 'Show')
+					.addClass('lane-menu-show')
+					.prependTo($headline)
+					;
+
+				if ( hide ) {
+					$menu.addClass('lane-menu-hidden');
+				}
+			};
+
+			$lane_menu
+				.delegate('.lane-menu-show', 'click', function() {
+					var $menu = $(this).closest('menu');
+					var hide_key = $menu.data('hide_key');
+
+					$menu.removeClass('lane-menu-hidden');
+					localStorage.removeItem(hide_key + ':' + get_id());
+					adjust_board();
+				})
+				.delegate('.lane-menu-hide', 'click', function() {
+					var $menu = $(this).closest('menu');
+					var hide_key = $menu.data('hide_key');
+
+					$menu.addClass('lane-menu-hidden');
+					localStorage.setItem(hide_key + ':' + get_id(), 1);
+					adjust_board();
+				})
+				;
+
+			/////////////////////////////
+			// Lane Nav ----------------
+			///////////////////////////
 			var $lane_nav = $('<menu/>')
 				.addClass('lane-menu-nav')
+				.data('hide-key', 'hide_lane_nav')
 				.appendTo($lane_menu)
 				;
 
@@ -247,33 +309,12 @@ $.fn.tooltip = function() {
 				.appendTo($lane_nav)
 				;
 
-			var hide_lane_nav_menu = function() {
-				$lane_nav.addClass('lane-menu-hidden');
-				localStorage.setItem('hide_lane_nav:' + get_id(), 1);
-			};
+			show_hide_menu($lane_nav);
 
-			var $lane_hide = $('<button/>')
-				.html('(Hide)')
-				.addClass('lane-menu-hide')
-				.bind('click', hide_lane_nav_menu)
-				.appendTo($lane_headline)
+			var $lane_nav_content = $('<div/>')
+				.addClass('lane-menu-content')
+				.appendTo($lane_nav)
 				;
-
-			var $lane_show = $('<button/>')
-				.html('(Show)')
-				.addClass('lane-menu-show')
-				.bind('click', function() {
-					$lane_nav.removeClass('lane-menu-hidden');
-					localStorage.removeItem('hide_lane_nav:' + get_id());
-				})
-				.appendTo($lane_headline)
-				;
-
-			var hide_lane_nav = localStorage.getItem('hide_lane_nav:' + get_id());
-
-			if ( hide_lane_nav ) {
-				hide_lane_nav_menu();
-			}
 
 			var order = localStorage.getItem('order:' + get_id());
 			var buttons = null;
@@ -308,7 +349,7 @@ $.fn.tooltip = function() {
 				if ( order ) {
 					buttons[name] = $button;
 				} else {
-					$lane_nav.append($button);
+					$lane_nav_content.append($button);
 				}
 			});
 
@@ -316,13 +357,13 @@ $.fn.tooltip = function() {
 			if ( order ) {
 				for ( var i = 0; i < order.length; i++ ) {
 					var $button = buttons[order[i]];
-					$lane_nav.append($button);
+					$lane_nav_content.append($button);
 					buttons[order[i]] = '';
 				}
 
 				for ( var prop in buttons ) {
 					if ( buttons.hasOwnProperty(prop) && buttons[prop] != '' ){
-						$lane_nav.append(buttons[prop]);
+						$lane_nav_content.append(buttons[prop]);
 					}
 				}
 			}
@@ -351,7 +392,7 @@ $.fn.tooltip = function() {
 			$content.prepend($lane_menu_wrapper);
 
 			// Set up events on buttons to scroll to swim lanes
-			$lane_nav
+			$lane_nav_content
 				.delegate('.lane-menu-nav-item', 'click', function(e) {
 					e.preventDefault();
 					var $this = $(this);
@@ -481,18 +522,28 @@ $.fn.tooltip = function() {
 			})
 			.appendTo($headline);*/
 
-			//////////////////
-			// Members
-			////////////////
+			////////////////////////////
+			// Members ----------------
+			//////////////////////////
 			var $members = $('.board-widget-members .member :first-child');
 			var $member_filters = $('<menu/>')
 				.addClass('lane-menu-member-filters')
+				.data('hide-key', 'hide_member_filters')
 				.appendTo($lane_menu)
 				;
 
+			// Header
 			var $members_headline = $('<h2>')
 				.addClass('lane-menu-headline')
 				.html('Member Filters')
+				.appendTo($member_filters)
+				;
+
+			show_hide_menu($member_filters);
+
+			// More
+			var $member_filters_content = $('<div/>')
+				.addClass('lane-menu-content')
 				.appendTo($member_filters)
 				;
 
@@ -503,7 +554,7 @@ $.fn.tooltip = function() {
 
 				update_filters();
 			})
-			.appendTo($members_headline);
+			.appendTo($member_filters_content);
 
 			var members = localStorage.getItem('filter_members:' + get_id());
 			if ( !members ) {
@@ -525,11 +576,11 @@ $.fn.tooltip = function() {
 					$member.addClass('lane-menu-member-filters-active');
 				}
 
-				$member_filters.append($member);
+				$member_filters_content.append($member);
 			});
 
 			// Filter delegates
-			$member_filters
+			$member_filters_content
 				.delegate('.lane-menu-member-filters-member', 'click', function() {
 					var $this = $(this);
 					var name = $this.data('name');
@@ -552,6 +603,7 @@ $.fn.tooltip = function() {
 			var $lanes = $('.list:not(.mod-add)');
 			var $lane_filters = $('<menu/>')
 				.addClass('lane-menu-lane-filters')
+				.data('hide-key', 'hide_lane_filters')
 				.appendTo($lane_menu)
 				;
 
@@ -561,13 +613,20 @@ $.fn.tooltip = function() {
 				.appendTo($lane_filters)
 				;
 
+			show_hide_menu($lane_filters);
+
+			var $lane_filters_content = $('<div/>')
+				.addClass('lane-menu-content')
+				.appendTo($lane_filters)
+				;
+
 			var $lanes_clear_filters = $('<button>(Clear)</button>').bind('click', function() {
 				lanes = {};
 				$('.lane-menu-lane-filters-lane').removeClass('lane-menu-lane-filters-active');
 
 				update_filters();
 			})
-			.appendTo($lanes_headline);
+			.appendTo($lane_filters_content);
 
 			var lanes = localStorage.getItem('filter_lanes:' + get_id());
 			if ( !lanes ) {
@@ -594,11 +653,11 @@ $.fn.tooltip = function() {
 					$this.addClass('lane-menu-member-filters-hide');
 				}
 
-				$lane_filters.append($lane);
+				$lane_filters_content.append($lane);
 			});
 
 			// Filter delegates
-			$lane_filters
+			$lane_filters_content
 				.delegate('.lane-menu-lane-filters-lane', 'click', function() {
 					var $this = $(this);
 					var $lane = $this.data('lane');
@@ -623,6 +682,7 @@ $.fn.tooltip = function() {
 			////////////////
 			$label_filters = $('<menu/>')
 				.addClass('lane-menu-label-filters')
+				.data('hide-key', 'hide_label_filters')
 				.insertBefore($lane_filters)
 				;
 
@@ -632,13 +692,20 @@ $.fn.tooltip = function() {
 				.appendTo($label_filters)
 				;
 
+			show_hide_menu($label_filters);
+
+			var $label_filters_content = $('<div/>')
+				.addClass('lane-menu-content')
+				.appendTo($label_filters)
+				;
+
 			var $labels_filters = $('<button>(Clear)</button>').bind('click', function() {
 				labels = {};
 				$('.lane-menu-label-filters-label').removeClass('lane-menu-label-filters-active');
 
 				update_filters();
 			})
-			.appendTo($labels_headline);
+			.appendTo($label_filters_content);
 
 			var labels = localStorage.getItem('filter_labels:' + get_id());
 			if ( !labels ) {
@@ -649,7 +716,7 @@ $.fn.tooltip = function() {
 
 			var do_label_filters = function() {
 				// Filter delegates
-				$label_filters
+				$label_filters_content
 					.delegate('.lane-menu-label-filters-label', 'click', function() {
 						var $this = $(this);
 						var name = $this.text().replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
@@ -678,7 +745,7 @@ $.fn.tooltip = function() {
 						$label.addClass('lane-menu-label-filters-active');
 					}
 					$label.find('*').detach();
-					$label_filters.append($label);
+					$label_filters_content.append($label);
 				});
 
 				$('.js-pop-widget-view').click();
@@ -704,15 +771,7 @@ $.fn.tooltip = function() {
 				})
 				;
 
-				// Move board over so menu can stay on top
-				var width = $lane_menu_wrapper.width();
-				$content.css({
-					'padding-left': width + 10
-				});
-
-				$lane_menu_wrapper.css({
-					left: (width + 10) * -1
-				});
+				adjust_board();
 
 				// Check to see if the board has been changed and start over if so
 				var check_me = setInterval(function() {
