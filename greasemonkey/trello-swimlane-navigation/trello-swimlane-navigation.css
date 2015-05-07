@@ -56,7 +56,6 @@
 	clear: both;
 	color: #4d4d4d;
 	padding: 0;
-	border-bottom: 1px solid #adadad;
 }
 
 .lane-menu .lane-menu-hidden .lane-menu-headline button,
@@ -64,7 +63,6 @@
 	margin: 0;
 	font-size: .8em;
 	text-align: left;
-	border-bottom: none;
 }
 
 .lane-menu .lane-menu-headline .lane-menu-hide,
