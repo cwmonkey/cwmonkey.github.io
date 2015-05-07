@@ -78,7 +78,7 @@
 
 .lane-menu {
 	margin: 0;
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-width: 200px;
 	height: 100%;
 	-webkit-box-sizing: border-box;
