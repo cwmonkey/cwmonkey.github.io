@@ -1,4 +1,5 @@
 (function() {
+	var $window = $(window);
 	var $board;
 	var $board_wrapper;
 	var $board_canvas;
@@ -18,7 +19,13 @@
 	$css.attr({href: window.cwmBookmarkletUrl + '/trello-swimlane-navigation.css?2'});
 
 	var get_id = function() {
-		return document.location.pathname.split('/')[2];
+		var parts = document.location.pathname.split('/');
+
+		if ( parts[1] != 'b' ) {
+			return null;
+		}
+
+		return parts[2];
 	};
 
 	// Complete a promise when a selector exists
@@ -227,7 +234,7 @@ $.fn.tooltip = function() {
 			$trello_swimlane_navigation_css = $('#trello-swimlane-navigation-css');
 
 			// Make sure board stuff exists before continuing
-			if ( !$trello_swimlane_navigation_css.length || ($trello_swimlane_navigation_css.css('content') != 'loaded' && $trello_swimlane_navigation_css.css('content') != '"loaded"') || !$content.length || !$board_wrapper.length || !$board_canvas.length || !$board.length || !$lanes.length || !$list_cards.length ) {
+			if ( !$trello_swimlane_navigation_css.length || ($trello_swimlane_navigation_css.css('content') != 'loaded' && $trello_swimlane_navigation_css.css('content') != '"loaded"') || !$content.length || !$board_wrapper.length || !$board_canvas.length || !$board.length || !$lanes.length || !$list_cards.length || !get_id() ) {
 				setTimeout(show_menu, 500);
 				return;
 			}
@@ -250,7 +257,7 @@ $.fn.tooltip = function() {
 
 			// Show/hide menus
 			var show_hide_menu = function($menu) {
-				var hide_key = $menu.data('hide_key');
+				var hide_key = $menu.data('hide-key');
 				var hide = localStorage.getItem(hide_key + ':' + get_id());
 				var $headline = $menu.find('.lane-menu-headline').eq(0);
 				var text = $headline.text();
@@ -278,7 +285,7 @@ $.fn.tooltip = function() {
 			$lane_menu
 				.delegate('.lane-menu-show', 'click', function() {
 					var $menu = $(this).closest('menu');
-					var hide_key = $menu.data('hide_key');
+					var hide_key = $menu.data('hide-key');
 
 					$menu.removeClass('lane-menu-hidden');
 					localStorage.removeItem(hide_key + ':' + get_id());
@@ -286,7 +293,7 @@ $.fn.tooltip = function() {
 				})
 				.delegate('.lane-menu-hide', 'click', function() {
 					var $menu = $(this).closest('menu');
-					var hide_key = $menu.data('hide_key');
+					var hide_key = $menu.data('hide-key');
 
 					$menu.addClass('lane-menu-hidden');
 					localStorage.setItem(hide_key + ':' + get_id(), 1);
@@ -734,7 +741,14 @@ $.fn.tooltip = function() {
 					;
 			};
 
-			$.when(exists('.edit-labels-pop-over .card-label', 1000)).then(function() {
+			// Attempt to populate label filters
+			$('.js-open-labels').click();
+
+			var $edit_labels_pop_over;
+
+			var do_labels = function() {
+				$edit_labels_pop_over.bind('DOMNodeInserted', try_do_labels);
+
 				var $card_labels = $('.js-labels-list .card-label');
 
 				$card_labels.each(function() {
@@ -753,9 +767,18 @@ $.fn.tooltip = function() {
 				do_label_filters();
 
 				first_time();
-			});
+			}
 
-			$('.js-open-labels').click();
+			// Some timeout jankyness since labels seem to be loaded async
+			var do_labels_timeout;
+			var try_do_labels = function() {
+				clearTimeout(do_labels_timeout);
+				do_labels_timeout = setTimeout(do_labels, 1000);
+			};
+
+			try_do_labels();
+
+			$edit_labels_pop_over = $('.edit-labels-pop-over').bind('DOMNodeInserted', try_do_labels);
 
 			//////////////////
 			// First time
