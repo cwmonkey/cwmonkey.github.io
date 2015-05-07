@@ -227,8 +227,6 @@ $.fn.tooltip = function() {
 			}
 			$board_wrapper = $('.board-wrapper');
 
-			$('.js-show-extra-members').trigger('click');
-
 			$lanes = $board.find('.list');
 			$list_cards = $board.find('.list-card');
 			$trello_swimlane_navigation_css = $('#trello-swimlane-navigation-css');
@@ -238,6 +236,8 @@ $.fn.tooltip = function() {
 				setTimeout(show_menu, 500);
 				return;
 			}
+
+			$('.js-show-extra-members').trigger('click');
 
 			var $lane_menu = $('<div/>')
 				.addClass('lane-menu u-fancy-scrollbar')
