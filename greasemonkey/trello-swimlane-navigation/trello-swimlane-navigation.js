@@ -449,6 +449,8 @@ $.fn.tooltip = function() {
 
 			// Show/hide cards
 			var update_filters = function() {
+				var cards_filtered = false;
+
 				// Members
 				var members_filtered = false;
 
@@ -456,6 +458,7 @@ $.fn.tooltip = function() {
 
 				for ( i in members ) {
 					members_filtered = true;
+					cards_filtered = true;
 
 					$('.list-card:has([title$="(' + i + ')"])')
 						.addClass('lane-menu-member-filters-show')
@@ -495,6 +498,7 @@ $.fn.tooltip = function() {
 
 				for ( i in labels ) {
 					labels_filtered = true;
+					cards_filtered = true;
 
 					$('.list-card:has([title="' + i + '"])')
 						.addClass('lane-menu-label-filters-show')
@@ -508,6 +512,13 @@ $.fn.tooltip = function() {
 				}
 
 				localStorage.setItem('filter_labels:' + get_id(), JSON.stringify(labels));
+
+				// Any cards
+				if ( cards_filtered ) {
+					$body.addClass('lane-menu-cards-filtered');
+				} else {
+					$body.removeClass('lane-menu-cards-filtered');
+				}
 			};
 
 			/*var $headline = $('<h2>')

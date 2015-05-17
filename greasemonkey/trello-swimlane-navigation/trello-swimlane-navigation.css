@@ -320,6 +320,12 @@ menu .lane-menu-headline {
 	display: block;
 }
 
+/* Hide these when filtering cards */
+.lane-menu-cards-filtered .js-move-cards,
+.lane-menu-cards-filtered .js-archive-cards {
+	display: none;
+}
+
 /* Tooltip ---------------- */
 
 .tooltip {
