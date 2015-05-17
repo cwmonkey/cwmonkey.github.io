@@ -465,6 +465,9 @@ $.fn.tooltip = function() {
 						;
 				}
 
+				$('.list-card:has(.list-card-members:empty)').addClass('lane-menu-member-no-members');
+				$('.list-card:not(:has(.list-card-members:empty))').removeClass('lane-menu-member-no-members');
+
 				if ( members_filtered ) {
 					$board.addClass('lane-menu-member-filters-filtered');
 				} else {

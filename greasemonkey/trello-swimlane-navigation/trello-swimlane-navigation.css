@@ -316,6 +316,13 @@ menu .lane-menu-headline {
 	display: none;
 }
 
+/* Show newly created cards */
+.lane-menu-member-no-members:first-child,
+.lane-menu-member-no-members:nth-last-child(2),
+.lane-menu-member-no-members:last-child {
+	display: block;
+}
+
 #board .js-composer {
 	display: block;
 }
