@@ -79,6 +79,7 @@ var $window = $(window);
 var id_name = 'tooltip';
 var class_name = 'tooltip';
 var show_class = 'tooltipShown';
+var $current;
 
 var $tooltip = $('<span/>')
   .addClass(class_name)
@@ -106,6 +107,15 @@ var show_tooltip = function() {
   if ( !title ) {
     return;
   }
+
+  if ( $current && !$current.attr('title') ) {
+    $current.attr({
+      'aria-describedby': '',
+      'title': $current.data('title')
+    });
+  }
+
+  $current = $this;
 
   clearTimeout(hide_timeout);
 
@@ -161,10 +171,12 @@ var show_tooltip = function() {
 
 var hide_timeout;
 var hide_tooltip = function() {
-  var $this = $(this);
   clearTimeout(hide_timeout);
   hide_timeout = setTimeout(function() {
-    $this.attr('aria-describedby', '');
+    $current.attr({
+      'aria-describedby': '',
+      'title': $current.data('title')
+    });
     $tooltip.removeClass(show_class);
   }, 10);
 };
