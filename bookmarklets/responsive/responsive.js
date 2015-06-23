@@ -18,6 +18,8 @@ window.cwmResponsive.load = function (window, $, undefined) {
 
 		$viewport_meta.remove();
 		$viewport_meta = $(viewport_meta).appendTo('head');
+
+		$('div:not(:has(div))').addClass('cwm-ender');
 	};
 
 	window.cwmResponsive = {

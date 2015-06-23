@@ -42,3 +42,8 @@ div > div {
 body > iframe {
 	display: none !important;
 }
+
+.cwm-ender {
+	padding: 10px !important;
+	margin-bottom: 10px !important;
+}
