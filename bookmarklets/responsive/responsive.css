@@ -1,3 +1,7 @@
+body * {
+	float: none !important;
+}
+
 body, div, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, acronym, address, big, cite, code,
@@ -14,22 +18,21 @@ audio, video {
 	max-width: 100% !important;
 	height: auto !important;
 	box-sizing: border-box !important;
-	float: none !important;
 	width: auto !important;
 	position: static !important;
 	min-width: 0 !important;
 	text-align: left !important;
-	margin: 0 !important;
+	margin: 0 auto !important;
 	line-height: 1.5 !important;
 }
 
 div {
-	margin: 2px 0 !important;
+	margin: 0 !important;
 	padding: 0 !important;
 }
 
 div > div {
-	margin-bottom: 2px !important;
+	margin-bottom: 0 !important;
 }
 
 .menu * {
@@ -46,4 +49,9 @@ body > iframe {
 .cwm-ender {
 	padding: 10px !important;
 	margin-bottom: 10px !important;
+}
+
+:empty {
+	padding: 0 !important;
+	margin: 0 auto !important;
 }
