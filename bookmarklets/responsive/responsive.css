@@ -1,0 +1,44 @@
+body, div, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, acronym, address, big, cite, code,
+img, q,
+center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+audio, video {
+	display: block !important;
+	max-width: 100% !important;
+	height: auto !important;
+	box-sizing: border-box !important;
+	float: none !important;
+	width: auto !important;
+	position: static !important;
+	min-width: 0 !important;
+	text-align: left !important;
+	margin: 0 !important;
+	line-height: 1.5 !important;
+}
+
+div {
+	margin: 2px 0 !important;
+	padding: 0 !important;
+}
+
+div > div {
+	margin-bottom: 2px !important;
+}
+
+.menu * {
+	display: inline-block !important;
+	overflow: visible !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+}
+
+body > iframe {
+	display: none !important;
+}
