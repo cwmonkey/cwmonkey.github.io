@@ -296,9 +296,18 @@ a:hover {
 ------------------------------------------------------------ */
 
 .page_responsive img {
-	max-width: 500px;
 	display: block;
 	margin-bottom: 1em;
+}
+
+.page_responsive ol {
+	width: 500px;
+	margin-left: 0;
+	padding-left: 40px;
+}
+
+#sub .page_responsive * {
+	max-width: 100%;
 }
 
 /* ------------------------------------------------------------
