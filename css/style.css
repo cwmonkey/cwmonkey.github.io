@@ -45,6 +45,12 @@ body {
 	overflow-x: hidden;
 }
 
+img,
+object,
+embed {
+	max-width: 100%;
+}
+
 a:link {
 	color: #FFE7BF;
 	transition: color .2s linear, background-color .2s linear;
@@ -289,6 +295,11 @@ a:hover {
 4.) Page Specific
 ------------------------------------------------------------ */
 
+.page_responsive img {
+	max-width: 500px;
+	display: block;
+	margin-bottom: 1em;
+}
 
 /* ------------------------------------------------------------
 4.) Media Queries
@@ -325,12 +336,6 @@ a:hover {
 		margin-bottom: 0;
 		padding-left: 1em;
 	}
-
-	img,
-	object,
-	embed {
-		max-width: 100%;
-	}
 }
 
 @media all and (max-width: 600px) {
@@ -340,8 +345,8 @@ a:hover {
 	}
 
 	body.navopen {
-		margin-right: -10em;
-		margin-left: 10em;
+		margin-right: -15em;
+		margin-left: 15em;
 	}
 
 	#header {
@@ -356,7 +361,7 @@ a:hover {
 	}
 
 	.navopen #header {
-		margin-left: 10em;
+		margin-left: 15em;
 	}
 
 	#title a {
@@ -370,11 +375,11 @@ a:hover {
 		transition: left .2s linear;
 		position: fixed;
 		top: 0;
-		width: 10em;
+		width: 15em;
 		height: 100%;
 		padding: 0;
 		background: #a69c8a;
-		left: -10em;
+		left: -15em;
 	}
 
 	.navopen #secondary {
