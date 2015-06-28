@@ -2,6 +2,7 @@ body * {
 	float: none !important;
 	font-size: 14px !important;
 	line-height: 1.5 !important;
+	overflow: auto !important;
 }
 
 body, div, applet, object, iframe,
@@ -25,7 +26,6 @@ audio, video {
 	min-width: 0 !important;
 	text-align: left !important;
 	margin: 0 auto !important;
-	overflow: hidden !important;
 }
 
 div {
