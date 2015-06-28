@@ -25,6 +25,7 @@ audio, video {
 	min-width: 0 !important;
 	text-align: left !important;
 	margin: 0 auto !important;
+	overflow: hidden !important;
 }
 
 div {
@@ -36,6 +37,7 @@ div > div {
 	margin-bottom: 0 !important;
 }
 
+ul li,
 .menu * {
 	display: inline-block !important;
 	overflow: visible !important;
