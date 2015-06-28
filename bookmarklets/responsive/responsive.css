@@ -8,7 +8,7 @@ body * {
 body, div, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, acronym, address, big, cite, code,
-img, q,
+q, img,
 center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
@@ -26,6 +26,25 @@ audio, video {
 	min-width: 0 !important;
 	text-align: left !important;
 	margin: 0 auto !important;
+	transform: none !important;
+}
+
+iframe,
+img {
+	display: inline !important;
+}
+
+tr {
+	margin-bottom: .5em !important;
+	padding: .5em !important;
+}
+
+td {
+	padding: 5px !important;
+}
+
+a {
+	display: inline !important;
 }
 
 div {
@@ -37,12 +56,16 @@ div > div {
 	margin-bottom: 0 !important;
 }
 
+dl dt,
+dl dd,
 ul li,
 .menu * {
 	display: inline-block !important;
 	overflow: visible !important;
 	opacity: 1 !important;
 	visibility: visible !important;
+	vertical-align: top !important;
+	padding: .5em !important;
 }
 
 body > iframe {
