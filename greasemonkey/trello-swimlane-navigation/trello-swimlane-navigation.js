@@ -173,11 +173,13 @@ var hide_timeout;
 var hide_tooltip = function() {
   clearTimeout(hide_timeout);
   hide_timeout = setTimeout(function() {
-    $current.attr({
-      'aria-describedby': '',
-      'title': $current.data('title')
-    });
-    $tooltip.removeClass(show_class);
+    if ( $current ) {
+	    $current.attr({
+	      'aria-describedby': '',
+	      'title': $current.data('title')
+	    });
+	    $tooltip.removeClass(show_class);
+	  }
   }, 10);
 };
 
@@ -343,7 +345,7 @@ $.fn.tooltip = function() {
 				buttons = {};
 			}
 
-			$members = $('.board-widget-members');
+			$members = $('.js-list-board-members');
 
 			// For each lane, make a button and toss it in the menu
 			$lanes.each(function() {
@@ -536,7 +538,7 @@ $.fn.tooltip = function() {
 				}
 			};
 
-			/*var $headline = $('<h2>')
+			var $headline = $('<h2>')
 				.addClass('lane-menu-headline')
 				.html('Filters')
 				.appendTo($lane_menu)
@@ -553,12 +555,12 @@ $.fn.tooltip = function() {
 
 				update_filters();
 			})
-			.appendTo($headline);*/
+			.appendTo($headline);
 
 			////////////////////////////
 			// Members ----------------
 			//////////////////////////
-			var $members = $('.board-widget-members .member :first-child');
+			var $members = $('.js-list-board-members .member :first-child');
 			var $member_filters = $('<menu/>')
 				.addClass('lane-menu-member-filters')
 				.data('hide-key', 'hide_member_filters')
@@ -768,6 +770,7 @@ $.fn.tooltip = function() {
 			};
 
 			// Attempt to populate label filters
+			$('.js-open-more').click();
 			$('.js-open-labels').click();
 
 			var $edit_labels_pop_over;
@@ -788,7 +791,10 @@ $.fn.tooltip = function() {
 					$label_filters_content.append($label);
 				});
 
-				$('.js-pop-widget-view').click();
+				$('.js-pop-widget-view')
+					.click()
+					.click()
+					;
 
 				do_label_filters();
 
