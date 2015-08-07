@@ -234,7 +234,7 @@ $.fn.tooltip = function() {
 			$body = $('body');
 			$board = $('#board');
 			$board_canvas = $('.board-canvas');
-			$content = $('#content');
+			$content = $('.board-main-content');
 			hide = localStorage.getItem('lane-menu-hide');
 			if ( hide ) {
 				$content.addClass('lane-menu-hide');
