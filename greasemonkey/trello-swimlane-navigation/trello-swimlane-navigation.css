@@ -26,7 +26,7 @@
 	transition: left .2s ease-in-out;
 }
 
-#content:not(.lane-menu-hide) .lane-menu-wrapper {
+.board-main-content:not(.lane-menu-hide) .lane-menu-wrapper {
 	left: 0 !important;
 }
 
