@@ -1,3 +1,6 @@
 [submodule "reactor-knockoff"]
 	path = reactor-knockoff
 	url = https://github.com/cwmonkey/reactor-knockoff.git
+[submodule "testing_submodules"]
+	path = testing_submodules
+	url = git@github.com:cwmonkey/testing_submodules.git
