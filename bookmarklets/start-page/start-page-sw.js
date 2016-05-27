@@ -1,20 +1,25 @@
-this.addEventListener('install', function(event) {
+var CACHE_NAME = 'my-site-cache-v5';
+var urlsToCache = [
+  '/bookmarklets/start-page/start-page.html'
+];
+
+self.addEventListener('install', function(event) {
+  // Perform install steps
   event.waitUntil(
-    caches.open('v3').then(function(cache) {
-      return cache.addAll([
-        '/bookmarklets/start-page/start-page.html',
-        '/bookmarklets/start-page/start-page-edit.html',
-        '/bookmarklets/start-page/start-page-edit.js',
-        '/bookmarklets/start-page/start-page-edit.css'
-      ]);
-    })
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        console.log('Opened cache' + CACHE_NAME);
+        return cache.addAll(urlsToCache).then(function() {
+          console.log('All resources have been fetched and cached.');
+        });
+      })
   );
 });
 
-this.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).catch(function() {
-      return fetch(event.request);
+    fetch(event.request).catch(function() {
+      return caches.match(event.request);
     })
   );
 });
