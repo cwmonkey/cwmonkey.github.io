@@ -10,6 +10,7 @@ var $trs = $table1.find('tbody tr');
 
 var ths = [];
 var counts = {};
+var variations = [];
 
 $ths.each(function() {
 	var text = $.trim($(this).text());
@@ -33,6 +34,11 @@ $trs.each(function() {
 			$(versions).each(function(vkey, vval) {
 				if ( !counts[vval] ) {
 					counts[vval] = {};
+					if ( vval === 'control' ) {
+						variations.push(' control');
+					} else {
+						variations.push(vval);
+					}
 				}
 
 				if ( !counts[vval][col] ) {
@@ -44,6 +50,9 @@ $trs.each(function() {
 		}
 	});
 });
+
+variations.sort();
+variations[0] = 'control';
 
 var $tr = $('<tr/>').addClass('__summary');
 
@@ -58,7 +67,9 @@ $(ths).each(function(key, col) {
 
 $tr.appendTo($table1);
 
-$.each(counts, function(verion, row) {
+$.each(variations, function(key, verion) {
+	var row = counts[verion];
+
 	var $tr = $('<tr/>').addClass('__summary');
 	var $th = $('<th/>').html(verion).appendTo($tr);
 	var visitors = null;
