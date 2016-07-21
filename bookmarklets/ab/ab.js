@@ -84,7 +84,7 @@ $.each(counts, function(verion, row) {
 				if ( diff > 0 ) {
 					html += '<span style="color:green">+' + perc_diff + '</span>';
 				} else {
-					html += '<span style="color:red">-' + perc_diff + '</span>';
+					html += '<span style="color:red">' + perc_diff + '</span>';
 				}
 
 				html += '</b>';
