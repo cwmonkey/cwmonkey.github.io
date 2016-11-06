@@ -1,3 +1,4 @@
+{% literal %}
 <script type="text/x-handlebars" data-type="note-tpl">
 	<div class="__make-note--note
 		{{#if collapsed}}__make-note--minimized{{/if}}
@@ -100,3 +101,4 @@
 		</span>
 	</div>
 </script>
+{% endliteral %}
