@@ -71,23 +71,6 @@
 
 {% include tpl/_make-note.tpl.html %}
 
-<script type="text/x-handlebars" data-type="match-options-tpl">
-	{{#each options}}
-		<option>{{this}}</option>
-	{{/each}}
-</script>
-
-<script type="text/x-handlebars" data-type="blacklist-item-tpl">
-	<div class="blacklist_item" data-type="blacklist-item">
-		<span class="blacklist_input">
-			<input type="text" value="{{m}}">
-		</span>
-		<span class="blacklist_submit">
-			<button data-type="blacklist-delete">Delete</button>
-		</span>
-	</div>
-</script>
-
 <script>
 	window.cwmMakeNoteDebug = {{ site.debug }};
 </script>
