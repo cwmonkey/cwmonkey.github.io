@@ -1,0 +1,74 @@
+---
+layout: default
+title: Greasemonkey - Make Note
+---
+
+<section id="description" class="cms">
+	<h2><a href="#description">Usage and description</a></h2>
+	<p>
+		Install the Greasemonkey script below and make notes on any website. You can choose to have it back your notes up on your Google Drive.
+	</p>
+	<p>
+		You can test it by clicking the note button at the top left of this page.
+	</p>
+	<h3>General Notes</h3>
+	<ul>
+		<li>These notes are not encrypted</li>
+		<li>Deletions are permanent</li>
+		<li>Clearing your localStorage will delete all notes not backed up on Google Drive</li>
+		<li>I do not track any usage of this app</li>
+		<li>No Google scripts are loaded until you opt-in to using them</li>
+		<li>You can <a href="https://github.com/cwmonkey/cwmonkey.github.io/tree/master/greasemonkey/make-note">view the source code on GitHub</a></li>
+	</ul>
+</section>
+
+<script src="//{{ site.domain }}/greasemonkey/make-note/make-note-script.js"></script>
+
+<section id="installing" class="cms">
+	<h2><a href="#installing">Installation instructions</a></h2>
+
+	<h3>Firefox</h3>
+	<ul>
+		<li>Install Greasemonkey (<a href="https://addons.mozilla.org/en-Us/firefox/addon/greasemonkey/">https://addons.mozilla.org/en-Us/firefox/addon/greasemonkey/</a>)</li>
+		<li>Copy the script below, click the down arrow next to the monkey and click "New User Script" then click "Use Script From Clipboard"</li>
+	</ul>
+
+	<h3>Chrome</h3>
+	<ul>
+		<li>Install Tampermonkey (<a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en">https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en</a>)</li>
+		<li>Copy the script below, click the weird square icon with two circles then click "Add new script". Select what's there and paste the script. Then click the Save button.</li>
+	</ul>
+
+	<h3>Opera</h3>
+	<ul>
+		<li>Install Violent Monkey (<a href="https://addons.opera.com/en/extensions/details/violent-monkey/?display=en">https://addons.opera.com/en/extensions/details/violent-monkey/?display=en</a>)</li>
+		<li>Copy the script below, click the monkey, click "Manage Scripts", then "New". Select what's there and paste the script.</li>
+	</ul>
+
+	<h3>Safari</h3>
+	<ul>
+		<li>Install Tampermonkey (<a href="https://tampermonkey.net/index.php?ext=dhdg&amp;browser=safari">https://tampermonkey.net/index.php?ext=dhdg&amp;browser=safari</a>)</li>
+		<li>Once installed, you must restart Safari.</li>
+		<li>Copy the script below, click the weird square icon with two circles then click "Add new script". Select what's there and paste the script.</li>
+	</ul>
+</section>
+
+<section id="script" class="cms">
+	<h2><a href="#script">The Script</a></h2>
+
+	<p>Copy <strong>everything</strong> in the box:</p>
+
+	<textarea id="user_script" spellcheck="false">// ==UserScript==
+// @name         Make Note
+// @namespace    http://cwmonkey.github.io/
+// @version      0.1
+// @description  Make notes on any website
+// @author       Gerald Burns
+// @match        http*://*/*
+// @grant        none
+// @run-at       document-start
+// ==/UserScript==
+
+(function(){var url='//{{ site.domain }}/greasemonkey/make-note/make-note-script.js';document.head.appendChild(document.createElement('script')).src=url+'?'+(new Date()).getTime();})();
+</textarea>
+</section>

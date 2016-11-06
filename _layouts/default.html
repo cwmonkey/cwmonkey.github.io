@@ -24,14 +24,14 @@
 
 <body>
 	<header id="header" role="banner">
-		<h4 id="title">
+		<h4 class="title">
 			<a href="/">
 				Monkey's Junk
 			</a>
 		</h4>
 	</header>
 
-	<nav id="secondary">
+	<nav class="secondary">
 		<h5 class="headline"><a href="#">Junk</a></h5>
 		<ul class="list">
 			<li class="item">
@@ -56,6 +56,12 @@
 				</ul>
 			</li>
 			<li class="item">
+				<a href="/greasemonkey">Greasemonkey</a>
+				<ul class="list">
+					<li class="item"><a href="/greasemonkey/make-note">Make Note</a></li>
+				</ul>
+			</li>
+			<li class="item">
 				<a href="/sites">Sites</a>
 			</li>
 		</ul>
@@ -65,7 +71,7 @@
 		<h1 id="main_headline"><a href="">
 			<strong>{{ page.title }}</strong>
 		</a></h1>
-		<div id="sub">
+		<div class="sub">
 			{{ content }}
 		</div>
 	</main>

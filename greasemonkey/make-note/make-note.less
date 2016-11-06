@@ -1,0 +1,111 @@
+@import "_make-note-shared.less";
+@import "_make-note-normalize.less";
+
+.make_important() {
+	body.__make-note--moving {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none;   /* Chrome/Safari/Opera */
+		-khtml-user-select: none;    /* Konqueror */
+		-moz-user-select: none;      /* Firefox */
+		-ms-user-select: none;       /* Internet Explorer/Edge */
+		user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+	}
+
+	#__make-note {
+		position: fixed;
+		top: 0;
+		left: 0;
+		border: 0;
+		///background: transparent;
+		//opacity: 0;
+		transition: opacity .5s linear;
+		width: 53px;
+		height: 18px;
+		display: block;
+		max-width: 100%;
+
+		&.__make-note_loaded {
+			opacity: 1;
+		}
+
+		&.__make-note_opened {
+			width: 320px;
+			height: 100%;
+			background: rgba(0,0,0,.5);
+			z-index: 110000;
+		}
+	}
+
+	.__make-note--note {
+		position: fixed;
+		min-width: 150px;
+		min-height: 56px;
+		margin: 0;
+		box-shadow: 3px 3px 3px 1px rgba(0, 0, 0, 0.2);
+		z-index: 100000;
+
+		.__make-note--match {
+			display: none;
+		}
+	}
+
+	.__make-note--resize {
+	}
+
+	.__make-note--min {
+	}
+
+	.__make-note--restore {
+		display: none;
+	}
+
+	.__make-note--to-window {
+		display: none;
+	}
+
+	.__make-note--to-list {
+	}
+
+	.__make-note--edit {
+	}
+
+	.__make-note--close {
+		display: none;
+	}
+
+	.__make-note--delete {
+		display: none;
+	}
+
+	.__make-note--note {
+		&.__make-note--minimized {
+			height: auto;
+			min-height: 0;
+
+			.__make-note--resize {
+				display: none;
+			}
+		}
+
+		&.__make-note--absoluted {
+			position: absolute;
+		}
+
+		&.__make-note--focused {
+			z-index: 100001;
+		}
+	}
+
+	.__make-note--note {
+		&.__make-note--editing {
+			padding-bottom: 18px;
+		}
+	}
+}
+
+& {
+	.make-note--note() !important;
+	.make_important() !important;
+	.make-note--states() !important;
+	.make-note--marked() !important;
+}

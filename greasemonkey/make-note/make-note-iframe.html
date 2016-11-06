@@ -1,0 +1,104 @@
+---
+---
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="/css/reset.min.css">
+	<link rel="stylesheet" href="/css/make-note-iframe.css">
+</head>
+<body>
+<div id="wrapper" class="unloaded">
+	<button data-type="view" class="view">View</button>
+	<button data-type="collapse" class="collapse">Close</button>
+
+	<menu class="top_nav">
+		<!-- button class="set1">Set 1</button>
+		<button class="set2">Set 2</button -->
+
+		<button style="display: none" data-type="gdenable" class="gdenable">Enable Google Drive Saving</button>
+		<button style="display: none" data-type="gdauthorize" class="gdauthorize">Authorize Google Drive Saving</button>
+		<button style="display: none" data-type="gddisable" class="gddisable">Disable Google Drive Saving</button>
+		<button style="display: none" data-type="gdsync" class="gdsync">Sync Google Drive</button>
+
+
+		<!--button data-type="gdscript" class="gdscript">Script</button>
+		<button data-type="gddisable" class="gddisable">Disable</button>
+		<button data-type="gdenable" class="gdenable">Enable</button>
+		<button data-type="gdenable2" class="gdenable2">Enable Delay</button>
+		<button data-type="gdload" class="gdload">Load</button>
+		<button data-type="gdsave" class="gdsave">Save</button>
+		<button data-type="add" class="add">Add</button>
+		<button data-type="blacklist-domain" class="blacklist_domain">Hide On This Domain</button -->
+	</menu>
+
+	<section class="filter" data-type="filter">
+		<h2>Show Notes Matching:</h2>
+		<select>
+			<option value="url">Current URL</option>
+			<option value="all">All URLs</option>
+			<optgroup data-type="filter-urls">
+			</optgroup>
+		</select>
+	</section>
+
+	<div class="notes" data-type="notes"></div>
+
+
+	<section class="note_add">
+		<h2>Add a Note</h2>
+		<div class="add_form" data-type="add-form"></div>
+	</section>
+
+	<div class="blacklist" data-type="blacklist"></div>
+
+	<div class="blacklist_add">
+		<h2>Add Blacklist URL</h2>
+
+		<form action="" data-type="blacklist-form" class="blacklist_form">
+			<span class="blacklist_input">
+				<input type="text" name="match" placeholder="http://example.com/*">
+			</span>
+			<span class="blacklist_submit">
+				<button>Add</button>
+			</span>
+		</form>
+	</div>
+
+	<div class="home">
+		<a href="/greasemonkey/make-note" target="_blank">Make Note Homepage</a>
+	</div>
+</div>
+
+{% include tpl/_make-note.tpl.html %}
+
+<script type="text/x-handlebars" data-type="match-options-tpl">
+	{{#each options}}
+		<option>{{this}}</option>
+	{{/each}}
+</script>
+
+<script type="text/x-handlebars" data-type="blacklist-item-tpl">
+	<div class="blacklist_item" data-type="blacklist-item">
+		<span class="blacklist_input">
+			<input type="text" value="{{m}}">
+		</span>
+		<span class="blacklist_submit">
+			<button data-type="blacklist-delete">Delete</button>
+		</span>
+	</div>
+</script>
+
+<script>
+	window.cwmMakeNoteDebug = {{ debug }};
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+<script src="/js/StorageWrapper.js"></script>
+<script src="/js/GoogleDriveSaver.js"></script>
+<script src="/greasemonkey/make-note/make-note-shared.js"></script>
+<script src="/greasemonkey/make-note/make-note-iframe.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<script type="text/x-handlebars" data-type="note-tpl">
+	<div class="__make-note--note
+		{{#if collapsed}}__make-note--minimized{{/if}}
+		{{#if absolute}}__make-note--absoluted{{/if}}
+		" tabIndex="-1" style="
+		{{#if x}}
+			left: {{x}}px;
+		{{else}}
+			left: 0;
+		{{/if}}
+
+		{{#if y}}
+			top: {{y}}px;
+		{{else}}
+			top: 0;
+		{{/if}}
+
+		{{#if width}}
+			width: {{width}}px;
+		{{else}}
+			width: 0;
+		{{/if}}
+
+		{{#if height}}
+			height: {{height}}px;
+		{{else}}
+			height: 0;
+		{{/if}}
+	">
+		<span class="__make-note--nav">
+			{{#if title}}
+				<span class="__make-note--title">
+					<span class="__make-note--mover" data-type="mover">{{title}}</span>
+				</span>
+			{{/if}}
+
+			<menu class="__make-note--tools">
+				<button data-type="edit" class="__make-note--tool __make-note--edit">Edit</button>
+				<button data-type="min" class="__make-note--tool __make-note--min" title="Minimize">Minimize</button>
+				<button data-type="restore" class="__make-note--tool __make-note--restore">Restore</button>
+				<button data-type="close" class="__make-note--tool __make-note--close">Close</button>
+				<button data-type="to-window" class="__make-note--tool __make-note--to-window">Move to window</button>
+				<button data-type="to-list" class="__make-note--tool __make-note--to-list">Move to list</button>
+			</menu>
+		</span>
+		<span class="__make-note--main">
+			<span class="__make-note--match">{{match}}</span>
+			<span class="__make-note--body">{{{marked_body}}}</span>
+		</span>
+		<button data-type="resize" class="__make-note--tool __make-note--resize">Resize</button>
+	</div>
+</script>
+
+<script type="text/x-handlebars" data-type="note-form-tpl">
+	<form action="" class="__make-note--form" data-type="form">
+		<input type="hidden" name="absolute" value="">
+		{{#if id}}
+			<input type="hidden" name="id" value="{{id}}">
+		{{/if}}
+
+		<div><label for="add-form--match-{{#if id}}{{id}}{{else}}{{date}}{{/if}}">
+			Matching:
+			<input type="text" id="add-form--match-{{#if id}}{{id}}{{else}}{{date}}{{/if}}" name="match" value="{{match}}" title="You can use * as a wildcard, example: http*://*.example.com*">
+		</label></div>
+		<div><label for="add-form--absolute-{{#if id}}{{id}}{{else}}{{date}}{{/if}}">
+			<input type="checkbox" id="add-form--absolute-{{#if id}}{{id}}{{else}}{{date}}{{/if}}" name="absolute" value="1">
+			Position absolute
+		</label></div>
+		<div><label for="add-form--title-{{#if id}}{{id}}{{else}}{{date}}{{/if}}">
+			<input type="text" id="add-form--title-{{#if id}}{{id}}{{else}}{{date}}{{/if}}" name="title" placeholder="Title" value="{{title}}">
+		</label></div>
+		<div><label for="add-form--body-{{#if id}}{{id}}{{else}}{{date}}{{/if}}">
+			<textarea id="add-form--body-{{#if id}}{{id}}{{else}}{{date}}{{/if}}" name="body" placeholder="Note">{{body}}</textarea>
+		</label></div>
+		<div>
+			{{#if id}}
+				<button data-type="save" type="submit" value="edit">Edit</button>
+				<button data-type="cancel" value="cancel">Cancel</button>
+				<button data-type="delete" value="delete">Delete</button>
+			{{else}}
+				<button type="submit" value="add">Add</button>
+			{{/if}}
+		</div>
+	</form>
+</script>

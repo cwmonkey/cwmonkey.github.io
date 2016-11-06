@@ -88,10 +88,10 @@ a:hover {
 	color: #FFE7BF;
 }
 
-#title a {
+.title a {
 	padding-left: 110px;
 	font-family: "Ranchers", sans-serif;
-	font-size: 2.5em;
+	font-size: 2em;
 	text-shadow: 2px 2px 2px #000;
 	line-height: 2;
 	background: url(http://mysmilies.com/images/monkey.png) left -5px no-repeat;
@@ -132,13 +132,13 @@ a:hover {
 	color: #000;
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 1.2em;
+	font-size: 1em;
 	display: block;
 }
 
 /* Site Nav */
 
-#secondary {
+.secondary {
 	background: #3C3F4F;
 	margin-bottom: 2em;
 	padding-left: 3em;
@@ -146,12 +146,12 @@ a:hover {
 	z-index: 2;
 }
 
-#secondary a {
+.secondary a {
 	text-decoration: none;
 	font-size: 1.1em;
 }
 
-#secondary .headline {
+.secondary .headline {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -162,24 +162,25 @@ a:hover {
     width: 1px;
 }
 
-#secondary .item {
+.secondary .item {
 	display: inline-block;
 	margin-right: 1em;
 	vertical-align: bottom;
 }
 
-#secondary .item a {
+.secondary .item a {
 	display: block;
 	padding: .5em 1em;
+	font-size: .875em;
 }
 
-#secondary .item a:focus,
-#secondary .item a:hover {
+.secondary .item a:focus,
+.secondary .item a:hover {
 	background: #2C2F3F;
 	color: #fff;
 }
 
-#secondary .list .list {
+.secondary .list .list {
 	position: absolute;
 	left: -9999px;
 	top: 100%;
@@ -189,12 +190,12 @@ a:hover {
 	opacity: 0;
 }
 
-#secondary .has_no_focus .list {
+.secondary .has_no_focus .list {
 	-webkit-animation: fadeOut .2s linear;
 	animation: fadeOut .2s linear;
 }
 
-#secondary .item.has_focus .list {
+.secondary .item.has_focus .list {
 	-webkit-animation: fadeIn .2s linear;
 	animation: fadeIn .2s linear;
 	opacity: 1;
@@ -202,22 +203,22 @@ a:hover {
 	left: 0;
 }
 
-#secondary .item {
+.secondary .item {
 	position: relative;
 }
 
-#secondary .item.has_focus {
+.secondary .item.has_focus {
 	padding: 0;
 	z-index: 2;
 }
 
-#secondary .item .item {
+.secondary .item .item {
 	display: block;
 	white-space: nowrap;
 	margin: 0;
 }
 
-#secondary .item .item a {
+.secondary .item .item a {
 	padding: .5em 1em;
 	display: block;
 
@@ -225,24 +226,25 @@ a:hover {
 	transition: all .2s linear;
 }
 
-#secondary .item .item a:focus,
-#secondary .item .item a:hover {
+.secondary .item .item a:focus,
+.secondary .item .item a:hover {
 	background: #4C4F5F;
 }
 
-#secondary .item .item:hover  {
+.secondary .item .item:hover  {
 	border: none;
 	border-bottom: none;
 }
 
 /* Page content */
-#sub {
+.sub {
 	background: #2C2F3F;
 	padding: 2em 3em 2em 3em;
 	line-height: 1.5;
+	font-size: .875em;
 }
 
-#sub .about p {
+.sub .about p {
 	margin-left: 1.5em;
 }
 
@@ -269,6 +271,13 @@ a:hover {
     padding: 0;
     position: absolute;
     width: 1px;
+}
+
+/* cms sections */
+
+.cms h2 a:link {
+	color: #fff;
+	text-decoration: none;
 }
 
 /*
@@ -306,8 +315,14 @@ a:hover {
 	padding-left: 40px;
 }
 
-#sub .page_responsive * {
+.sub .page_responsive * {
 	max-width: 100%;
+}
+
+#user_script {
+	width: 100%;
+	height: 300px;
+	font-family: monospace;
 }
 
 /* ------------------------------------------------------------
@@ -337,11 +352,11 @@ a:hover {
 		display: block;
 	}
 
-	#sub {
+	.sub {
 		padding: 1em;
 	}
 
-	#secondary {
+	.secondary {
 		margin-bottom: 0;
 		padding-left: 1em;
 	}
@@ -373,14 +388,14 @@ a:hover {
 		margin-left: 15em;
 	}
 
-	#title a {
+	.title a {
 		font-size: 1.1em;
 		background-position: 0 -5px;
 		margin-left: 2em;
 		padding-left: 95px;
 	}
 
-	#secondary {
+	.secondary {
 		transition: left .2s linear;
 		position: fixed;
 		top: 0;
@@ -391,18 +406,18 @@ a:hover {
 		left: -15em;
 	}
 
-	.navopen #secondary {
+	.navopen .secondary {
 		left: 0;
 	}
 
-	#secondary a {
+	.secondary a {
 		color: #fff;
 		display: block;
 		position: relative;
 		padding: .5em 1em;
 	}
 
-	#secondary .headline a:after {
+	.secondary .headline a:after {
 		content: "";
 		position: absolute;
 		right: -2.5em;
@@ -415,7 +430,7 @@ a:hover {
 		background: url(/images/menu.gif) center center no-repeat;
 	}
 
-	#secondary .headline {
+	.secondary .headline {
 		clip: auto;
 		height: auto;
 		margin: 0;
@@ -425,12 +440,12 @@ a:hover {
 		background: #867c6a;
 	}
 
-	#secondary .item {
+	.secondary .item {
 		display: block;
 		margin: 0;
 	}
 
-	#secondary .list .list {
+	.secondary .list .list {
 		position: static;
 		opacity: 1;
 		-webkit-animation: none !important;

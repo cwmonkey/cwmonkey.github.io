@@ -8,7 +8,7 @@ var $body = $('body');
 var nav_focus_TO;
 var nav_unfocus_TO;
 $body
-	.delegate('#secondary .item', 'mouseenter focusin', function() {
+	.delegate('.secondary .item', 'mouseenter focusin', function() {
 		var $this = $(this);
 		clearTimeout(nav_focus_TO);
 		nav_focus_TO = setTimeout(function() {
@@ -17,7 +17,7 @@ $body
 				.addClass('has_focus');
 		}, 0);
 	})
-	.delegate('#secondary .item', 'mouseleave focusout', function() {
+	.delegate('.secondary .item', 'mouseleave focusout', function() {
 		var $this = $(this);
 		clearTimeout(nav_unfocus_TO);
 		nav_unfocus_TO = setTimeout(function() {
@@ -26,7 +26,7 @@ $body
 				.addClass('has_no_focus');
 		}, 0);
 	})
-	.delegate('#secondary .item', 'click', function() {
+	.delegate('.secondary .item', 'click', function() {
 		var $this = $(this);
 		$this.closest('.has_focus')
 			.removeClass('has_focus')
@@ -77,7 +77,7 @@ $body
 
 		SimpleHistory.pushState(event.target.href);
 	})
-	.delegate('#secondary .headline a', 'click', function(event) {
+	.delegate('.secondary .headline a', 'click', function(event) {
 		event.preventDefault();
 
 		if ( $body.is('.navopen') ) {
@@ -86,7 +86,7 @@ $body
 			$body.addClass('navopen');
 		}
 	})
-	.delegate('#secondary .list a', 'click', function(event) {
+	.delegate('.secondary .list a', 'click', function(event) {
 		$body.removeClass('navopen');
 	})
 	;

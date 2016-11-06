@@ -1,0 +1,253 @@
+// SVG backgrounds
+
+.svg(@src) {
+	@src2: escape(replace(@src, '^\s+', '', 'gi'));
+	background-image: url("data:image/svg+xml;charset=utf-8,@{src2}");
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.to-list(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M14 6v4h8v4h-8v4l-8-6zm4-4H2v20h16v-6h-2v4H4V4h12v4h2z"/></svg>');
+}
+
+.to-window(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M14 6v4H8v4h6v4l8-6zm6-4H4v20h16v-4h-2v2H6V4h12v2h2z"/></svg>');
+}
+
+.min(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="@{color}" d="M12 8l-6 6h4v8h4v-8h4zm10-6H2v4h20z"/></svg>');
+}
+
+.restore(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 22l-6-8h4V8h4v6h4zM22 2H2v4h20z"/></svg>');
+}
+
+.edit(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M2 22v-4L14 6l4 4L6 22zM22 6l-4-4-2 2 4 4z"/></svg>');
+}
+
+.resize(@color: #000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 22H10l5-5-3-3 2-2 3 3 5-5zM14 2H2v12l5-5 3 3 2-2-3-3z"/></svg>');
+}
+
+.note(@color: #000000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 2v20H2V2h20zM4 8v12h16V8H4zm0-4v2h12V4H4zm2 8h12v-2H6v2zm0 2v2h12v-2H6zM18 4v2h2V4h-2z"/></svg>');
+}
+
+.make-note--note() {
+	.__make-note--note {
+		margin: 10px;
+		background: #fff;
+		padding: 2px;
+		line-height: 1.5;
+		box-sizing: border-box;
+		font-size: 16px;
+		border: 1px solid #000;
+		display: flex;
+		flex-direction: column;
+
+		*,
+		*:before,
+		*:after {
+			box-sizing: inherit;
+		}
+
+		.__make-note--nav {
+			background: #000;
+			color: #fff;
+			padding: 0 4px;
+			font-size: 14px;
+			display: inline-block;
+			width: 100%;
+			max-width: 100%;
+			vertical-align: top;
+			position: relative;
+			flex: 0 0 auto;
+		}
+
+		.__make-note--tool {
+			-webkit-appearance: none; // iOS
+			border-radius: 0;
+			background: #fff;
+			border: 1px solid #ccc;
+			box-shadow: none;
+			font: inherit;
+			padding: 0;
+
+			width: 1em;
+			height: 1em;
+			text-indent: 32px;
+			white-space: nowrap;
+			overflow: hidden;
+			position: relative;
+			cursor: pointer;
+			margin: 0;
+			min-height: 0;
+			line-height: 1;
+
+			// FireFox
+			&::-moz-focus-inner { 
+				border: 0;
+				padding: 0;
+				margin: 0;
+			}
+
+			&.__make-note--resize {
+				.resize();
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+
+			&.__make-note--min {
+				.min();
+			}
+
+			&.__make-note--restore {
+				.restore();
+			}
+
+			&.__make-note--to-window {
+				.to-window();
+			}
+
+			&.__make-note--to-list {
+				.to-list();
+			}
+
+			&.__make-note--edit {
+				.edit();
+			}
+		}
+
+
+		@nav_width: 51px;
+
+		.__make-note--title {
+			display: block;
+			width: 100%;
+			padding-right: @nav_width;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			float: left;
+		}
+
+		.__make-note--mover {
+			display: block;
+			-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none;   /* Chrome/Safari/Opera */
+			-khtml-user-select: none;    /* Konqueror */
+			-moz-user-select: none;      /* Firefox */
+			-ms-user-select: none;       /* Internet Explorer/Edge */
+			user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+			cursor: default;
+		}
+
+		.__make-note--tools {
+			display: block;
+			white-space: nowrap;
+			padding: 0;
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin: 0 3px 0 0;
+		}
+
+		.__make-note--main {
+			padding: 5px 5px 0 5px;
+			display: block;
+			overflow-y: auto;
+		}
+
+		.__make-note--match {
+			display: block;
+			margin-bottom: 5px;
+			font-style: italic;
+		}
+
+		.__make-note--body {
+			display: block;
+			font-size: 14px;
+			color: #000;
+		}
+	}
+
+	.__make-note--form {
+		background: #fff;
+		padding: 1px 10px;
+		font-size: 14px;
+		overflow-y: auto;
+
+		> div {
+			margin: 5px;
+		}
+
+		input[type="text"],
+		textarea {
+			font-size: 14px;
+			font-family: inherit;
+			min-width: 100%;
+			border: 1px solid #ccc;
+		}
+
+		input[type="text"] {
+			padding: 0 5px;
+			line-height: 1.8;
+		}
+
+		textarea {
+			overflow: hidden;
+			resize: both;
+			padding: 5px;
+			line-height: 1.5;
+		}
+
+		button {
+			font-size: 14px;
+			padding: 0 10px 0 10px;
+			background: #fff;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			color: #000;
+			box-shadow: none;
+			line-height: 2;
+			min-height: 0;
+			cursor: pointer;
+
+			&:hover,
+			&:focus {
+				background: #f0f0f0;
+			}
+		}
+	}
+}
+
+.make-note--states() {
+	.__make-note--note {
+		&.__make-note--editing {
+			//height: auto;
+			//width: auto;
+			z-index: 100002;
+
+			//.__make-note--resize,
+			//.__make-note--nav,
+			.__make-note--tools,
+			.__make-note--main {
+				display: none;
+			}
+		}
+
+		&.__make-note--minimized {
+			.__make-note--min,
+			.__make-note--main {
+				display: none;
+			}
+
+			.__make-note--restore {
+				display: inline-block;
+			}
+		}
+	}
+}
