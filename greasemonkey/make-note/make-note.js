@@ -87,6 +87,7 @@ var main = function() {
 
 	$iframe.appendTo(document.body);
 
+	// Fix iframe for iPhone
 	setTimeout(function() {
 		$iframe.addClass('__make-note_opened');
 		$iframe[0].scrolling = 'auto';
@@ -254,10 +255,10 @@ var main = function() {
 		constrain_move();
 		var note = moving_node;
 
-		$window.unbind('touchmove mousemove', note_move);
+		$window.unbind('mousemove', note_move);
 		$body
 			.removeClass('__make-note--moving')
-			.unbind('touchend touchcancel mouseup mouseleave', note_end_move);
+			.unbind('mouseup mouseleave', note_end_move);
 
 		if ( !note.editing ) {
 			if ( x_last <= 0 ) {
@@ -284,8 +285,8 @@ var main = function() {
 	var note_end_resize = function() {
 		var note = cwmMakeNote.get_node(resizing);
 
-		$window.unbind('touchmove mousemove', note_resize);
-		$body.unbind('touchend touchcancel mouseup mouseleave', note_end_resize);
+		$window.unbind('mousemove', note_resize);
+		$body.unbind('mouseup mouseleave', note_end_resize);
 
 		if ( !note.editing ) {
 			if ( x_rlast <= 0 ) {
@@ -314,7 +315,7 @@ var main = function() {
 		.delegate('.__make-note--note', 'focusout', function(e) {
 			$(this).removeClass('__make-note--focused');
 		})
-		.delegate('[data-type="mover"]', 'touchstart mousedown', function(e) {
+		.delegate('[data-type="mover"]', 'mousedown', function(e) {
 			if ( event.which !== 1 ) {
 				return;
 			}
@@ -326,12 +327,12 @@ var main = function() {
 			y_pos = e.clientY - moving.offsetTop;
 			change_height = undefined;
 
-			$window.bind('touchmove mousemove', note_move);
+			$window.bind('mousemove', note_move);
 			$body
 				.addClass('__make-note--moving')
-				.bind('touchend touchcancel mouseup mouseleave', note_end_move);
+				.bind('mouseup mouseleave', note_end_move);
 		})
-		.delegate('[data-type="resize"]', 'touchstart mousedown', function(e) {
+		.delegate('[data-type="resize"]', 'mousedown', function(e) {
 			if ( event.which !== 1 ) {
 				return;
 			}
@@ -342,14 +343,38 @@ var main = function() {
 			x_rpos = e.clientX - $resizing.outerWidth(true);
 			y_rpos = e.clientY - $resizing.outerHeight(true);
 
-			$window.bind('touchmove mousemove', note_resize);
-			$body.bind('touchend touchcancel mouseup mouseleave', note_end_resize);
+			$window.bind('mousemove', note_resize);
+			$body.bind('mouseup mouseleave', note_end_resize);
 		})
 		.delegate('[data-type="to-list"]', 'click', function() {
 			cwmMakeNote.get_node(this).toList();
 			cwmMakeNote.get_node(this).$el.remove();
 		})
 		;
+
+	// Mobile support
+	// http://stackoverflow.com/questions/5186441/javascript-drag-and-drop-for-touch-devices
+	function touchHandler(event) {
+		var touch = event.changedTouches[0];
+
+		var simulatedEvent = document.createEvent('MouseEvent');
+			simulatedEvent.initMouseEvent({
+			touchstart: 'mousedown',
+			touchmove: 'mousemove',
+			touchend: 'mouseup'
+		}[event.type], true, true, window, 1,
+			touch.screenX, touch.screenY,
+			touch.clientX, touch.clientY, false,
+			false, false, false, 0, null);
+
+		touch.target.dispatchEvent(simulatedEvent);
+		event.preventDefault();
+	}
+
+	document.addEventListener('touchstart', touchHandler, true);
+	document.addEventListener('touchmove', touchHandler, true);
+	document.addEventListener('touchend', touchHandler, true);
+	document.addEventListener('touchcancel', touchHandler, true);
 };
 
 })();
