@@ -87,6 +87,18 @@ var main = function() {
 
 	$iframe.appendTo(document.body);
 
+	setTimeout(function() {
+		$iframe.addClass('__make-note_opened');
+		$iframe[0].scrolling = 'auto';
+		$iframe.attr({scrolling: 'auto'});
+
+		setTimeout(function() {
+			$iframe.removeClass('__make-note_opened');
+			$iframe[0].scrolling = 'no';
+			$iframe.attr({scrolling: 'no'});
+		}, 0);
+	}, 0);
+
 	// Add History events
 	(function(history){
 		var trigger_event = function(name) {
