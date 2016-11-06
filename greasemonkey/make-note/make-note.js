@@ -149,6 +149,32 @@ var main = function() {
 	window.addEventListener('pushstate', handle_url_change);
 	window.addEventListener('replacestate', handle_url_change);
 
+
+	// Mobile support
+	// http://stackoverflow.com/questions/5186441/javascript-drag-and-drop-for-touch-devices
+	function touchHandler(event) {
+		var touch = event.changedTouches[0];
+
+		var simulatedEvent = document.createEvent('MouseEvent');
+			simulatedEvent.initMouseEvent({
+			touchstart: 'mousedown',
+			touchmove: 'mousemove',
+			touchend: 'mouseup'
+		}[event.type], true, true, window, 1,
+			touch.screenX, touch.screenY,
+			touch.clientX, touch.clientY, false,
+			false, false, false, 0, null);
+
+		touch.target.dispatchEvent(simulatedEvent);
+		event.preventDefault();
+	}
+
+	document.addEventListener('touchstart', touchHandler, true);
+	document.addEventListener('touchmove', touchHandler, true);
+	document.addEventListener('touchend', touchHandler, true);
+	document.addEventListener('touchcancel', touchHandler, true);
+
+	// resize/move
 	var $window = $(window);
 	var $body = $(document.body);
 
@@ -351,30 +377,6 @@ var main = function() {
 			cwmMakeNote.get_node(this).$el.remove();
 		})
 		;
-
-	// Mobile support
-	// http://stackoverflow.com/questions/5186441/javascript-drag-and-drop-for-touch-devices
-	function touchHandler(event) {
-		var touch = event.changedTouches[0];
-
-		var simulatedEvent = document.createEvent('MouseEvent');
-			simulatedEvent.initMouseEvent({
-			touchstart: 'mousedown',
-			touchmove: 'mousemove',
-			touchend: 'mouseup'
-		}[event.type], true, true, window, 1,
-			touch.screenX, touch.screenY,
-			touch.clientX, touch.clientY, false,
-			false, false, false, 0, null);
-
-		touch.target.dispatchEvent(simulatedEvent);
-		event.preventDefault();
-	}
-
-	document.addEventListener('touchstart', touchHandler, true);
-	document.addEventListener('touchmove', touchHandler, true);
-	document.addEventListener('touchend', touchHandler, true);
-	document.addEventListener('touchcancel', touchHandler, true);
 };
 
 })();
