@@ -497,7 +497,7 @@ var add_note = function(values) {
 
 	$add_form.find('[name="match"]').val(url.href);
 
-	if ( note.matches(document.location.href) ) {
+	if ( note.matches(url.href) ) {
 		matches++;
 		$('[data-type="view"]').html(matches);
 

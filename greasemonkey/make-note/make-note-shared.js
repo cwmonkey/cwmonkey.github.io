@@ -47,7 +47,8 @@ Note.prototype.init = function(params) {
 	}
 
 	this.marked_body = marked(this.body);
-	this.$el = $(this.note_tpl(this));
+
+	this.$el = $(this.note_tpl(this).trim());
 	this.$el.data('__make-note-object', this);
 };
 
