@@ -254,10 +254,10 @@ var main = function() {
 		constrain_move();
 		var note = moving_node;
 
-		$window.unbind('mousemove', note_move);
+		$window.unbind('touchmove mousemove', note_move);
 		$body
 			.removeClass('__make-note--moving')
-			.unbind('mouseup mouseleave', note_end_move);
+			.unbind('touchend touchcancel mouseup mouseleave', note_end_move);
 
 		if ( !note.editing ) {
 			if ( x_last <= 0 ) {
@@ -284,8 +284,8 @@ var main = function() {
 	var note_end_resize = function() {
 		var note = cwmMakeNote.get_node(resizing);
 
-		$window.unbind('mousemove', note_resize);
-		$body.unbind('mouseup mouseleave', note_end_resize);
+		$window.unbind('touchmove mousemove', note_resize);
+		$body.unbind('touchend touchcancel mouseup mouseleave', note_end_resize);
 
 		if ( !note.editing ) {
 			if ( x_rlast <= 0 ) {
@@ -314,7 +314,7 @@ var main = function() {
 		.delegate('.__make-note--note', 'focusout', function(e) {
 			$(this).removeClass('__make-note--focused');
 		})
-		.delegate('[data-type="mover"]', 'mousedown', function(e) {
+		.delegate('[data-type="mover"]', 'touchstart mousedown', function(e) {
 			if ( event.which !== 1 ) {
 				return;
 			}
@@ -326,12 +326,12 @@ var main = function() {
 			y_pos = e.clientY - moving.offsetTop;
 			change_height = undefined;
 
-			$window.bind('mousemove', note_move);
+			$window.bind('touchmove mousemove', note_move);
 			$body
 				.addClass('__make-note--moving')
-				.bind('mouseup mouseleave', note_end_move);
+				.bind('touchend touchcancel mouseup mouseleave', note_end_move);
 		})
-		.delegate('[data-type="resize"]', 'mousedown', function(e) {
+		.delegate('[data-type="resize"]', 'touchstart mousedown', function(e) {
 			if ( event.which !== 1 ) {
 				return;
 			}
@@ -342,8 +342,8 @@ var main = function() {
 			x_rpos = e.clientX - $resizing.outerWidth(true);
 			y_rpos = e.clientY - $resizing.outerHeight(true);
 
-			$window.bind('mousemove', note_resize);
-			$body.bind('mouseup mouseleave', note_end_resize);
+			$window.bind('touchmove mousemove', note_resize);
+			$body.bind('touchend touchcancel mouseup mouseleave', note_end_resize);
 		})
 		.delegate('[data-type="to-list"]', 'click', function() {
 			cwmMakeNote.get_node(this).toList();
