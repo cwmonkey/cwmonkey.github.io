@@ -58,12 +58,35 @@ var load_page = function(path) {
 			.addClass('unloaded')
 			.removeClass('loading')
 			.removeClass('unloaded')
-			.focus()
+			//.focus()
 			;
+
+		window.scrollTo(0, 0);
 
 		// Analytics
 		ga('send', 'pageview', path);
+		check_path();
 	});
+};
+
+// Path scripts to run
+var paths = {
+	'^/greasemonkey/make-note': function() {
+		(function(){var url='/greasemonkey/make-note/make-note-script.js';document.head.appendChild(document.createElement('script')).src=url+'?'+(new Date()).getTime();})();
+	}
+};
+
+var check_path = function() {
+	var path;
+	for ( var key in paths ) {
+		if ( paths.hasOwnProperty(key) ) {
+			if ( document.location.pathname.match(new RegExp(key)) ) {
+				path = paths[key];
+				path();
+				break;
+			}
+		}
+	}
 };
 
 $body
