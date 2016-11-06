@@ -58,7 +58,7 @@ cwmJsload.load(
 	function() {
 		(function($) {
 			if ( typeof window.cwmMakeNote.main === 'undefined' ) {
-				window.cwmMakeNote.load(window, $, window.cwmMakeNote.debug);
+				window.cwmMakeNote.load(window, $, window.cwmMakeNote.debug, window.Handlebars);
 			}
 
 			window.cwmMakeNote.main();

@@ -2,11 +2,13 @@
 
 var $;
 var debug = false;
+var Handlebars;
 
-window.cwmMakeNote.load = function(window, jQuery, d) {
+window.cwmMakeNote.load = function(window, jQuery, d, h) {
 	$ = jQuery;
 	debug = d;
 	window.cwmMakeNote.main = main;
+	Handlebars = h;
 };
 
   /////////////////////////////
@@ -14,7 +16,7 @@ window.cwmMakeNote.load = function(window, jQuery, d) {
 /////////////////////////////
 var main = function() {
 	var tpls = {};
-	var app = new window.cwmMakeNoteApp($);
+	var app = new window.cwmMakeNoteApp($, Handlebars, debug);
 
 	app.attach();
 

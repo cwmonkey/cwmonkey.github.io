@@ -2,6 +2,7 @@
 
 var $;
 var debug = false;
+var Handlebars;
 
 var Note = function(params, note_tpl, note_form_tpl, save_fn, frame) {
 	debug && console.log('Note');
@@ -269,12 +270,13 @@ var cwmMakeNote = window.cwmMakeNote = {
 
 window.cwmMakeNote.Note = Note;
 
-var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, d) {
+var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, h, d) {
 	if ( d ) {
 		debug = true;
 	}
 
 	$ = jQuery;
+	Handlebars = h;
 
 	// Get form as {name: value...}
 	$.fn.serializeObject = function() {

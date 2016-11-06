@@ -130,13 +130,16 @@
 			display: block;
 			width: 100%;
 			padding-right: @nav_width;
-			overflow: hidden;
-			text-overflow: ellipsis;
 			float: left;
 		}
 
 		.__make-note--mover {
 			display: block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+
 			-webkit-touch-callout: none; /* iOS Safari */
 			-webkit-user-select: none;   /* Chrome/Safari/Opera */
 			-khtml-user-select: none;    /* Konqueror */
