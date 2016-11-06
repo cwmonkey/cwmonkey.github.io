@@ -43,7 +43,7 @@ cwmJsload.load(
 			script: '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js',
 			static: true,
 			test: function() {
-				return !!window.Handlebars;
+				return !!window.Handlebars && parseInt(window.Handlebars) >= 4;
 			}
 		},
 		{
