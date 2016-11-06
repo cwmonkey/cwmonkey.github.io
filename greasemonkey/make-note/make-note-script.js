@@ -8,7 +8,7 @@ if ( window.cwmMakeNoteLoad || window.top !== window || document.location.pathna
 }
 
 window.cwmMakeNoteLoad = true;
-window.cwmMakeNoteDebug = {{ debug }};
+window.cwmMakeNoteDebug = {{ site.debug }};
 
 {% include js/make-note-shared.min.js %}
 
