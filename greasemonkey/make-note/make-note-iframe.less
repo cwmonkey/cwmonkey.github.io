@@ -1,6 +1,13 @@
 @import "_make-note-shared.less";
 @import "_make-note-normalize.less";
 
+// Some retarded Safari fix
+// http://stackoverflow.com/questions/5267996/how-to-properly-display-an-iframe-in-mobile-safari
+html, body {height:100%; overflow:hidden}
+body {overflow:auto; -webkit-overflow-scrolling:touch}
+
+// Usual CSS
+
 html {
 	box-sizing: border-box;
 	height: 100%;
