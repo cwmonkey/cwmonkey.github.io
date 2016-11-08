@@ -250,16 +250,16 @@ var autosize = function(el) {
  // Shared functionality
 /////////////////////////////
 
-var if_reg = /{{ *#if +([a-z_][a-z_0-9A-Z]*) *}}/g;
-var else_reg = /{{ *else *}}/g;
-var endif_reg = /{{ *\/if *}}/g;
-var each_reg = /{{ *#each +([a-z_][a-z_0-9A-Z]*) *}}/g;
-var endeach_reg = /{{ *\/each *}}/g;
+var if_reg = /\{\{ *#if +([a-z_][a-z_0-9A-Z]*) *\}\}/g;
+var else_reg = /\{\{ *else *\}\}/g;
+var endif_reg = /\{\{ *\/if *\}\}/g;
+var each_reg = /\{\{ *#each +([a-z_][a-z_0-9A-Z]*) *\}\}/g;
+var endeach_reg = /\{\{ *\/each *\}\}/g;
 var trim_reg = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 var n_reg = /\n/g;
-var this_reg = /{{ *this *}}/g;
-var var_raw_reg = /{{{ *([a-z_][a-z_0-9A-Z]*) *}}}/g;
-var var_reg = /{{ *([a-z_][a-z_0-9A-Z]*) *}}/g;
+var this_reg = /\{\{ *this *\}\}/g;
+var var_raw_reg = /\{\{\{ *([a-z_][a-z_0-9A-Z]*) *\}\}\}/g;
+var var_reg = /\{\{ *([a-z_][a-z_0-9A-Z]*) *\}\}/g;
 
 var cwmMakeNote = window.cwmMakeNote = {
 	// Get node from dom element
