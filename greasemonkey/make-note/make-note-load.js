@@ -40,13 +40,6 @@ cwmJsload.load(
 			}
 		},
 		{
-			script: '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js',
-			static: true,
-			test: function() {
-				return !!window.Handlebars && parseInt(window.Handlebars) >= 4;
-			}
-		},
-		{
 			script: '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js',
 			static: true,
 			test: function() {
@@ -58,7 +51,7 @@ cwmJsload.load(
 	function() {
 		(function($) {
 			if ( typeof window.cwmMakeNote.main === 'undefined' ) {
-				window.cwmMakeNote.load(window, $, window.cwmMakeNote.debug, window.Handlebars);
+				window.cwmMakeNote.load(window, $, window.cwmMakeNote.debug);
 			}
 
 			window.cwmMakeNote.main();

@@ -2,7 +2,6 @@
 
 var $;
 var debug = false;
-var Handlebars;
 
 var Note = function(params, note_tpl, note_form_tpl, save_fn, frame) {
 	debug && console.log('Note');
@@ -247,6 +246,21 @@ var autosize = function(el) {
 	},0);
 };
 
+  /////////////////////////////
+ // Shared functionality
+/////////////////////////////
+
+var if_reg = /{{ *#if +([a-z_][a-z_0-9A-Z]*) *}}/g;
+var else_reg = /{{ *else *}}/g;
+var endif_reg = /{{ *\/if *}}/g;
+var each_reg = /{{ *#each +([a-z_][a-z_0-9A-Z]*) *}}/g;
+var endeach_reg = /{{ *\/each *}}/g;
+var trim_reg = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+var n_reg = /\n/g;
+var this_reg = /{{ *this *}}/g;
+var var_raw_reg = /{{{ *([a-z_][a-z_0-9A-Z]*) *}}}/g;
+var var_reg = /{{ *([a-z_][a-z_0-9A-Z]*) *}}/g;
+
 var cwmMakeNote = window.cwmMakeNote = {
 	// Get node from dom element
 	get_node: function(el) {
@@ -265,18 +279,35 @@ var cwmMakeNote = window.cwmMakeNote = {
 		var reg = new RegExp(pattern);
 
 		return str.match(reg);
+	},
+	compile: function(html) {
+		var fn = "function(d){var html='";
+		fn += html
+			.replace(trim_reg, '')
+			.replace(n_reg, '\\\n')
+			.replace(if_reg, "';if (d.$1) {html+='")
+			.replace(else_reg, "';}else{html+='")
+			.replace(endif_reg, "';}html+='")
+			.replace(each_reg, "';for(var i=0,l=d.$1.length,v;i<l;i++){v=d.$1[i];html+='")
+			.replace(endeach_reg, "';};html+='")
+			.replace(this_reg, "';html+=v;html+='")
+			.replace(var_raw_reg, "';html+=d.$1;html+='")
+			.replace(var_reg, "';html+=d.$1;html+='")
+			;
+		fn += "';return html}";
+		eval('var func = ' + fn);
+		return func;
 	}
 };
 
 window.cwmMakeNote.Note = Note;
 
-var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, h, d) {
+var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, d) {
 	if ( d ) {
 		debug = true;
 	}
 
 	$ = jQuery;
-	Handlebars = h;
 
 	// Get form as {name: value...}
 	$.fn.serializeObject = function() {
@@ -292,7 +323,7 @@ var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, h, d) {
 
 // Template
 cwmMakeNoteApp.prototype.tpl = function(source) {
-	var template = Handlebars.compile(source);
+	var template = cwmMakeNote.compile(source);
 	return template;
 };
 

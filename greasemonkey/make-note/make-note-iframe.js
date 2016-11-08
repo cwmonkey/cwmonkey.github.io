@@ -242,7 +242,7 @@ window.addEventListener('message', receive_message, false);
 var $wrapper = $('#wrapper');
 var $view = $('[data-type="view"]');
 var $body = $(document.body);
-var app = new window.cwmMakeNoteApp($, Handlebars, debug);
+var app = new window.cwmMakeNoteApp($, debug);
 
 app.attach();
 
