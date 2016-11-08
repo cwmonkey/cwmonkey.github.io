@@ -281,7 +281,7 @@ var cwmMakeNote = window.cwmMakeNote = {
 		return str.match(reg);
 	},
 	compile: function(html) {
-		var fn = "function(d){var html='";
+		var fn = "function(d,undefined){var html='";
 		fn += html
 			.replace(trim_reg, '')
 			.replace(n_reg, '\\\n')
@@ -291,8 +291,8 @@ var cwmMakeNote = window.cwmMakeNote = {
 			.replace(each_reg, "';for(var i=0,l=d.$1.length,v;i<l;i++){v=d.$1[i];html+='")
 			.replace(endeach_reg, "';};html+='")
 			.replace(this_reg, "';html+=v;html+='")
-			.replace(var_raw_reg, "';html+=d.$1;html+='")
-			.replace(var_reg, "';html+=d.$1;html+='")
+			.replace(var_raw_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
+			.replace(var_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
 			;
 		fn += "';return html}";
 		eval('var func = ' + fn);
