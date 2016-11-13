@@ -273,6 +273,7 @@ var cwmMakeNote = window.cwmMakeNote = {
 			.replace(/([\.\\\+\?\[\^\]\$\(\)\{\}\=\!\>\|\:\-])/g, '\\$1')
 			.replace(/\*/g, '.*')
 			.replace(/\/\.\*$/, '(\\/.*)?')
+			.replace(/\/$/, '\\/?')
 			+ '(#.*)?'
 			;
 
