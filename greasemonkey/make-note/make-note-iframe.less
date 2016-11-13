@@ -26,15 +26,8 @@ body {
 }
 
 .add,
-.collapse {
+.adjust_nav button {
 	display: none;
-}
-
-.collapse {
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 1000;
 }
 
 #wrapper.loaded {
@@ -43,7 +36,7 @@ body {
 	padding-top: 25px;
 
 	.add,
-	.collapse {
+	.adjust_nav button {
 		display: inline-block;
 	}
 }
@@ -213,59 +206,97 @@ body {
 	}
 }
 
-.collapse {
-	-webkit-appearance: none; // iOS
-	border-radius: 0;
-	background: rgba(0, 0, 0, .1);
-	border: 1px solid #ccc;
-	box-shadow: none;
-	font: inherit;
-	padding: 2px 5px 3px 20px;
-	margin: 2px 0 0 2px;
-	font-size: 12px;
-	color: #fff;
-	border-radius: 3px;
-	text-shadow: 1px 1px 0 #000;
-	white-space: nowrap;
-	cursor: pointer;
-	transition: all .1s linear;
+.adjust_nav {
+	position: fixed;
+	top: 0;
+	left: 0;
 
-	&:hover {
+	button {
+		-webkit-appearance: none; // iOS
+		border-radius: 0;
 		background: rgba(0, 0, 0, .3);
-		border-color: #fff;
+		border: 1px solid #ccc;
+		box-shadow: none;
+		font: inherit;
+		padding: 2px 5px 3px 20px;
+		margin: 2px 0 0 2px;
+		font-size: 12px;
+		color: #fff;
+		border-radius: 3px;
+		text-shadow: 1px 1px 0 #000;
+		white-space: nowrap;
+		cursor: pointer;
+		transition: all .1s linear;
+		position: relative;
+		z-index: 1000;
+
+		&:hover {
+			background: rgba(0, 0, 0, .3);
+			border-color: #fff;
+		}
+
+		// FireFox
+		&::-moz-focus-inner { 
+			border: 0;
+			padding: 0;
+			margin: 0;
+		}
+
+		&:before,
+		&:after {
+			content: " ";
+			display: inline-block;
+			width: 12px;
+			height: 12px;
+			vertical-align: bottom;
+			transform: rotate(-90deg);
+			margin-right: 3px;
+			position: absolute;
+		}
+
+		&:before {
+			top: 2px;
+			left: 5px;
+			z-index: 2;
+		}
+
+		&:after {
+			top: 3px;
+			left: 6px;
+			z-index: 1;
+		}
 	}
 
-	// FireFox
-	&::-moz-focus-inner { 
-		border: 0;
-		padding: 0;
-		margin: 0;
+	.collapse {
+		&:before {
+			.min(#fff);
+		}
+
+		&:after {
+			.min();
+		}
 	}
 
-	&:before,
-	&:after {
-		content: " ";
-		display: inline-block;
-		width: 12px;
-		height: 12px;
-		vertical-align: bottom;
-		transform: rotate(-90deg);
-		margin-right: 3px;
-		position: absolute;
+	.thinner {
+		&:before {
+			.arrow(#fff);
+		}
+
+		&:after {
+			.arrow();
+		}
 	}
 
-	&:before {
-		.min(#fff);
-		top: 2px;
-		left: 5px;
-		z-index: 2;
-	}
+	.wider {
+		&:before {
+			.arrow(#fff);
+			transform: rotate(90deg);
+		}
 
-	&:after {
-		.min();
-		top: 3px;
-		left: 6px;
-		z-index: 1;
+		&:after {
+			.arrow();
+			transform: rotate(90deg);
+		}
 	}
 }
 

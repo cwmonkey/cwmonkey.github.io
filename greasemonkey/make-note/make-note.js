@@ -15,6 +15,12 @@ window.cwmMakeNote.load = function(window, jQuery, d) {
 var main = function() {
 	var tpls = {};
 	var app = new window.cwmMakeNoteApp($, debug);
+	var width = 320;
+	var width_key = '__make-note-width'
+
+	try {
+		width = parseInt(localStorage.getItem(width_key)) || width;
+	} catch(e) {}
 
 	app.attach();
 
@@ -46,6 +52,17 @@ var main = function() {
 			});
 		} else if ( event.data.type === 'destroy' ) {
 			$iframe.remove();
+		} else if ( event.data.type === 'wider' ) {
+			width += 20;
+			$iframe.width(width);
+			localStorage.setItem(width_key, width);
+		} else if ( event.data.type === 'thinner' ) {
+			width -= 20;
+			if ( width < 100 ) {
+				width = 100;
+			}
+			$iframe.width(width);
+			localStorage.setItem(width_key, width);
 		} else if ( event.data.type === 'open' ) {
 			$iframe.addClass('__make-note_opened');
 			$iframe[0].scrolling = 'auto';
@@ -81,7 +98,7 @@ var main = function() {
 	$css.appendTo(document.head);
 
 	// Add iframe
-	var $iframe = $('<iframe id="__make-note" scrolling="no" style="display: none; opacity: 0"></iframe>');
+	var $iframe = $('<iframe id="__make-note" scrolling="no" style="display: none; opacity: 0; width: ' + width + 'px"></iframe>');
 	var iframe = $iframe[0];
 	$iframe.attr({src: '//{{ site.domain }}/greasemonkey/make-note/make-note-iframe.html#' + document.location.href});
 

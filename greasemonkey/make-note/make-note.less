@@ -19,8 +19,10 @@
 		///background: transparent;
 		//opacity: 0;
 		transition: opacity .5s linear;
-		width: 53px;
-		height: 18px;
+		max-width: 53px;
+		max-height: 18px;
+		min-width: 53px;
+		min-height: 18px;
 		display: block;
 		max-width: 100%;
 		z-index: 100000;
@@ -30,7 +32,10 @@
 		}
 
 		&.__make-note_opened {
-			width: 320px;
+			max-width: 100%;
+			max-height: 100%;
+			min-width: none;
+			min-height: none;
 			height: 100%;
 			background: rgba(0,0,0,.5);
 			z-index: 110000;

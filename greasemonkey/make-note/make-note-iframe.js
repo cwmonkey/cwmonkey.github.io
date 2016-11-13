@@ -269,6 +269,12 @@ $document
 		$wrapper.removeClass('loaded');
 		$view.show();
 	})
+	.delegate('[data-type="thinner"]', 'click', function() {
+		window.parent.postMessage({type: 'thinner'}, '*');
+	})
+	.delegate('[data-type="wider"]', 'click', function() {
+		window.parent.postMessage({type: 'wider'}, '*');
+	})
 	.delegate('[data-type="add-form"] form', 'submit', function(event) {
 		event.preventDefault();
 		var $this = $(this);

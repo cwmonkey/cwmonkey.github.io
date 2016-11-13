@@ -36,6 +36,10 @@
 	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 2v20H2V2h20zM4 8v12h16V8H4zm0-4v2h12V4H4zm2 8h12v-2H6v2zm0 2v2h12v-2H6zM18 4v2h2V4h-2z"/></svg>');
 }
 
+.arrow(@color: #000000) {
+	.svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="@{color}" d="M12 5l-6 6h4v8h4v-8h4l-6-6z"/></svg>');
+}
+
 .make-note--note() {
 	.__make-note--note {
 		margin: 10px;
