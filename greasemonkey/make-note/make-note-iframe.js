@@ -499,9 +499,12 @@ var add_note = function(values) {
 	cwmMakeNote.notes[note.id] = note;
 	note.$el.appendTo($notes);
 
-	$add_form[0].reset();
+	$add_form
+		[0].reset();
 
-	$add_form.find('[name="match"]').val(url.href);
+	$add_form
+		.find('textarea').css({height: ''}).end()
+		.find('[name="match"]').val(url.href);
 
 	if ( note.matches(url.href) ) {
 		matches++;

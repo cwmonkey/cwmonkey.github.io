@@ -230,20 +230,27 @@ Note.prototype.export = function() {
 };
 
 // Textarea resizer
-var autosize_to;
+var $autosize_holder;
 var autosize = function(el) {
-	clearTimeout(autosize_to);
+	if ( !$autosize_holder ) {
+		$autosize_holder = $('<span style="width:0;display:inline-block"></span>');
+	}
 
-	autosize_to = setTimeout(function(){
-		var $el = $(el);
-		var w = el.style.width;
-		el.style.cssText = 'height:auto;' + (w?'width:'+w:'');
-		var height = $el.outerHeight(true);
-		el.style.cssText = 'padding-top:0; padding-bottom:0; border-top:0; border-bottom:0;' + (w?'width:'+w:'');
-		var extra = height - $el.outerHeight(true);
-		el.style.cssText = 'height:' + (el.scrollHeight + extra) + 'px;' + (w?'width:'+w:'');
-		$el.trigger('autosize');
-	},0);
+	var $el = $(el);
+	var height = $el.outerHeight(true);
+
+	$autosize_holder
+		.css({height: height})
+		.insertAfter($el);
+
+	var w = el.style.width;
+	el.style.cssText = 'height:auto;' + (w?'width:'+w:'');
+	height = $el.outerHeight(true);
+	el.style.cssText = 'padding-top:0; padding-bottom:0; border-top:0; border-bottom:0;' + (w?'width:'+w:'');
+	var extra = height - $el.outerHeight(true);
+	el.style.cssText = 'height:' + (el.scrollHeight + extra) + 'px;' + (w?'width:'+w:'');
+	$autosize_holder.detach();
+	$el.trigger('autosize');
 };
 
   /////////////////////////////
@@ -336,7 +343,7 @@ cwmMakeNoteApp.prototype.attach = function() {
 		.delegate('[data-type="restore"]', 'click', function() {
 			cwmMakeNote.get_node(this).restore();
 		})
-		.delegate('.__make-note--note textarea', 'input drop paste cut delete click', function() {
+		.delegate('.__make-note--form textarea', 'input drop paste cut delete click', function() {
 			autosize(this);
 		})
 		.delegate('[data-type="edit"]', 'click', function() {
