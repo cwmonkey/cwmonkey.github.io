@@ -32,12 +32,12 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 					name: 'Fill Murray',
 					site: 'fillmurray.com',
 					template: 'http://fillmurray.com/{width}/{height}'
-				}, */
+				},
 				{
 					name: 'Nice Nice jpg',
 					site: 'nicenicejpg.com',
 					template: 'http://nicenicejpg.com/{width}/{height}'
-				},
+				}, */
 				{
 					name: 'Place Cage',
 					site: 'placecage.com',
@@ -50,12 +50,12 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 					name: 'Place Cosby',
 					site: 'placecosby.com',
 					template: 'http://placecosby.com/{width}/{height}'
-				},
+				}/*,
 				{
 					name: 'Place Sheen',
 					site: 'placesheen.com',
 					template: 'http://placesheen.com/{width}/{height}'
-				}
+				}*/
 			]
 		},
 		{
@@ -108,7 +108,7 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 					site: 'fpoimg.com',
 					template: 'http://fpoimg.com/{width}x{height}?text={text}'
 				},
-				{
+				/*{
 					name: 'Placehold.io',
 					site: 'placehold.io',
 					template: '{protocol}://placehold.io/{width}/{height}.{extension}?text={text}',
@@ -116,7 +116,7 @@ window.cwmPlaceImage.load = function (window, $, undefined) {
 						protocol: ['None', 'http', 'https'],
 						extension: ['gif', 'jpeg', 'jpg', 'png', 'webp']
 					}
-				},
+				},*/
 				{
 					name: 'Place Hold It',
 					site: 'placehold.it',
