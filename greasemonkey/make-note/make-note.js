@@ -1,10 +1,12 @@
 (function() {
 
 var $;
+var marked;
 var debug = false;
 
-window.cwmMakeNote.load = function(window, jQuery, d) {
+window.cwmMakeNote.load = function(window, jQuery, window_marked, d) {
 	$ = jQuery;
+	marked = window_marked;
 	debug = d;
 	window.cwmMakeNote.main = main;
 };
@@ -14,7 +16,7 @@ window.cwmMakeNote.load = function(window, jQuery, d) {
 /////////////////////////////
 var main = function() {
 	var tpls = {};
-	var app = new window.cwmMakeNoteApp($, debug);
+	var app = new window.cwmMakeNoteApp($, marked, debug);
 	var width = 320;
 	var width_key = '__make-note-width'
 

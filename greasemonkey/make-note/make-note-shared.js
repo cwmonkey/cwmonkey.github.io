@@ -1,6 +1,7 @@
 (function(undefined) {
 
 var $;
+var marked;
 var debug = false;
 
 var Note = function(params, note_tpl, note_form_tpl, save_fn, frame) {
@@ -268,54 +269,59 @@ var this_reg = /\{\{ *this *\}\}/g;
 var var_raw_reg = /\{\{\{ *([a-z_][a-z_0-9A-Z]*) *\}\}\}/g;
 var var_reg = /\{\{ *([a-z_][a-z_0-9A-Z]*) *\}\}/g;
 
-var cwmMakeNote = window.cwmMakeNote = {
-	// Get node from dom element
-	get_node: function(el) {
-		return $(el).closest('.__make-note--note').data('__make-note-object');
-	},
-	wnotes: {},
-	notes: {},
-	fauxMatch: function(pattern, str) {
-		pattern = pattern
-			.replace(/([\.\\\+\?\[\^\]\$\(\)\{\}\=\!\>\|\:\-])/g, '\\$1')
-			.replace(/\*/g, '.*')
-			.replace(/\/\.\*$/, '(\\/.*)?')
-			.replace(/\/$/, '\\/?')
-			+ '(#.*)?'
-			;
+// Get node from dom element
+var cwmMakeNote = window.cwmMakeNote = {};
 
-		var reg = new RegExp(pattern);
+cwmMakeNote.get_node = function(el) {
+	return $(el).closest('.__make-note--note').data('__make-note-object');
+};
 
-		return str.match(reg);
-	},
-	compile: function(html) {
-		var fn = "function(d,undefined){var html='";
-		fn += html
-			.replace(trim_reg, '')
-			.replace(n_reg, '\\\n')
-			.replace(if_reg, "';if (d.$1) {html+='")
-			.replace(else_reg, "';}else{html+='")
-			.replace(endif_reg, "';}html+='")
-			.replace(each_reg, "';for(var i=0,l=d.$1.length,v;i<l;i++){v=d.$1[i];html+='")
-			.replace(endeach_reg, "';};html+='")
-			.replace(this_reg, "';html+=v;html+='")
-			.replace(var_raw_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
-			.replace(var_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
-			;
-		fn += "';return html}";
-		eval('var func = ' + fn);
-		return func;
-	}
+cwmMakeNote.wnotes = {};
+
+cwmMakeNote.notes = {};
+
+cwmMakeNote.fauxMatch = function(pattern, str) {
+	pattern = pattern
+		.replace(/([\.\\\+\?\[\^\]\$\(\)\{\}\=\!\>\|\:\-])/g, '\\$1')
+		.replace(/\*/g, '.*')
+		.replace(/\/\.\*$/, '(\\/.*)?')
+		.replace(/\/$/, '\\/?')
+		+ '(#.*)?'
+		;
+
+	var reg = new RegExp(pattern);
+
+	return str.match(reg);
+};
+
+cwmMakeNote.compile = function(html) {
+	var fn = "function(d,undefined){var html='";
+	fn += html
+		.replace(trim_reg, '')
+		.replace(n_reg, '\\\n')
+		.replace(if_reg, "';if (d.$1) {html+='")
+		.replace(else_reg, "';}else{html+='")
+		.replace(endif_reg, "';}html+='")
+		.replace(each_reg, "';for(var i=0,l=d.$1.length,v;i<l;i++){v=d.$1[i];html+='")
+		.replace(endeach_reg, "';};html+='")
+		.replace(this_reg, "';html+=v;html+='")
+		.replace(var_raw_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
+		.replace(var_reg, "';if(d.$1!==undefined){html+=d.$1};html+='")
+		;
+	fn += "';return html}";
+	eval('var func = ' + fn);
+	return func;
 };
 
 window.cwmMakeNote.Note = Note;
 
-var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, d) {
+var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, window_marked, d) {
 	if ( d ) {
 		debug = true;
 	}
 
 	$ = jQuery;
+	marked = window_marked;
 
 	// Get form as {name: value...}
 	$.fn.serializeObject = function() {

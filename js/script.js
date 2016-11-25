@@ -72,7 +72,7 @@ var load_page = function(path) {
 // Path scripts to run
 var paths = {
 	'^/greasemonkey/make-note': function() {
-		(function(){var url='/greasemonkey/make-note/make-note-script.js';document.head.appendChild(document.createElement('script')).src=url+'?'+(new Date()).getTime();})();
+		(function(){var url='/greasemonkey/make-note/make-note-script.js';document.head.appendChild(document.createElement('script')).src=url+'?1';})();
 	}
 };
 
