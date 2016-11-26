@@ -1,5 +1,3 @@
----
----
 {% raw %}
 /**
  * marked - a markdown parser

@@ -51,7 +51,7 @@
           id = '__showdown-checkbox-input-' + Date.now() + itr;
           matches = match.match(matcher);
           repl = matches[1];
-          repl += '<label for="' + id + '"><input class="__showdown-checkbox-input" id="' + id + '" type="checkbox"'
+          repl += '<label for="' + id + '"><input class="__showdown-checkbox-input" id="' + id + '" type="checkbox"';
           if ( matches[3] !== ' ' ) {
             repl += ' checked';
           }
