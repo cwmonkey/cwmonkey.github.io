@@ -50,6 +50,17 @@ Note.prototype.init = function(params) {
 
 	this.md_body = md(this.body);
 
+	/* Shadow DOM
+	// div.innerHTML = html;
+	var css = '<link rel="stylesheet" href="//{{ site.domain }}/css/make-note.css" id="__make-note-css"/>';
+	var div = document.createElement('DIV');
+	var shadow = div.createShadowRoot();
+	var html = this.note_tpl(this).trim() + css;
+	//var clone = document.importNode(html, true);
+	shadow.innerHTML = html;
+	this.$el = $(div);
+	*/
+
 	this.$el = $(this.note_tpl(this).trim());
 	this.$el.data('__make-note-object', this);
 };
