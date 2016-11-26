@@ -31,11 +31,12 @@ for ( var thing in window ) {
 
 ;(function(window) {
 	{% include js/vendor/jquery.js %}
-	{% include js/vendor/marked.js %}
-	cwmMakeNoteWindow.marked = marked;
+	{% include js/vendor/showdown.js %}
+	{% include js/showdown-checkbox.min.js %}
+	{% include js/make-note-setup.min.js %}
 })(cwmMakeNoteWindow);
 
-window.cwmMakeNote.load(window, cwmMakeNoteWindow.jQuery, cwmMakeNoteWindow.marked, window.cwmMakeNote.debug);
+window.cwmMakeNote.load(window, cwmMakeNoteWindow.jQuery, cwmMakeNoteWindow.md, window.cwmMakeNote.debug);
 
 window.cwmMakeNote.main();
 

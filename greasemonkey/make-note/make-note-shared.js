@@ -1,8 +1,9 @@
 (function(undefined) {
 
 var $;
-var marked;
+var md;
 var debug = false;
+var ignore_next_update = null;
 
 var Note = function(params, note_tpl, note_form_tpl, save_fn, frame) {
 	debug && console.log('Note');
@@ -47,18 +48,18 @@ Note.prototype.init = function(params) {
 		if ( this.save_fn ) this.save_fn(this.id, this.export());
 	}
 
-	this.marked_body = marked(this.body);
+	this.md_body = md(this.body);
 
 	this.$el = $(this.note_tpl(this).trim());
 	this.$el.data('__make-note-object', this);
 };
 
-Note.prototype.update = function(name, value) {
+Note.prototype.update = function(name, value, ignore) {
 	debug && console.log('Note.update');
 	if ( this[name] !== value ) {
 		this[name] = value;
 		this.updated = Date.now().toString(36);
-		if ( this.save_fn ) this.save_fn(this.id, this.export());
+		if ( this.save_fn ) this.save_fn(this.id, this.export(), ignore);
 	}
 };
 
@@ -108,28 +109,37 @@ Note.prototype.save = function(params, url, skip_save_fn) {
 		this.save_fn(this.id, this.export());
 	}
 
-	this.$el
-		.removeClass('__make-note--editing')
-		.find('.__make-note--form')
-			.remove().end()
-		.find('.__make-note--mover').html(this.title).end()
-		.find('.__make-note--match').html(this.match).end()
-		.find('.__make-note--body').html(marked(this.body)).end()
-		.css({
-			width: this.width,
-			height: this.height,
-			top: this.y,
-			left: this.x,
-			zIndex: this.zindex
-		})
-		;
+	if ( ignore_next_update === this.id ) {
+		ignore_next_update = null;
+	} else {
+		this.$el
+			.removeClass('__make-note--editing')
+			.find('.__make-note--form')
+				.remove().end()
+			.find('.__make-note--mover').html(this.title).end()
+			.find('.__make-note--match').html(this.match).end()
+			.find('.__make-note--body').html(md(this.body)).end()
+			.css({
+				width: this.width,
+				height: this.height,
+				top: this.y,
+				left: this.x,
+				zIndex: this.zindex
+			})
+			;
+	}
 
-	var matches = this.matches(url);
+	// TODO: Keep track of current URL
+	if ( url ) {
+		var matches = this.matches(url);
 
-	if ( this.out && matches ) {
-		this.toWindow();
-	} else if ( matches ) {
-		this.toList();
+		if ( params.out ) {
+			if ( this.out && matches ) {
+				this.toWindow();
+			} else if ( matches ) {
+				this.toList();
+			}
+		}
 	}
 
 	if ( this.deleted ) {
@@ -315,13 +325,13 @@ cwmMakeNote.compile = function(html) {
 
 window.cwmMakeNote.Note = Note;
 
-var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, window_marked, d) {
+var cwmMakeNoteApp = window.cwmMakeNoteApp = function(jQuery, window_md, d) {
 	if ( d ) {
 		debug = true;
 	}
 
 	$ = jQuery;
-	marked = window_marked;
+	md = window_md;
 
 	// Get form as {name: value...}
 	$.fn.serializeObject = function() {
@@ -343,6 +353,37 @@ cwmMakeNoteApp.prototype.tpl = function(source) {
 
 cwmMakeNoteApp.prototype.attach = function() {
 	$(document)
+		.delegate('.__make-note--body input[type="checkbox"]', 'change', function() {
+			var checkbox = this;
+			var $this = $(this);
+			var checked = $this.prop('checked');
+			var $mnbody = $this.closest('.__make-note--body');
+			var $checkboxes = $mnbody.find('input[type="checkbox"]');
+			var index = 0;
+
+			for ( var i = 0, l = $checkboxes.length; i < l; i++ ) {
+				if ( $checkboxes.get(i) === checkbox ) {
+					index = i;
+					break;
+				}
+			}
+
+			var note = cwmMakeNote.get_node(this);
+			var s = note.body;
+
+			var findi = -1;
+			s = s.replace(/\[[ x]\]/g, function(match) {
+				findi++;
+				if ( findi === index ) {
+					return ( checked ? '[x]' : '[ ]' );
+				}
+
+				return match;
+			});
+
+			ignore_next_update = note.id;
+			note.update('body', s);
+		})
 		.delegate('[data-type="min"]', 'click', function() {
 			cwmMakeNote.get_node(this).minimize();
 		})
