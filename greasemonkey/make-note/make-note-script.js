@@ -32,9 +32,10 @@ for ( var thing in window ) {
 ;(function(window) {
 	{% include js/vendor/jquery.js %}
 	{% include js/vendor/showdown.js %}
+	var showdown = cwmMakeNoteWindow.showdown;
 	{% include js/showdown-checkbox.min.js %}
 	{% include js/make-note-setup.min.js %}
-})(cwmMakeNoteWindow);
+}).call(cwmMakeNoteWindow, cwmMakeNoteWindow);
 
 window.cwmMakeNote.load(window, cwmMakeNoteWindow.jQuery, cwmMakeNoteWindow.md, window.cwmMakeNote.debug);
 
