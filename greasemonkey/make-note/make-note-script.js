@@ -29,10 +29,11 @@ for ( var thing in window ) {
 
 {% include js/make-note.min.js %}
 
-;(function(window, showdown) {
+/* in case a site defines define and define.amd, it breaks showdown */
+;(function(window, define) {
 	{% include js/vendor/jquery.js %}
-	{% include js/vendor/showdown.pretty.js %}
-	showdown = cwmMakeNoteWindow.showdown;
+	{% include js/vendor/showdown.js %}
+	var showdown = cwmMakeNoteWindow.showdown;
 	{% include js/showdown-checkbox.min.js %}
 	{% include js/make-note-setup.min.js %}
 }).call(cwmMakeNoteWindow, cwmMakeNoteWindow);
