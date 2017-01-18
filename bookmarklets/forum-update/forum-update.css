@@ -1,0 +1,32 @@
+.fupost {
+	transition: box-shadow 2s;
+	position: relative;
+}
+
+.fustar {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	color: black;
+	text-decoration: none;
+}
+
+.fustarred .fustar {
+	color: yellow;
+}
+
+.fulast {
+	outline: 3px dashed blue;
+}
+
+.fupost.funew {
+	box-shadow: 0 0 15px 5px rgba(255,0,0,.5);
+}
+
+.fupost.fustarred {
+	outline: 3px solid yellow;
+}
+
+.fuadded img.timg {
+	visibility: visible;
+}

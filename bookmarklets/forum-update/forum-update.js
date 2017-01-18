@@ -41,7 +41,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 
 	window.cwmForumUpdate = {
 		load: function() {
-			includecss(params['url'] + '/bookmarklets/forumUpdate/forumUpdate.css?2');
+			includecss(window.cwmBaseUrl + '/bookmarklets/forum-update/forum-update.css?2');
 			window.cwmForumUpdate.main = window.cwmForumUpdate.app;
 		},
 		app: function() {
