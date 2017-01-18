@@ -1,0 +1,16 @@
+---
+layout: default
+title: Bookmarklets - Forum Update
+---
+
+<section class="usage cms">
+	<h3>Usage and description</h3>
+
+	<p>
+		Drag the link to your shortcuts bar:
+	</p>
+
+	<p>
+		<a href="javascript:(function(){url='//{{ site.domain }}/bookmarklets/forum-update/bookmarklet.js';document.body.appendChild(document.createElement('script')).src=url+'?url=//{{ site.domain }}&ref='+encodeURIComponent(document.location.href)+'&'+new Date().getTime();})();">forum-update</a>
+	</p>
+</section>
