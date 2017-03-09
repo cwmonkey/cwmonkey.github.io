@@ -1,0 +1,13 @@
+<script>
+alert(window.opener);
+alert(document.referrer);
+</script>
+
+<script>
+  function superFunJankTime() {
+    var start = Date.now();
+    while (Date.now() - start < 1000);
+    setTimeout(superFunJankTime, 50);
+  }
+  superFunJankTime();
+</script>
