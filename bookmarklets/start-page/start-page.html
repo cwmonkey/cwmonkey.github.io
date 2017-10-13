@@ -112,7 +112,7 @@ h1 {
 </head>
 <body>
 
-<div id="wrapper">
+<div id="wrapper" tabindex="-1">
 	<main>
 		<div></div>
 		<a class="edit" href="start-page-edit.html">Edit</a>
@@ -207,6 +207,8 @@ if ( document.location.hash ) {
 		make_sites_html();
 	}
 }
+
+wrapper.focus();
 
 </script>
 
