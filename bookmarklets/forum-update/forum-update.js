@@ -138,7 +138,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			var get_posts = function() {
 				current_url = current_url.split('#')[0];
 
-	console.log('get_posts');
+//console.log('get_posts');
 				$.ajax(current_url, {
 
 				})
@@ -166,7 +166,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 						}
 
 						rate = next_check_rate;
-	console.log('get_posts got ' + found + ' posts');
+//console.log('get_posts got ' + found + ' posts');
 					}
 
 					$next_page = $div.find(next_page_selector);
@@ -241,9 +241,12 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 
 				if ( !suspend ) {
 					check_scroll = false;
-					$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
-						check_scroll = true;
-					}});
+console.log('scroling');
+					setTimeout(function() {
+						$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
+							check_scroll = true;
+						}});
+					}, 10);
 				}
 
 				if ( document.location.href != $post.fuurl ) history.pushState(null, null, $post.fuurl);
