@@ -83,7 +83,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			window.forumUpdate_running = function() {
 				allstop = !allstop;
 				if ( allstop ) {
-					console.log('stopping all');
+//console.log('stopping all');
 					clearTimeout(get_posts_to);
 					//clearInterval(show_post_interval);
 					clearTimeout(show_post_interval);
@@ -188,7 +188,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			};
 
 			var show_post = function() {
-	console.log('show_post')
+//console.log('show_post')
 				show_post_interval = setTimeout(show_post, window.show_post_rate);
 				if ( !posts.length ) return;
 
@@ -241,7 +241,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 
 				if ( !suspend ) {
 					check_scroll = false;
-console.log('scroling');
+console.log('scrolling');
 					setTimeout(function() {
 						$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
 							check_scroll = true;
@@ -269,10 +269,10 @@ console.log('scroling');
 
 					if ( $window.scrollTop() >= $document.height() - $window.height() ) {
 						suspend = false;
-						console.log('restarting');
+//console.log('restarting');
 					} else {
 						suspend = true;
-						console.log('suspending');
+//console.log('suspending');
 					}
 
 					check_scroll = true;
