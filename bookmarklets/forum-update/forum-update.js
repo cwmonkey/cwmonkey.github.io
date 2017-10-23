@@ -242,11 +242,10 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 				if ( !suspend ) {
 					check_scroll = false;
 console.log('scrolling');
-					setTimeout(function() {
-						$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
-							check_scroll = true;
-						}});
-					}, 10);
+					//$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
+					$('html, body').stop().animate({scrollTop:$post.last().offset().top}, scroll_speed, function() {
+						check_scroll = true;
+					});
 				}
 
 				if ( document.location.href != $post.fuurl ) history.pushState(null, null, $post.fuurl);
