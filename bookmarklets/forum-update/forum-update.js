@@ -215,8 +215,8 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 				postdate = new Date(new Date($postdate.text().trim()) - (1000*60*60*7));
 				var ago = new Date() - postdate;
 
+console.log('ago', ago, 'min_post_age', window.min_post_age)
 				if ( ago < window.min_post_age ) {
-					console.log(ago)
 					return;
 				}
 
