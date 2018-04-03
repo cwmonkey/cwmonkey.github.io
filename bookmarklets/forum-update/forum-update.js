@@ -216,6 +216,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 				var ago = new Date() - postdate;
 
 				if ( ago < window.min_post_age ) {
+					console.log(ago)
 					return;
 				}
 
