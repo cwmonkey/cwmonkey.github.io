@@ -215,9 +215,9 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 				postdate = new Date(new Date($postdate.text().trim()) - (1000*60*60*7));
 				var ago = new Date() - postdate;
 
-				/*if ( ago < window.min_post_age ) {
+				if ( ago < window.min_post_age ) {
 					return;
-				}*/
+				}
 
 				$post.find('.author').prepend($('<span>' + (ago/1000) + ' </span>'));
 				$post.find('a').attr('target', '_blank');
