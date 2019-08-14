@@ -211,49 +211,50 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 
 				// Post date
 				var $postdate = $post.find('.postdate').clone();
-				$postdate.find('a').remove();
-				postdate = new Date(new Date($postdate.text().trim()) - (1000*60*60*7));
-				var ago = new Date() - postdate;
 
-console.log('ago', ago, 'min_post_age', window.min_post_age)
-				if ( ago < window.min_post_age ) {
-					return;
-				}
-
-				$post.find('.author').prepend($('<span>' + (ago/1000) + ' </span>'));
-				$post.find('a').attr('target', '_blank');
-				posts.shift();
-				// / Post date
-
-				var $star = $('<a href="#">&#9733;</a>').addClass('fustar');
-				$post.append($star);
-
-				$post.addClass('funew');
-				if ( $post.text().indexOf('WrasslorMonkey') !== -1 ) {
-					$post.find('.postbody').addClass('userquoted');
-				}
-
-				$parent.append($post);
-
-				if ( blurred ) {
-					blur_count++;
-					document.title = '(' + blur_count + ') ' + title;
-				}
-
-				if ( !suspend ) {
-					check_scroll = false;
-console.log('scrolling');
-					//$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
-					$('html, body').stop().animate({scrollTop:$post.last().offset().top}, scroll_speed, function() {
-						check_scroll = true;
-					});
-				}
-
-				if ( document.location.href != $post.fuurl ) history.pushState(null, null, $post.fuurl);
+				console.log('new post');
 
 				setTimeout(function() {
-					$post.removeClass('funew');
-				}, 0);
+					$postdate.find('a').remove();
+					postdate = new Date(new Date($postdate.text().trim()) - (1000*60*60*7));
+					var ago = new Date() - postdate;
+
+					$post.find('.author').prepend($('<span>' + (ago/1000) + ' </span>'));
+					$post.find('a').attr('target', '_blank');
+					// / Post date
+
+					var $star = $('<a href="#">&#9733;</a>').addClass('fustar');
+					$post.append($star);
+
+					$post.addClass('funew');
+					if ( $post.text().indexOf('WrasslorMonkey') !== -1 ) {
+						$post.find('.postbody').addClass('userquoted');
+					}
+
+					$parent.append($post);
+
+					if ( blurred ) {
+						blur_count++;
+						document.title = '(' + blur_count + ') ' + title;
+					}
+
+					if ( !suspend ) {
+						check_scroll = false;
+
+						//$window.scrollTo($post, scroll_speed, {axis: 'y', onAfter: function() {
+						$('html, body').stop().animate({scrollTop:$post.last().offset().top}, scroll_speed, function() {
+							check_scroll = true;
+						});
+					}
+
+					if ( document.location.href != $post.fuurl ) history.pushState(null, null, $post.fuurl);
+
+					setTimeout(function() {
+						$post.removeClass('funew');
+					}, 0);
+				}, window.min_post_age || 0);
+
+				posts.shift();
 			};
 
 			if ( $next_page.length ) {

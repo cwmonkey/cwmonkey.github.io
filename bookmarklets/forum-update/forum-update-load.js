@@ -29,6 +29,12 @@ cwmJsload.load(
 
 			return false;
 		},
+	{
+		script: '/js/vendor/jQuery.scrollTo/2.1.2/jquery.scrollTo.js',
+		static: true,
+		test: function() {
+			return !!jQuery.fn.scrollTo;
+		},
 		callback: function() {
 			window.jQueryCwm = jQuery.noConflict(true);
 			var jQueryOriginal = jQuery || window.jQueryCwm;
