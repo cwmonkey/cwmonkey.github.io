@@ -1,0 +1,859 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Lego Digital Designer</title>
+		
+		<style type="text/css">
+			
+			div
+			{
+			    font-family:arial,sans-serif; 
+			    font-size: 11px;
+			    color:#000000;
+			}
+			
+			.header 
+			{
+			    width:1024px;
+			    background-image:url('images/Header.png');
+			    background-repeat:repeat-x;
+			    background-color: #000000;
+			    height:40px;
+			    padding-left:10px;
+			}
+            
+            .headerPrint
+			{
+			    display:none;
+			}
+			
+			.footer
+			{
+			    font-size:10px;
+			    text-align:center;
+			    width:1024px;
+			}
+			
+			.nav
+			{
+			    text-align:center;
+			    width:1024px;
+			}
+			
+			.step
+			{
+			    display:none;
+			}
+
+			.stepdisplay
+			{
+			    display:block;
+			    width:1024px;
+			    height:620px;
+			}
+			
+			.modelParts 
+			{ 
+			    list-style-type:none; 
+			    padding:4px 0px 0px 0px; 
+			    margin:0px; 
+			}
+			.modelParts ul 
+			{ 
+			    list-style-type:none; 
+			    float:left; 
+			    padding:5px 0px 0px 5px; 
+			    width:140px; 
+			    border:1px dotted gray; 
+			    margin:0px 
+			 }
+			.modelParts ul li 
+			{ 
+			    padding:0px; 
+			    margin:0px 
+			}
+			.modelParts ul li img 
+			{ 
+			    padding:0px; 
+			    height:64px; 
+			    width:64px; 
+			    margin-left:15px 
+			}
+			
+			.stepTextTop p 
+			{ 
+			    margin:0px; 
+			    padding:10px 0px 0px 0px;  
+			 }
+			.stepText p
+			{ 
+			    margin:0px; 
+			    width:30px; 
+			    padding:25px 0px 0px 10px;
+			}
+            
+            .biElement
+            {
+                float:left;
+                margin:20px;
+                width:280px;
+                
+            }
+            
+            .stepelements
+            {
+                width:1024px;
+			    height:620px;
+                overflow:auto;
+            }
+            
+			
+		</style>
+
+        <style type="text/css" media="print">
+            .nav
+			{
+			    display:none;
+			}
+			
+			.stepdisplay
+			{
+			    display:none;
+			}
+            
+            .stepelements
+			{
+			    display:none;
+			}
+            
+            .header
+			{
+			    display:none;
+			}
+            
+            .headerPrint
+			{
+			    display:block;
+			}
+			
+			.step
+			{
+			    display:block;
+			    width:1024px;
+			    height:620px;
+			    page-break-after:always;
+			}
+            
+            .biElement
+            {
+                width:280px;                
+            }
+            
+        </style>
+
+<!-- Let's see if I can fix some of LEGO's styles... -->
+
+<style>
+img {
+	max-width: 100%;
+	height: auto;
+}
+.footer,
+.nav,
+.header,
+.stepdisplay {
+	width: auto;
+	height: auto;
+}
+div {
+	font-size: 14px;
+}
+li {
+	line-height: 1.4;
+}
+</style>
+
+        <script language="javascript" type="text/javascript">
+            
+            var biCurStep=0;
+            
+            function returnTest(e) {
+                var keynum = 0;
+                if (window.event) {
+                    keynum = e.keyCode
+                }
+                else if (e.which) {
+                    keynum = e.which
+                }
+                if (keynum == 13) 
+                {
+                    try {
+                        biStep(parseInt(window.document.getElementById('stepNumber').value,10));
+                    } 
+                    catch(err) {
+                        biStep(0);
+                    }
+                }
+            }
+
+            function biStep(step) {
+
+                if (step>19+1) step=19+1;
+                if (step<0) step=0;
+
+                for (var i=0;i<19+2;i++) {
+                    var id='step_' + i.toString();
+                    var cn='stepdisplay';
+                    if (i==19+1) {
+                        cn='stepelements';
+                        id='step_elements';
+                    }
+                    
+                    if (i==step) {
+                        window.document.getElementById('step_display').innerHTML=window.document.getElementById(id).innerHTML;
+						   window.document.getElementById('step_display').className=cn;
+                    }
+                }
+                window.document.getElementById('stepNumber').value=step.toString();
+                biCurStep=step;
+            }
+        </script>
+	</head>
+	<body onload="biStep(0)">
+        <div class="header"><img src="images/Logo.png" /></div>
+        <div class="headerPrint"><img src="images/Header_print.png" /></div>
+		
+        <div class="stepdisplay" id="step_display"></div>
+
+        <div class="step" id="step_0">
+            <div style="float:left;width:150px"><p>Model Name:<br /><span style="font-weight:bold">Turtle</span><br /><br />Number of Bricks: <span style="font-weight:bold">47</span></p></div>
+            <div style="float:left"><img height="300" width="400" src="turtle-images/Step19.png" /></div>
+            <div style="clear:both"></div>
+
+        </div>
+
+			
+        <div class="step" id="step_1">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 1 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick0.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick1.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick2.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step1.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_2">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 2 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick0.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick3.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick2.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step2.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_3">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 3 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick4.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick0.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick5.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step3.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_4">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 4 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick6.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick7.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick8.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step4.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_5">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 5 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick6.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick7.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick9.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step5.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_6">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 6 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick10.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick9.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step6.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_7">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 7 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick11.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick9.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step7.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_8">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 8 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick12.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick13.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step8.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_9">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 9 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step9.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_10">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 10 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick0.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step10.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_11">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 11 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick12.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick13.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step11.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_12">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 12 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step12.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_13">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 13 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick0.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step13.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_14">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 14 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick7.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick15.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step14.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_15">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 15 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick16.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick17.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick18.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step15.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_16">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 16 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step16.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_17">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 17 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick19.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick20.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick21.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step17.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_18">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 18 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>4 x</p></li>
+							<li><img height="64" width="64" src="turtle-images/Brick22.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step18.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_19">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 19 of 19</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="turtle-images/Step19.png" /></div>
+            <div style="clear:both"></div>
+        </div>
+
+        <div class="step" id="step_elements">
+            				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick6.png" /></td>
+					        <td></td>
+					        <td>BRICK 1X1 - New Dark Red</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick11.png" /></td>
+					        <td></td>
+					        <td>BRICK 1X2 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick12.png" /></td>
+					        <td></td>
+					        <td>BRICK 1X1 W. 1 KNOB - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick7.png" /></td>
+					        <td></td>
+					        <td>ROOF TILE 1X1X2/3, PC - New Dark Red</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick16.png" /></td>
+					        <td></td>
+					        <td>ROOF TILE 1 X 2 X 2/3, ABS - New Dark Red</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick22.png" /></td>
+					        <td></td>
+					        <td>ROOF TILE 2X2X1 45 DEGR. - BOT. 45 DEGR. - Nougat</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick4.png" /></td>
+					        <td></td>
+					        <td>PLATE W. BOW 1X2X2/3 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick10.png" /></td>
+					        <td></td>
+					        <td>PLATE W/ HALF BOW INV. 1X2X2/3 - White</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>6&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick0.png" /></td>
+					        <td></td>
+					        <td>BRICK W. ARCH 1X1X1 1/3 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick15.png" /></td>
+					        <td></td>
+					        <td>PLATE W. BOW  2X2X2/3 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick8.png" /></td>
+					        <td></td>
+					        <td>PLATE 1X1 - Nougat</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick3.png" /></td>
+					        <td></td>
+					        <td>PLATE 1X2 - White</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick9.png" /></td>
+					        <td></td>
+					        <td>PLATE 1X2 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick19.png" /></td>
+					        <td></td>
+					        <td>PLATE 2X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick17.png" /></td>
+					        <td></td>
+					        <td>PLATE 1X4 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick18.png" /></td>
+					        <td></td>
+					        <td>PLATE 1X4 - New Dark Red</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick1.png" /></td>
+					        <td></td>
+					        <td>PLATE 2X3 - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick2.png" /></td>
+					        <td></td>
+					        <td>PLATE 2X4 - White</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick13.png" /></td>
+					        <td></td>
+					        <td>PLATE 2X2 ROUND - Bright Yellowish Green</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick14.png" /></td>
+					        <td></td>
+					        <td>FLAT TILE 2X2, ROUND - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick20.png" /></td>
+					        <td></td>
+					        <td>PLATE 4X4 ROUND W. SNAP - White</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick5.png" /></td>
+					        <td></td>
+					        <td>ROCKER BEARING 1X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="turtle-images/Brick21.png" /></td>
+					        <td></td>
+					        <td>PLATE 2X2 (ROCKING) - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+
+            <div style="clear:both"></div>
+        </div>
+
+        <div id="nav"  class="nav">
+            <table style="margin:0 auto" border="0">
+                <tr>
+                    <td><a onclick="biStep(0);" href="#"><img border="0" alt="First" src="images/Arrow_First.png" /></a></td>
+                    <td><a onclick="biStep(biCurStep-1);" href="#"><img border="0" alt="First" src="images/Arrow_Backward.png" /></a></td>
+                    <td><input id="stepNumber" onkeydown="returnTest(window.event)" type="text" style="text-align:center;width:56px;height:28px;border:1px solid #cccccc;font-size:14px;font-weight:bold" /></td>
+                    <td><a onclick="biStep(biCurStep+1);" href="#"><img border="0" alt="First" src="images/Arrow_Forward.png" /></a></td>
+                    <td><a onclick="biStep(19+1);" href="#"><img border="0" alt="First" src="images/Arrow_Last.png" /></a></td>
+                    <td style="width:40px">&nbsp;</td>
+                    <td><a onclick="window.print();return false;" href="#"><img border="0" alt="Print" src="images/PrintIcon.png" /></a></td>
+                </tr>
+            </table>
+        </div> 
+		<div style="clear:both;">&nbsp;</div>
+
+<div>
+	<h2>Notes:</h2>
+	<p><strong>Credit to Legotruman</strong> (<a href="https://www.reddit.com/user/legotruman">u/legotruman</a>, <a href="https://www.instagram.com/legotruman/">Instagram</a>)</p>
+
+	<p>I used LDD to make these instructions (I need to find a better program!). Because of that there are a few substitutions for the sake of showing how it all pieces together.</p>
+
+	<h3>Here are the pieces you will need:</h3>
+	<p>(Warning: I'm not 100% sure about the Reddish Brown and Dark Red colors. I just ordered everything and am hoping for the best XD)</p>
+
+	<ul>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-round-plate-2-x-2-with-axle-hole-with-axle-hole-4032">Lime Round Plate 2 x 2 (4032)</a> x2 (Hard to find)</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-white-plate-2-x-4-3020">White Plate 2 x 4 (3020)</a> x2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-brick-1-x-2-x-1-33-with-curved-top-6091">Lime Brick 1 x 2 x 1.33 with Curved Top (6091)</a> x6</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-plate-2-x-3-3021">Lime Plate 2 x 3 (3021)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-white-plate-1-x-2-3023">White Plate 1 x 2 (3023)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-black-hinge-1-x-2-base-3937">Black Hinge 1 x 2 Base (3937)</a></li>
+
+		<hr>
+		<li><a href="https://www.brickowl.com/catalog/lego-yellowish-green-left-wedge-1-x-2-with-bow-45-cut-29120">Yellowish Green Left Wedge 1 x 2 with Bow 45° Cut (29120)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-yellowish-green-right-wedge-1-x-2-with-bow-45-cut-29119">LEGO Yellowish Green Right Wedge 1 x 2 with Bow 45° Cut (29119)</a></li>
+		<li>These two are rare, I ended up buying the set that had them: <a href="https://www.brickowl.com/catalog/lego-ariel-ursula-set-41623">Ariel &amp; Ursula Set 41623</a></li>
+		<li>OR just get another green color. Seem to be a lot of those</li>
+		<hr>
+
+		<li><a href="https://www.brickowl.com/catalog/lego-reddish-brown-plate-1-x-1-3024">Reddish Brown Plate 1 x 1 (3024)</a> x2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-dark-red-brick-1-x-1-3005">Dark Red Brick 1 x 1 (3005)</a> x 2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-dark-red-slope-31-1-x-1-50746-54200">Dark Red Slope 31° 1 x 1 (50746 / 54200)</a> x 4</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-plate-1-x-2-3023">Lime Plate 1 x 2 (3023)</a> x 4</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-white-slope-2-x-2-x-0-6-curved-inverted-32803">White Slope 2 x 2 x 0.6 Curved, Inverted (32803)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-brick-1-x-2-3004-93792">Lime Brick 1 x 2 (3004 / 93792)</a> x2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-brick-1-x-1-with-stud-on-1-side-87087">Lime Brick 1 x 1 with Stud on 1 Side (87087)</a> x2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-slope-curved-2-x-2-x-0-66-15068">Lime Slope Curved 2 x 2 x 0.66 (15068)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-lime-plate-1-x-4-3710">Lime Plate 1 x 4 (3710)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-dark-red-plate-1-x-4-3710">Dark Red Plate 1 x 4 (3710)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-black-hinge-2-x-2-top-6134">Black Hinge 2 x 2 Top (6134)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-plate-2-x-2-3022-94148">Plate 2 x 2 (3022 / 94148)</a></li>
+		<li><a href="https://www.brickowl.com/catalog/lego-white-wedge-plate-45-2-x-2-26601">White Wedge Plate 45° 2 x 2 (26601)</a> x4</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-dark-red-slope-31-1-x-2-85984">Dark Red Slope 31° 1 x 2 (85984)</a> x2</li>
+		<li><a href="https://www.brickowl.com/catalog/lego-reddish-brown-slope-45-wedge-corner-2-x-2-13548">Reddish Brown Slope 45 Wedge Corner 2 x 2 (13548)</a> x4</li>
+
+		<li><a href="https://www.brickowl.com/catalog/lego-black-round-tile-2-x-2-with-decoration-with-bottom-stud-holder-19197">Black Round Tile 2 x 2 with Decoration with Bottom Stud Holder (19197)</a> x2 (hard to find, I couldn't get any! Gonna have to sub something...)</li>
+	</ul>
+</div>
+
+		<div class="footer">© 2012 The LEGO Group. All rights reserved.<br />
+Use of the LEGO Digital Designer html print tool, signifies your agreement to the terms of use.</div>
+	</body>
+</html>
