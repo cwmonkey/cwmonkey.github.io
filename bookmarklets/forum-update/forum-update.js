@@ -252,6 +252,34 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 					setTimeout(function() {
 						$post.removeClass('funew');
 					}, 0);
+
+
+
+var a = $("td.postbody a");
+a = a.not("td.postbody:has(img[title=':nws:']) a").not(".postbody:has(img[title=':nms:']) a");
+a = a.not("td.bbc-spoiler a");
+a.each(function() {
+		if (!/^http/.test($(this).text())) {
+				return
+		}
+		var e = $(this).attr("href").match(/^(?:https|http):\/\/(?:mobile\.)?twitter.com\/[0-9a-zA-Z_]+\/(?:status|statuses)\/([0-9]+)/);
+		if (e == null) {
+				return
+		}
+		var j = e[1];
+		var h = this;
+		$.ajax({
+				url: "https://api.twitter.com/1/statuses/oembed.json?id=" + j,
+				dataType: "jsonp",
+				success: function(l) {
+						h = $(h).wrap("<div class='tweet'>").parent();
+						$(h).html(l.html)
+				}
+		});
+});
+
+
+
 				}, window.min_post_age || 0);
 
 				posts.shift();
