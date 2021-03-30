@@ -1,1 +1,1 @@
-ws --https -d _site
+ngrok http 4000 -bind-tls=true localhost
