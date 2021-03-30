@@ -1,7 +1,7 @@
 ---
 ---
 
-window.cwmBaseUrl = "//{{ site.domain }}";
+window.cwmBaseUrl = "{{ site.protocol }}://{{ site.domain }}";
 window.cwmBookmarkletUrl = window.cwmBaseUrl + "/bookmarklets/forum-update";
 
 {% include js/cwm-jsload.min.js %}
