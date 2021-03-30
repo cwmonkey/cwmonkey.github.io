@@ -1,6 +1,6 @@
 [submodule "reactor-knockoff"]
 	path = reactor-knockoff
-	url = https://github.com/cwmonkey/reactor-knockoff.git
+	url = git@github.com:cwmonkey/reactor-knockoff.git
 [submodule "test-repo"]
 	path = test-repo
 	url = https://github.com/cwmonkey/test-repo.git
