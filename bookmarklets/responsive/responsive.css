@@ -24,7 +24,6 @@ audio, video {
 	width: auto !important;
 	position: static !important;
 	min-width: 0 !important;
-	text-align: left !important;
 	margin: 0 auto !important;
 	transform: none !important;
 }
