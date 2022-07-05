@@ -109,7 +109,7 @@ a:hover {
 	font-size: 2em;
 	text-shadow: 2px 2px 2px #000;
 	line-height: 2;
-	background: url(http://mysmilies.com/images/monkey.png) left -5px no-repeat;
+	background: url(/images/monkey.png) left -5px no-repeat;
 	display: block;
 }
 
