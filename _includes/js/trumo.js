@@ -29,7 +29,7 @@
 		t = t.toLowerCase();
 	}
 
-	out(t)
+	out(t);
 
 	if (rand()) {
 		out('Reverse');

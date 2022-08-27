@@ -4,7 +4,7 @@ layout:
 
 {% capture include_to_url %}{% include js/trumo.js %}{% endcapture %}
 
-{% capture cleaned_and_encoded %}{{ include_to_url | normalize_whitespace | uri_escape | remove: "%09" }}{% endcapture %}
+{% capture cleaned_and_encoded %}{{ include_to_url | uri_escape | remove: "%09" }}{% endcapture %}
 
 <p>
 	Click trumo to copy a trum to your clipboard.
