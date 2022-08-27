@@ -11,7 +11,7 @@
 
 	const out = function(s) {
 		debug ? debug.innerHTML = s + "\n" + debug.innerHTML : console.log(s);
-	}
+	};
 
 	const c = Math.random();
 
@@ -34,7 +34,7 @@
 	if (rand()) {
 		out('Reverse');
 		t = t.split('').reverse().join('');
-		out(t)
+		out(t);
 	}
 
 	for (let i = 0; i < t.length; i++) {
@@ -45,7 +45,7 @@
 				re = Math.random() < .5 ? re : re.toUpperCase()
 			}
 			t = t.substring(0, i) + re + t.substring(i + 1, t.length);
-			out(t)
+			out(t);
 		}
 	}
 
@@ -56,24 +56,23 @@
 			if (r) {
 				re = Math.random() < .5 ? re : re.toUpperCase()
 			}
-			out('Add: ' + re)
+			out('Add: ' + re);
 			t = t.substring(0, p) + re + t.substring(p + 1, t.length);
-			out(t)
+			out(t);
 		}
 	}
-
 
 	if (rand()) {
 		out('p -> o')
 		t = t.replace(/p/, 'o').replace(/P/, 'O');
-		out(t)
+		out(t);
 	}
 
 
 	if (rand()) {
 		out('m -> n')
 		t = t.replace(/m/, 'n').replace(/M/, 'N');
-		out(t)
+		out(t);
 	}
 
 	navigator.clipboard.writeText(t);
