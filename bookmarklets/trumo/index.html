@@ -1,0 +1,21 @@
+---
+layout: 
+---
+
+{% capture include_to_url %}{% include js/trumo.js %}{% endcapture %}
+
+{% capture cleaned_and_encoded %}{{ include_to_url | normalize_whitespace | uri_escape | remove: "%09" }}{% endcapture %}
+
+<p>
+	Click trumo to copy a trum to your clipboard
+</p>
+
+<p>
+	<a href="javascript:{{ cleaned_and_encoded }}" title="URL size: {{ cleaned_and_encoded | size }}">trumo</a>
+</p>
+
+<p>
+	Hint: You can drag the link to your browser's toolbar to use it as a bookmarklet
+</p>
+
+<div style="white-space: pre; font-family: sans-serif" id="trumodebug"></div>
