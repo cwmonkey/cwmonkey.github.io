@@ -8,3 +8,7 @@
 /css/make-note.css.map
 /project.sublime-project
 /project.sublime-workspace
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
