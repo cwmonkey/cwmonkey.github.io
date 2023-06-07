@@ -6,6 +6,7 @@ author:
   email: monkey@mysmilies.com
 
 domain: cwmonkey.github.io
+protocol: https
 javascripts: javascripts.html
 stylesheets: stylesheets.html
 debug: false

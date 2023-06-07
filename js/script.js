@@ -92,7 +92,7 @@ var check_path = function() {
 check_path();
 
 $body
-	.delegate('a[href^="/"]', 'click', function(event) {
+	.delegate('a[href^="/"][href$=".js"])', 'click', function(event) {
 		if ( event.metaKey || event.shiftKey || event.ctrlKey || $(this).data('noajax') ) {
 			return;
 		}

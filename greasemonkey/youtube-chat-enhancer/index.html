@@ -1,0 +1,63 @@
+---
+layout: default
+title: Greasemonkey - YouTube Chat Enhancer
+---
+
+<section id="description" class="cms">
+	<h2><a href="#description">Usage and description</a></h2>
+	<p>
+		Install the Greasemonkey script below and take more control over your YouTube chat experience.
+	</p>
+
+	<h3>What This Script Does</h3>
+	<ul>
+		<li>Adds a right-click menu to chat authors which has options to change their visibility</li>
+		<li>Adds configurable sounds to mentions and users of your choice</li>
+	</ul>
+
+	<h3>What This Script Does NOT Do</h3>
+	<ul>
+		<li>This script does not and will not track you</li>
+		<li>This script will not inject any sort of ads or any other monetization content into the page</li>
+		<li>This script will not post anything or otherwise generate any content on your behalf</li>
+		<li>This script will not do anything to violate the YouTube terms of service</li>
+	</ul>
+
+	<h3>Planned Features</h3>
+	<ul>
+		<li>Keyword highlight/alert</li>
+		<li>Anti-keywords (mute/hide messages with certain words)</li>
+		<li>"Hard" mute (hide messages) - allow mods/owners to be seen?</li>
+		<li>"Hard" quiet (hide messages) - allow mods/owners to be seen?</li>
+		<li>Fav messages</li>
+		<li>Global settings (vs channel)</li>
+		<li>Global mute sound</li>
+		<li>User notes</li>
+		<li>User defined sounds</li>
+		<li>User specific sounds</li>
+	</ul>
+</section>
+
+{% include greasemonkey/_install-greasemonkey.html %}
+
+<section id="script" class="cms">
+	<h2><a href="#script">The Script</a></h2>
+
+	<p>Once you have installed Greasemonkey, <a href="//{{ site.domain }}/greasemonkey/youtube-chat-enhancer/youtube-chat-enhancer.user.js">click this link to install the script</a>.</p>
+
+	<!-- p>Copy <strong>everything</strong> in the box:</p>
+
+	<div class="user_script" spellcheck="false">// ==UserScript==
+// @name         Make Note
+// @namespace    http://cwmonkey.github.io/
+// @version      0.1
+// @description  Make notes on any website
+// @author       cwmonkey
+// @match        http*://*/*
+// @grant        none
+// @run-at       document-start
+// ==/UserScript==
+
+(function(){var url='//{{ site.domain }}/greasemonkey/make-note/make-note-script.js';document.head.appendChild(document.createElement('script')).src=url+'?1';})();
+</div -->
+</section>

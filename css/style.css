@@ -141,6 +141,7 @@ a:hover {
 	border-bottom: none;
 	background: #f6ecda;
 	margin-left: -3em;
+	border-top-right-radius: 6px;
 }
 
 #main_headline a {
@@ -269,6 +270,7 @@ a:hover {
 	background: #3C3F4F;
 	padding: 1em 1.5em 1em 1.5em;
 	margin: 1em 0;
+	border-radius: 6px;
 }
 
 /* ------------------------------------------------------------
@@ -316,6 +318,20 @@ a:hover {
     overflow: visible;
     position: static;
     width: auto;
+}
+
+/* user script */
+
+.user_script {
+	user-select: all;
+	white-space: pre-wrap;
+	border: 1px solid black;
+	padding: 10px;
+	background: #fff;
+	color: #000;
+	font-family: monospace;
+	font-size: 12px;
+	word-break: break-all;
 }
 
 /* ------------------------------------------------------------
