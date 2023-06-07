@@ -571,7 +571,7 @@ User specific sounds
     sCMMenu.append(
         append(ce('li', {className: 'ytce-help'}), ce('a', {
             href: 'https://cwmonkey.github.io/greasemonkey/youtube-chat-enhancer/',
-            innerText: 'YT Chat Enhancer',
+            innerText: 'YT Chat Enhancer v{% include greasemonkey/youtube-chat-enhancer/version %}',
             target: '_blank'
         }))
     );
