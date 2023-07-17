@@ -1,0 +1,32 @@
+---
+layout: default
+title: Greasemonkey - slack Enhancer
+---
+
+<section id="description" class="cms">
+	<h2><a href="#description">Usage and description</a></h2>
+	<p>
+		Install the Greasemonkey script below and take more control over your Slack experience.
+	</p>
+
+	<h3>What This Script Does</h3>
+	<ul>
+		<li>Keeps threads open in right sidebar</li>
+		<li>Keeps mentions open in right sidebar when no thread is open</li>
+	</ul>
+
+	<h3>TODO</h3>
+	<ul>
+		<li>"Reply in Thread" opens thread in Slack's native right sidebar (but this is faster, so maybe I need to incorporate the native sidebar in the main window somehow)</li>
+		<li>Opening  thread in the right column can make it open in the main window as well if you move to that channel (could auto close)</li>
+		<li>Opening threads is generally slow, would like to come up with a better way of doing it</li>
+	</ul>
+</section>
+
+{% include greasemonkey/_install-greasemonkey.html %}
+
+<section id="script" class="cms">
+	<h2><a href="#script">The Script</a></h2>
+
+	<p>Once you have installed Greasemonkey, <a href="//{{ site.domain }}/greasemonkey/slack-enhancer/slack-enhancer.user.js">click this link to install the script</a>.</p>
+</section>
