@@ -5,18 +5,17 @@
 /*
 
 TODO:
-Figure out distribution
-Put code on github
-Keyword highlight/alert
-Anti-keywords (mute/hide messages with certain words)
-"Hard" mute (hide messages) - allow mods/owners to be seen?
-"Hard" quiet (hide messages) - allow mods/owners to be seen?
-Fav messages
-Global settings (vs channel)
-Global mute sound
-User notes
-User defined sounds
-User specific sounds
+* Keyword highlight/alert
+* Anti-keywords (mute/hide messages with certain words)
+* "Hard" mute (hide messages) - allow mods/owners to be seen?
+* "Hard" quiet (hide messages) - allow mods/owners to be seen?
+* Fav messages
+* Global settings (vs channel)
+* Global mute sound
+* User notes
+* User defined sounds
+* User specific sounds
+* Text to speech on posts
 
 */
 
