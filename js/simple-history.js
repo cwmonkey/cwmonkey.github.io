@@ -7,6 +7,7 @@
 (function(window, undefined) {
 
   var initial = location.href;
+  var previous = initial;
 
   window.SimpleHistory = {
     supported: !!(window.history && window.history.pushState),
@@ -20,7 +21,8 @@
       history.replaceState(state, null, fragment);
     },
     notify: function(state) {
-      this.matcher(location.pathname + location.search, state);
+      this.matcher(location.pathname + location.search, state, previous);
+      previous = location.href;
     },
     start: function(matcher) {
       this.matcher = matcher;

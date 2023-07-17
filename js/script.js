@@ -116,7 +116,20 @@ $body
 	})
 	;
 
-SimpleHistory.start(function(path) {
+SimpleHistory.start(function(path, state, previous) {
+	chref = window.location.href;
+
+	// Clicked an anchor again
+	if (chref.includes('#') && chref == previous) {
+		return;
+	}
+
+	// Clicked an anchor with target on page
+	var parts = chref.split(previous);
+	if (parts[0] === '' && parts[1] && parts[1].startsWith('#')) {
+		return;
+	}
+
 	load_page(path);
 });
 /* /Faux ajax */

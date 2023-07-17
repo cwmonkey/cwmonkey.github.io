@@ -81,6 +81,18 @@ a:hover {
 	color: red;
 }
 
+@keyframes targeted {
+	0% { outline: 10px dashed rgba(0, 255, 0, 0) }
+	10% { outline: 10px dashed rgba(0, 255, 0, 1) }
+	90% { outline: 10px dashed rgba(0, 255, 0, 1) }
+	100% { outline: 10px dashed rgba(0, 255, 0, 0) }
+}
+
+:target {
+  animation-name: targeted;
+  animation-duration: 4s;
+}
+
 #header {
 	background: #2C2F3F;
 	padding: 0 3em;
@@ -238,8 +250,6 @@ a:hover {
 .secondary .item .item a {
 	padding: .5em 1em;
 	display: block;
-
-	-webkit-transition: all .2s linear;
 	transition: all .2s linear;
 }
 
