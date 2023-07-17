@@ -3,8 +3,8 @@ RewriteEngine On
 AddType text/css .css
 AddType application/x-javascript .js
 
-AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+# AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
 
 <filesMatch "\.(ico|jpg|gif|jpeg|js|css|png)$">
-Header set Cache-Control "max-age=29030400, public"
+# Header set Cache-Control "max-age=29030400, public"
 </filesMatch>
