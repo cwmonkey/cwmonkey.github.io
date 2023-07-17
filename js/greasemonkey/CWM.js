@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CWM
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       You
 // @match        http*://*/*
@@ -11,6 +11,8 @@
 // ==/UserScript==
 
 /* Usage:
+    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.3
+
     // CWM
     const {
         // pretty debug output
@@ -37,7 +39,7 @@
 (function() {
     'use strict';
 
-    console.log('CWM 0.2');
+    console.log('CWM 0.3');
 
     ////////////////////////////////
     // Pretty Debug
@@ -375,7 +377,7 @@
     function addCSS(id, text) {
         const el = ce('style', {
             id: id,
-            innerText: text
+            innerHTML: text
         });
 
         document.body.append(el);
