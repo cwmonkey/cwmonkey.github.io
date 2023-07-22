@@ -35,10 +35,19 @@
         } = window.CWM;
 
     const pathParts = window.location.pathname.split('/');
+    const workspaceId = pathParts[2];
 
     /* ---------------------------------
        Terrible link builder bullshit
     --------------------------------- */
+
+    function localLink(location) {
+        const threadUrlParts = location.split(/[\/&=]/);
+        const channelId = threadUrlParts[4];
+        const threadId = threadUrlParts[6];
+        const threadUrl = 'https://app.slack.com/client/' + workspaceId + '/' + channelId + '/thread/' + channelId + '-' + threadId;
+        return threadUrl;
+    }
 
     function jankyLinkBuilder(content, location) {
         const oldInnerHTML = content.innerHTML;
@@ -47,7 +56,14 @@
 
         content.innerHTML = location;
 
-        pollFor('.p-draft_unfurls__unfurl').then((el) => {
+        pollFor('.p-draft_unfurls__unfurl a').then((el) => {
+            // Fix for a link being posted
+            if (!el.href.includes('?thread_ts=')) {
+                content.innerHTML = oldInnerHTML;
+                window.location = localLink(location);
+                return;
+            }
+
             el.click();
 
             return pollFor('.c-sk-modal_portal .c-message_attachment__part a');
@@ -97,8 +113,8 @@
 
     if (window.location.pathname.match(/^\/archives\//)) {
         pollFor('a[href^="/messages/"][target="_self"]').then((el) => {
-            console.log(el.href);
-            // window.location = el.href;
+            // console.log(el.href);
+            window.location = el.href;
         });
 
         return;
@@ -260,8 +276,6 @@
 
     // Don't run in iframes
     if (window.parent !== window) return
-
-    const workspaceId = pathParts[2];
 
     addCSS('sm-general', `
         :root {
