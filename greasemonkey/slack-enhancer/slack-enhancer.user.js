@@ -45,7 +45,12 @@
         const threadUrlParts = location.split(/[\/&=]/);
         const channelId = threadUrlParts[4];
         const threadId = threadUrlParts[6];
-        const threadUrl = 'https://app.slack.com/client/' + workspaceId + '/' + channelId + '/thread/' + channelId + '-' + threadId;
+        let threadUrl = 'https://app.slack.com/client/' + workspaceId + '/' + channelId
+
+        if (threadId) {
+            threadUrl += '/thread/' + channelId + '-' + threadId;
+        }
+
         return threadUrl;
     }
 
@@ -56,10 +61,14 @@
 
         content.innerHTML = location;
 
-        pollFor('.p-draft_unfurls__unfurl a').then((el) => {
+        pollFor('.p-draft_unfurls__unfurl').then((el) => {
             // Fix for a link being posted
-            if (!el.href.includes('?thread_ts=')) {
+            let a = el.querySelector('a');
+
+            // TODO: check to see if on same slack instance
+            if (a && !a.href.includes('slack.com')) {
                 content.innerHTML = oldInnerHTML;
+                console.log('navigating', a, location);
                 window.location = localLink(location);
                 return;
             }
@@ -68,8 +77,10 @@
 
             return pollFor('.c-sk-modal_portal .c-message_attachment__part a');
         }).then((el) => {
+            if (!el) return;
             content.innerHTML = oldInnerHTML;
             el.click();
+            console.log(el);
             document.body.classList.remove('link_loading');
         });
     }
@@ -215,9 +226,17 @@
 
             // clicked a slack link
             if (isOrChild(ev.target, 'a[href*="slack.com/archives/"]')) {
+                console.log('clicked a slack link', ev.target);
+
+                let a = ev.target;
+
+                if (a.tagName !== 'A') {
+                    a = a.closest('a');
+                }
+
                 postMessage({
                     type: 'location',
-                    location: ev.target.href
+                    location: a.href
                 });
 
                 console.log(ev.target.href);
@@ -248,6 +267,7 @@
                 if (a.href.includes('?thread_ts=')) {
                     // Let it go
                 } else {
+                    console.log('else', a);
                     postMessage({
                         type: 'location',
                         location: a.href
@@ -327,6 +347,7 @@
         const data = ev.data;
 
         if (data.type === 'location') {
+            console.log(data);
             gotoLocation(data);
         }
 
