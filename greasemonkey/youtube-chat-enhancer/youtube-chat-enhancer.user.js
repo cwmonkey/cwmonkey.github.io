@@ -5,17 +5,18 @@
 /*
 
 TODO:
-* Keyword highlight/alert
-* Anti-keywords (mute/hide messages with certain words)
-* "Hard" mute (hide messages) - allow mods/owners to be seen?
-* "Hard" quiet (hide messages) - allow mods/owners to be seen?
-* Fav messages
-* Global settings (vs channel)
-* Global mute sound
-* User notes
-* User defined sounds
-* User specific sounds
-* Text to speech on posts
+Figure out distribution
+Put code on github
+Anti-keywords (mute/hide messages with certain words)
+"Hard" mute (hide messages) - allow mods/owners to be seen?
+"Hard" quiet (hide messages) - allow mods/owners to be seen?
+Fav messages
+Global settings (vs channel)
+Global mute sound
+User notes
+User defined sounds
+User specific sounds
+list/add/edit/delete user lists (alert/muted, etc)
 
 */
 
@@ -58,6 +59,11 @@ TODO:
     const authorAlert = new Sound({
         gain: .3,
         sequence: [{frequency: 400, time: .1}, {frequency: 300, time: .05}]
+    });
+
+    const keywordAlert = new Sound({
+        gain: .3,
+        sequence: [{frequency: 600, time: .05}, {frequency: 550, time: .05}, {frequency: 500, time: .05}]
     });
 
     // Set up debug logger
@@ -355,6 +361,17 @@ TODO:
       .yt-live-chat-author-chip {
         cursor: url("data:image/svg+xml,%3Csvg width='17px' height='19px' viewBox='0 0 17 19' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='bundle-os-x-cursors' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Made-with-💕by-Azendoo-design-team---@azendoo' transform='translate(-195.000000, -33.000000)'%3E%3Cg id='contextualmenu' transform='translate(195.000000, 33.000000)'%3E%3Cpath d='M8,17.4697 L8,17.9997 L17,17.9997 L17,7.9997 L8,7.9997 L8,8.4267 L8,17.4697 Z' id='cursor' fill='%23FFFFFF'%3E%3C/path%3E%3Cpath d='M0,16.4219 L0,0.4069 L11.591,12.0259 L4.81,12.0259 L4.399,12.1499 L0,16.4219 Z' id='cursor' fill='%23FFFFFF'%3E%3C/path%3E%3Cpath d='M9.0845,17.0962 L5.4795,18.6312 L0.7975,7.5422 L4.4835,5.9892 L9.0845,17.0962 Z' id='cursor' fill='%23FFFFFF'%3E%3C/path%3E%3Cpath d='M7.751,16.4155 L5.907,17.1895 L2.807,9.8155 L4.648,9.0405 L7.751,16.4155 Z' id='cursor' fill='%23000000'%3E%3C/path%3E%3Cpath d='M15,12 L10,12 L10,11 L15,11 L15,12 Z M15,14 L10,14 L10,13 L15,13 L15,14 Z M15,16 L10,16 L10,15 L15,15 L15,16 Z M9,17 L16,17 L16,9 L9,9 L9,17 Z' id='cursor' fill='%23000000'%3E%3C/path%3E%3Cpath d='M1,2.814 L1,14.002 L3.969,11.136 L4.397,10.997 L9.165,10.997 L1,2.814 Z' id='cursor' fill='%23000000'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E"), auto;
       }
+
+      /* --------------------------------
+         Keywords
+      -------------------------------- */
+
+      .keyword {
+        background: #07db07;
+        color: #fff;
+        padding: 2px 4px;
+        border-radius: 2px;
+      }
     `);
 
     ////////////////////////////////
@@ -551,6 +568,11 @@ TODO:
             sCMMenu.style.display = 'none';
             sCMToggleButton.innerText = 'Open';
             sCMWrapperEl.classList.remove('ytce-opened');
+
+            // re-process hilights when closed
+            chatContainer.querySelectorAll('yt-live-chat-text-message-renderer, yt-live-chat-paid-message-renderer').forEach((el) => {
+                processMessage(el, false, true);
+            });
         } else {
             settingsMenuOpened = true;
             sCMMenu.style.display = 'block';
@@ -713,7 +735,52 @@ TODO:
         ce('li', {innerText: 'Sounds:', className: 'ytce-header'}),
         append(ce('li'), prepend(ce('label', { innerText: 'Mentions' }), sCMChatSoundsMentionsInput)),
         append(ce('li'), prepend(ce('label', { innerText: '"Alerted" Users' }), sCMChatSoundsAlertUsersInput)),
-        // append(ce('li'), prepend(ce('label', { innerText: 'Keywords' }), sCMChatSoundsKeywordsInput)),
+        append(ce('li'), prepend(ce('label', { innerText: 'Keywords' }), sCMChatSoundsKeywordsInput)),
+    );
+
+    // Keyword highlight
+    let keywords = [];
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
+    function setKeywords() {
+        keywords = [];
+        let keywordsStr = sCMKeywordsTextarea.value.trim();
+        let keywordsArr = keywordsStr.split(',');
+        keywordsArr.forEach(val => {
+            let keyword = val.trim();
+            if (keyword) {
+                //const keywordRegexp = new RegExp('\b' + escapeRegExp(keyword) + '\b', 'i');
+                //keywords.push(keyword);
+                keywords.push(keyword);
+            }
+        });
+    }
+
+    const sCMKeywordsTextarea = ce('textarea');
+
+    GM.getValue('keywords-' + channelName).then((value) => {
+        if (value) {
+            sCMKeywordsTextarea.value = value;
+            setKeywords();
+        }
+    });
+
+    sCMKeywordsTextarea.addEventListener('input', () => {
+        if (!sCMKeywordsTextarea.value) {
+            GM.deleteValue('keywords-' + channelName);
+        } else {
+            GM.setValue('keywords-' + channelName, sCMKeywordsTextarea.value);
+        }
+
+        setKeywords();
+    });
+
+    sCMMenu.append(
+        ce('li', {innerText: 'Keywords (comma separated):', className: 'ytce-header'}),
+        append(ce('li'), sCMKeywordsTextarea)
+        ce('li', {innerText: '(separate words with commas)', className: 'ytce-header'}),
     );
 
     // Import/Export
@@ -841,18 +908,36 @@ TODO:
     ////////////////////////////////
     // Message Processing
     ////////////////////////////////
-
     const authorVolumes = {};
-    function processMessage(el, alerts) {
+    const punctuation = ":;.,-–—‒_(){}[]!'\"+=".split('');
+
+    function processMessage(el, alerts, onlyRedoMarks) {
         el.classList.add('processed');
         const authorEl = el.querySelector('#author-name');
         const author = authorEl.innerText;
         const mention = el.querySelector('.mention');
+        const message = el.querySelector('#message');
 
+        // Keywords
+        const mk = new window.Mark(message);
+        if (onlyRedoMarks) mk.unmark();
+        mk.mark(keywords, {element: 'span', className: 'keyword', exclude: 'span', "accuracy": {
+            "value": "exactly",
+            "limiters": punctuation
+        }, done: function(cnt) {
+            if (cnt && sCMChatSoundsKeywordsInput.checked && alerts) {
+                keywordAlert.play(parseFloat(sCMAlertVolumeInput.value));
+            }
+        }});
+
+        if (onlyRedoMarks) return;
+
+        // Mentions
         if (sCMChatSoundsMentionsInput.checked && alerts && mention) {
             mentionAlert.play(parseFloat(sCMAlertVolumeInput.value));
         }
 
+        // Author volumes
         if (authorVolumes[author]) {
             el.setAttribute('ytce-author-volume', authorVolumes[author]);
 
@@ -877,12 +962,12 @@ TODO:
     pollFor('.yt-live-chat-item-list-renderer').then((el) => {
         chatContainer = el;
 
-        el.querySelectorAll('yt-live-chat-text-message-renderer').forEach((el) => {
+        chatContainer.querySelectorAll('yt-live-chat-text-message-renderer, yt-live-chat-paid-message-renderer').forEach((el) => {
             processMessage(el, false);
         });
 
         const ob = new Observer({element: el, fn: () => {
-            el.querySelectorAll('yt-live-chat-text-message-renderer:not(.processed)').forEach((el) => {
+            el.querySelectorAll('yt-live-chat-text-message-renderer:not(.processed), yt-live-chat-paid-message-renderer:not(.processed)').forEach((el) => {
                 processMessage(el, true);
             });
         }})
