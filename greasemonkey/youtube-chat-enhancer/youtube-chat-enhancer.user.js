@@ -778,9 +778,9 @@ list/add/edit/delete user lists (alert/muted, etc)
     });
 
     sCMMenu.append(
-        ce('li', {innerText: 'Keywords (comma separated):', className: 'ytce-header'}),
+        ce('li', {innerText: 'Keywords:', className: 'ytce-header'}),
         append(ce('li'), sCMKeywordsTextarea),
-        ce('li', {innerText: '(separate words with commas)', className: 'ytce-header'})
+        ce('li', {innerText: '(separate words with commas)'})
     );
 
     // Import/Export
