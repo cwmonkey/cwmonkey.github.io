@@ -10,5 +10,4 @@
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @require      {{ site.protocol }}://{{ site.domain }}/js/greasemonkey/CWM.js?{% include greasemonkey/youtube-chat-enhancer/version %}
-// @require      https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js
 // ==/UserScript==

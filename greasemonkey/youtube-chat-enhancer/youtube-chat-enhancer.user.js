@@ -5,8 +5,6 @@
 /*
 
 TODO:
-Figure out distribution
-Put code on github
 Anti-keywords (mute/hide messages with certain words)
 "Hard" mute (hide messages) - allow mods/owners to be seen?
 "Hard" quiet (hide messages) - allow mods/owners to be seen?
@@ -23,8 +21,8 @@ list/add/edit/delete user lists (alert/muted, etc)
 (function() {
     'use strict';
 
-    console.log('YouTube Chat Enhancements');
-    console.log(window.CWM);
+    const version = '{% include greasemonkey/youtube-chat-enhancer/version %}'.substring(0, 10);
+    console.log('YouTube Chat Enhancer v' + version);
 
     // CWM
     const {
@@ -86,6 +84,11 @@ list/add/edit/delete user lists (alert/muted, etc)
         log(text, 'color: #000');
     }
 
+    let loggedInUser = undefined;
+    try {
+        loggedInUser = ytInitialData.continuationContents.liveChatContinuation.actionPanel.liveChatMessageInputRenderer.authorName.simpleText;
+    } catch(err) {}
+
     let channelName = undefined;
     let startDate = undefined;
     let videoId = undefined;
@@ -124,10 +127,10 @@ list/add/edit/delete user lists (alert/muted, etc)
 
     date = new Date(startDate);
 
-    console.log(channelName);
+    /* console.log(channelName);
     console.log(startDate);
     console.log(videoId);
-    console.log(videoTitle);
+    console.log(videoTitle); */
 
     let chatVisibilityDefault = 'normal';
     GM.getValue('chatVisibilityDefault-' + channelName).then(function(value) {
@@ -571,7 +574,8 @@ list/add/edit/delete user lists (alert/muted, etc)
 
             // re-process hilights when closed
             chatContainer.querySelectorAll('yt-live-chat-text-message-renderer, yt-live-chat-paid-message-renderer').forEach((el) => {
-                processMessage(el, false, true);
+                const processMessageDelay = processMessage.bind(this, el, false, true);
+                setTimeout(processMessageDelay, 0);
             });
         } else {
             settingsMenuOpened = true;
@@ -592,7 +596,7 @@ list/add/edit/delete user lists (alert/muted, etc)
     sCMMenu.append(
         append(ce('li', {className: 'ytce-help'}), ce('a', {
             href: 'https://cwmonkey.github.io/greasemonkey/youtube-chat-enhancer/',
-            innerText: 'YT Chat Enhancer v{% include greasemonkey/youtube-chat-enhancer/version %}',
+            innerText: 'YT Chat Enhancer v' + version,
             target: '_blank'
         }))
     );
@@ -748,12 +752,13 @@ list/add/edit/delete user lists (alert/muted, etc)
         keywords = [];
         let keywordsStr = sCMKeywordsTextarea.value.trim();
         let keywordsArr = keywordsStr.split(',');
+
         keywordsArr.forEach(val => {
             let keyword = val.trim();
+
             if (keyword) {
-                //const keywordRegexp = new RegExp('\b' + escapeRegExp(keyword) + '\b', 'i');
-                //keywords.push(keyword);
-                keywords.push(keyword);
+                const keywordRegexp = new RegExp('\\b' + escapeRegExp(keyword) + '\\b', 'ig');
+                keywords.push(keywordRegexp);
             }
         });
     }
@@ -911,7 +916,91 @@ list/add/edit/delete user lists (alert/muted, etc)
     const authorVolumes = {};
     const punctuation = ":;.,-–—‒_(){}[]!'\"+=".split('');
 
-    function processMessage(el, alerts, onlyRedoMarks) {
+    function doHighlights(alerts, onlyRedoHighlights, author, message) {
+        let nodes = [];
+        let highlightsFound = false;
+
+        if (onlyRedoHighlights) {
+            const highlightEls = message.querySelectorAll('[ishighlight]');
+
+            if (highlightEls.length) {
+                highlightsFound = true;
+
+                message.childNodes.forEach((child) => {
+                    if (child.nodeName !== '#text' && child.matches('[ishighlight]')) {
+                        const tn = document.createTextNode(child.innerText);
+                        nodes.push(tn);
+                    } else {
+                        nodes.push(child);
+                    }
+                });
+            } else {
+                message.childNodes.forEach((child) => {
+                    nodes.push(child);
+                });
+            }
+        } else {
+            message.childNodes.forEach((child) => {
+                nodes.push(child);
+            });
+        }
+
+        let found = false;
+
+        keywords.forEach((keyword) => {
+            let newNodes = [];
+
+            nodes.forEach((node) => {
+                if (node.nodeName === '#text') {
+                    const text = node.textContent;
+                    const matches = text.match(keyword);
+
+                    if (matches) {
+                        found = true;
+                        const splits = text.split(keyword);
+
+                        splits.forEach((s) => {
+                            if (s) {
+                                const tn = document.createTextNode(s);
+                                newNodes.push(tn);
+                            }
+
+                            const m = matches.shift();
+                            if (m) {
+                                const highlightEl = ce('span', {
+                                    innerText: m,
+                                    className: 'keyword'
+                                });
+                                highlightEl.setAttribute('ishighlight', 1);
+
+                                newNodes.push(highlightEl);
+                            }
+                        });
+                    } else {
+                        newNodes.push(node);
+                    }
+                } else {
+                    newNodes.push(node);
+                }
+            });
+
+            nodes = [];
+            newNodes.forEach((node) => {
+                nodes.push(node);
+            });
+        });
+
+        if (found || highlightsFound) {
+            message.replaceChildren(...nodes);
+
+            if (sCMChatSoundsKeywordsInput.checked && alerts && author !== loggedInUser) {
+                keywordAlert.play(parseFloat(sCMAlertVolumeInput.value));
+            }
+        }
+    }
+
+    function processMessage(el, alerts, onlyRedoHighlights) {
+        if (!el || (el.matches('.processed') && !onlyRedoHighlights)) return;
         el.classList.add('processed');
         const authorEl = el.querySelector('#author-name');
         const author = authorEl.innerText;
@@ -919,18 +1008,11 @@ list/add/edit/delete user lists (alert/muted, etc)
         const message = el.querySelector('#message');
 
         // Keywords
-        const mk = new window.Mark(message);
-        if (onlyRedoMarks) mk.unmark();
-        mk.mark(keywords, {element: 'span', className: 'keyword', exclude: 'span', "accuracy": {
-            "value": "exactly",
-            "limiters": punctuation
-        }, done: function(cnt) {
-            if (cnt && sCMChatSoundsKeywordsInput.checked && alerts) {
-                keywordAlert.play(parseFloat(sCMAlertVolumeInput.value));
-            }
-        }});
+        // Something in youtube seems to be rewriting chat messages, so we will delay the highlighting
+        const delayHighlight = doHighlights.bind(this, alerts, onlyRedoHighlights, author, message);
+        setTimeout(delayHighlight, (author === loggedInUser) ? 2000 : 0);
 
-        if (onlyRedoMarks) return;
+        if (onlyRedoHighlights) return;
 
         // Mentions
         if (sCMChatSoundsMentionsInput.checked && alerts && mention) {
@@ -963,12 +1045,14 @@ list/add/edit/delete user lists (alert/muted, etc)
         chatContainer = el;
 
         chatContainer.querySelectorAll('yt-live-chat-text-message-renderer, yt-live-chat-paid-message-renderer').forEach((el) => {
-            processMessage(el, false);
+            const processMessageDelay = processMessage.bind(this, el, false);
+            setTimeout(processMessageDelay, 0);
         });
 
         const ob = new Observer({element: el, fn: () => {
             el.querySelectorAll('yt-live-chat-text-message-renderer:not(.processed), yt-live-chat-paid-message-renderer:not(.processed)').forEach((el) => {
-                processMessage(el, true);
+                const processMessageDelay = processMessage.bind(this, el, true);
+                setTimeout(processMessageDelay, 0);
             });
         }})
     });
