@@ -9,5 +9,6 @@
 // @grant        unsafeWindow
 // @grant        GM.setValue
 // @grant        GM.getValue
+// @grant        GM.notification
 // @require      {{ site.protocol }}://{{ site.domain }}/js/greasemonkey/CWM.js?{% include greasemonkey/youtube-chat-enhancer/version %}
 // ==/UserScript==

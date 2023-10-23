@@ -18,22 +18,6 @@ list/add/edit/delete user lists (alert/muted, etc)
 
 */
 
-/*
-
-TODO:
-Anti-keywords (mute/hide messages with certain words)
-"Hard" mute (hide messages) - allow mods/owners to be seen?
-"Hard" quiet (hide messages) - allow mods/owners to be seen?
-Fav messages
-Global settings (vs channel)
-Global mute sound
-User notes
-User defined sounds
-User specific sounds
-list/add/edit/delete user lists (alert/muted, etc)
-
-*/
-
 (function() {
     'use strict';
 
