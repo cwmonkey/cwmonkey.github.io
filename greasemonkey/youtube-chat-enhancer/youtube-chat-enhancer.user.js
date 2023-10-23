@@ -18,6 +18,22 @@ list/add/edit/delete user lists (alert/muted, etc)
 
 */
 
+/*
+
+TODO:
+Anti-keywords (mute/hide messages with certain words)
+"Hard" mute (hide messages) - allow mods/owners to be seen?
+"Hard" quiet (hide messages) - allow mods/owners to be seen?
+Fav messages
+Global settings (vs channel)
+Global mute sound
+User notes
+User defined sounds
+User specific sounds
+list/add/edit/delete user lists (alert/muted, etc)
+
+*/
+
 (function() {
     'use strict';
 
@@ -375,6 +391,18 @@ list/add/edit/delete user lists (alert/muted, etc)
         padding: 2px 4px;
         border-radius: 2px;
       }
+
+      /* --------------------------------
+         Notifications
+      -------------------------------- */
+
+      #message {
+        transition: outline .5s ease-in-out;
+      }
+
+      .ytce-flash {
+        outline: 3px yellow dashed;
+      }
     `);
 
     ////////////////////////////////
@@ -546,7 +574,7 @@ list/add/edit/delete user lists (alert/muted, etc)
     chatEnhancementsWrapper.append(aCMWrapperEl);
 
     ////////////////////////////////
-    // Chat Setting Context Menu
+    // Chat Setting Menu
     ////////////////////////////////
 
     // Wrapper
@@ -675,7 +703,7 @@ list/add/edit/delete user lists (alert/muted, etc)
 
     // Sounds
 
-    // Mentions
+    // Sounds: Mentions
     const sCMChatSoundsMentionsInput = ce('input', {
         type: 'checkbox',
         checked: 'checked'
@@ -695,7 +723,7 @@ list/add/edit/delete user lists (alert/muted, etc)
         }
     });
 
-    // "Alerted" Users
+    // Sounds: "Alerted" Users
     const sCMChatSoundsAlertUsersInput = ce('input', {
         type: 'checkbox',
         checked: 'checked'
@@ -715,7 +743,7 @@ list/add/edit/delete user lists (alert/muted, etc)
         }
     });
 
-    // Keywords
+    // Sounds: Keywords
     const sCMChatSoundsKeywordsInput = ce('input', {
         type: 'checkbox',
         checked: 'checked'
@@ -782,10 +810,115 @@ list/add/edit/delete user lists (alert/muted, etc)
         setKeywords();
     });
 
+    // Sounds: Add to menu
+
     sCMMenu.append(
         ce('li', {innerText: 'Keywords:', className: 'ytce-header'}),
         append(ce('li'), sCMKeywordsTextarea),
         ce('li', {innerText: '(separate words with commas)'})
+    );
+
+    // Desktop Notifications
+
+    const image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzNCMzQ2OTE4RjRDMTFFNzk0NkJBQjFBRkY5OTYyN0YiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzNCMzQ2OTI4RjRDMTFFNzk0NkJBQjFBRkY5OTYyN0YiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMzQ0MUZDNDhGNEMxMUU3OTQ2QkFCMUFGRjk5NjI3RiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozM0IzNDY5MDhGNEMxMUU3OTQ2QkFCMUFGRjk5NjI3RiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvLSNusAAAKBSURBVHja7JdNTxNxEMZ/3b6BWA1CPYAvSBrSRC6GC0ajCYleOEHCyRufgQT4DnwCwsEDXogHr0aMicaoIdAISMAGGyGiSZVgUaEt7Ti73eLGC+y2tgeZZNLN7s7Mk//OPPPUJyLU0wzqbCcAAtls1rooqu+pH9gPQg6EZ/687zsCtNiprDw/HDfzjnyNZuEygHg8bj00b9yBa73Q2wadnRANQrP66Qg0aOUG+7WQnfNvM8EV1HNmPc2Z3YZ9E8cv2NmAr59hYwkWn8KLb5ojXI48B02P4L5CL2hm+de+AM/icKl0BIr8iRavRWGnr8LziHmad6FHbxzUGoDpA9Bn3ICbehD+ekzALbhudEG8XiMYgy7jMrS7iopGYXxc56O5YgAt0EYSXrr6dtGoSD4vkkyKDA5W1AMfYQHtxiVXga2tIum0HNrMjEgs5gnAFqwZDtLzZkNDMDcHIyOayV0qBXGKNVit6ASclkiI9PcfO5cy45YRLFFodayjQ1u63dUmNHLVKj41Bd3dMDl57BBdWBJwLEBvNj8PY2MwO+slep/38Np1D+RyIpmMyOioSDjseQx1ChYDGdh2hdmvrD09DRMTsLJS0eEpgJ3AB/3tcROVTsPwcFXa5jt8MVKYX8GFFYtVGxotvG680R6o1zJKKIXRBMG38LjWWkBJ6N0FiFhIrip9LKtCqVXxT7DcZ5VVFgyHw5i6+Lyqs3swoOrktnLZlYu6LZUizyq7N7aU9kXQFqX+o/nFEqd5FZ45Jbo9LZrZ1GnT9t3UrfHqATxch11TlPpSqdRh1E+bHs1qkZLM9et1yAYQ8AggrwAKu7Y0L9iyvLy2fCf/Df97AL8FGADezLVaLkUivwAAAABJRU5ErkJggg==';
+
+    function notify(data) {
+        data.image = image;
+        data.onclick = function() {
+            if (window.parent) {
+                window.parent.focus();
+            }
+
+            window.focus();
+
+            if (data.el) {
+                data.el.classList.add('ytce-flash');
+
+                setTimeout(() => {
+                    data.el.classList.remove('ytce-flash');
+                }, 3000);
+            }
+        }
+        // TODO: flash/scroll to element on click
+        GM.notification(data);
+    }
+
+    // Notifications: Mentions
+    const sCMChatNotifyMentionsInput = ce('input', {
+        type: 'checkbox'
+    });
+
+    sCMChatNotifyMentionsInput.addEventListener('change', () => {
+        if (sCMChatNotifyMentionsInput.checked) {
+            GM.setValue('showMentionNotifications-' + channelName, 1);
+            notify({
+                title: 'Mention Notifications Changed',
+                text: 'Mention notifications have been turned ON'
+            });
+        } else {
+            GM.deleteValue('showMentionNotifications-' + channelName);
+        }
+    });
+
+    GM.getValue('showMentionNotifications-' + channelName).then((value) => {
+        if (value) {
+            sCMChatNotifyMentionsInput.checked = true;
+        }
+    });
+
+    // Notifications: "Alerted" Users
+    const sCMChatNotifyAlertUsersInput = ce('input', {
+        type: 'checkbox'
+    });
+
+    sCMChatNotifyAlertUsersInput.addEventListener('change', () => {
+        if (sCMChatNotifyAlertUsersInput.checked) {
+            GM.setValue('showAlertNotifications-' + channelName, 1);
+            notify({
+                title: '"Alerted" Users Notifications Changed',
+                text: '"Alerted" Users notifications have been turned ON'
+            });
+        } else {
+            GM.deleteValue('showAlertNotifications-' + channelName);
+        }
+    });
+
+    GM.getValue('showAlertNotifications-' + channelName).then((value) => {
+        if (value) {
+            sCMChatNotifyAlertUsersInput.checked = true;
+        }
+    });
+
+    // Notifications: Keywords
+    const sCMChatNotifyKeywordsInput = ce('input', {
+        type: 'checkbox'
+    });
+
+    sCMChatNotifyKeywordsInput.addEventListener('change', () => {
+        if (sCMChatNotifyKeywordsInput.checked) {
+            GM.setValue('showKeywordNotifications-' + channelName, 1);
+            notify({
+                title: 'Keyword Notifications Changed',
+                text: 'Keyword notifications have been turned ON'
+            });
+        } else {
+            GM.deleteValue('showKeywordNotifications-' + channelName);
+        }
+    });
+
+    GM.getValue('showKeywordNotifications-' + channelName).then((value) => {
+        if (value) {
+            sCMChatNotifyKeywordsInput.checked = true;
+        }
+    });
+
+    // Notifications: Add to menu
+
+    sCMMenu.append(
+        ce('li', {innerText: 'Notifications:', className: 'ytce-header'}),
+        append(ce('li'), prepend(ce('label', { innerText: 'Mentions' }), sCMChatNotifyMentionsInput)),
+        append(ce('li'), prepend(ce('label', { innerText: '"Alerted" Users' }), sCMChatNotifyAlertUsersInput)),
+        append(ce('li'), prepend(ce('label', { innerText: 'Keywords' }), sCMChatNotifyKeywordsInput)),
     );
 
     // Import/Export
@@ -993,11 +1126,28 @@ list/add/edit/delete user lists (alert/muted, etc)
         if (found || highlightsFound) {
             message.replaceChildren(...nodes);
 
-            if (sCMChatSoundsKeywordsInput.checked && alerts && author !== loggedInUser) {
-                keywordAlert.play(parseFloat(sCMAlertVolumeInput.value));
+            if (alerts && author !== loggedInUser) {
+                if (!didSound && sCMChatSoundsKeywordsInput.checked) {
+                    keywordAlert.play(parseFloat(sCMAlertVolumeInput.value));
+                    didSound = true;
+                }
+
+                if (!didNotify && sCMChatNotifyKeywordsInput.checked) {
+                    notify({
+                        title: 'Keyword Notification',
+                        text: author + ': ' + message.innerText,
+                        el: message
+                    });
+                    didNotify = true;
+                }
             }
         }
     }
+
+    // Don't do sounds/notifications twice for the same message
+    // TODO: Priority: mentions > keywords > alerted users
+    let didSound = false;
+    let didNotify = false;
 
     function processMessage(el, alerts, onlyRedoHighlights) {
         if (!el || (el.matches('.processed') && !onlyRedoHighlights)) return;
@@ -1006,6 +1156,8 @@ list/add/edit/delete user lists (alert/muted, etc)
         const author = authorEl.innerText;
         const mention = el.querySelector('.mention');
         const message = el.querySelector('#message');
+        didSound = false;
+        didNotify = false;
 
         // Keywords
         // Something in youtube seems to be rewriting chat messages, so we will delay the highlighting
@@ -1015,16 +1167,40 @@ list/add/edit/delete user lists (alert/muted, etc)
         if (onlyRedoHighlights) return;
 
         // Mentions
-        if (sCMChatSoundsMentionsInput.checked && alerts && mention) {
-            mentionAlert.play(parseFloat(sCMAlertVolumeInput.value));
+        if (alerts && mention) {
+            if (!didSound && sCMChatSoundsMentionsInput.checked) {
+                mentionAlert.play(parseFloat(sCMAlertVolumeInput.value));
+                didSound = true;
+            }
+
+            if (!didNotify && sCMChatNotifyMentionsInput.checked) {
+                notify({
+                    title: 'Mention Notification',
+                    text: author + ': ' + message.innerText,
+                    el: message
+                });
+                didNotify = true;
+            }
         }
 
         // Author volumes
         if (authorVolumes[author]) {
             el.setAttribute('ytce-author-volume', authorVolumes[author]);
 
-            if (sCMChatSoundsAlertUsersInput.checked && alerts && authorVolumes[author] === 'alert') {
-                authorAlert.play(parseFloat(sCMAlertVolumeInput.value));
+            if (alerts && authorVolumes[author] === 'alert') {
+                if (!didSound && sCMChatSoundsAlertUsersInput.checked) {
+                    authorAlert.play(parseFloat(sCMAlertVolumeInput.value));
+                    didSound = true;
+                }
+
+                if (!didNotify && sCMChatNotifyAlertUsersInput.checked) {
+                    notify({
+                        title: '"Alerted" User Notification',
+                        text: author + ': ' + message.innerText,
+                        el: message
+                    });
+                    didNotify = true;
+                }
             }
         } else {
             GM.getValue('authorVolume-' + channelName + '-' + author).then((value) => {
@@ -1032,8 +1208,21 @@ list/add/edit/delete user lists (alert/muted, etc)
                     authorVolumes[author] = value;
                     el.setAttribute('ytce-author-volume', authorVolumes[author]);
 
-                    if (sCMChatSoundsAlertUsersInput.checked && alerts && value === 'alert') {
-                        authorAlert.play(parseFloat(sCMAlertVolumeInput.value));
+                    // TODO: duped above
+                    if (alerts && value === 'alert') {
+                        if (!didSound && sCMChatSoundsAlertUsersInput.checked) {
+                            authorAlert.play(parseFloat(sCMAlertVolumeInput.value));
+                            didSound = true;
+                        }
+
+                        if (!didNotify && sCMChatNotifyAlertUsersInput.checked) {
+                            notify({
+                                title: '"Alerted" User Notification',
+                                text: author + ': ' + message.innerText,
+                                el: message
+                            });
+                            didNotify = true;
+                        }
                     }
                 }
             });
