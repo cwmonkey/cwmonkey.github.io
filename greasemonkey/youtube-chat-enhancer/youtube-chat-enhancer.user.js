@@ -95,7 +95,7 @@ list/add/edit/delete user lists (alert/muted, etc)
     let videoTitle = undefined;
     let date = undefined;
 
-    const scriptDataEl = window.parent.window.document.querySelector('script.player-microformat-renderer');
+    const scriptDataEl = window.parent.window.document.querySelector('script.player-microformat-renderer, script.ytd-player-microformat-renderer');
 
     if (scriptDataEl) {
         const data = JSON.parse(scriptDataEl.innerText);
