@@ -171,19 +171,33 @@
     // DOM manipulation
     ////////////////////////////////
 
+    // These are attributes that must be set with setAttribute
+    const ceAttributes = {
+        'for': 1
+    };
+
+    // document.createElement
     function ce(tagName, properties) {
         const el = document.createElement(tagName);
         properties = properties || {};
 
         Object.assign(el, properties);
 
+        Object.entries(properties).forEach(([key, value]) => {
+            if (ceAttributes[key]) {
+                el.setAttribute(key, value);
+            }
+        });
+
         return el;
     }
 
+    // document.querySelector
     function qs(selector) {
         return document.querySelector(selector);
     }
 
+    // querySelectorAll
     function qsa(selector) {
         return document.querySelectorAll(selector);
     }
