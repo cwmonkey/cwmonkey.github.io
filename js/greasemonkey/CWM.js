@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CWM
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  try to take over the world!
 // @author       You
 // @match        http*://*/*
@@ -32,14 +32,16 @@
         // hijack
         hijackWebSocket, hijackXMLHttpRequest,
         // pubsub
-        sub, before
+        sub, before,
+        // ui
+        floatingWindow
         } = window.CWM;
 */
 
 (function() {
     'use strict';
 
-    console.log('CWM 0.3');
+    console.log('CWM 0.4');
 
     ////////////////////////////////
     // Pretty Debug
@@ -672,6 +674,219 @@
     }
 
     ////////////////////////////////
+    // UI
+    ////////////////////////////////
+
+    ////////////////////////////////
+    // Draggable/Resizeable Window
+    ////////////////////////////////
+
+    /* Usage:
+        const myWindow = new floatingWindow({
+            name: 'mine', // Used as part of key to store size/position
+            data: data, // Stored values (height, width, top, left) go here
+                        // Format: `floatingWindow-${name}-height`, etc
+            set: setValue, // Function sto store size/position
+            title: 'My Window', // Title to show in header
+            width: 200, // Defaults
+            height: 100,
+            top: 100,
+            left: 100
+        });
+    */
+    
+    // TODO: Move to CWM
+    class floatingWindow {
+        constructor(params) {
+            this.params = params;
+
+            // Used for saving data
+            this.name = params.name;
+            this.data = params.data; // Saved values
+            this.set = params.set;
+
+            this.prefix = 'floatingWindow-' + this.name + '-';
+
+            // Other
+            this.title = params.title;
+
+            // Defaults
+            this.defaultWidth = params.width || 100;
+            this.defaultHeight = params.height || 100;
+            this.defaultTop = params.top || 0;
+            this.defaultLeft = params.left || 0;
+
+            // Window elements
+            this.windowEl = null;
+            this.headerEl = null;
+            this.contentEl = null;
+
+            // init
+            this.create();
+        }
+
+        create() {
+            const data = this.data;
+            const prefix = this.prefix;
+            const set = this.set;
+
+            // Window size/position
+            let top = data[prefix + 'top'] || this.defaultTop;
+            let left = data[prefix + 'left'] || this.defaultLeft;
+            let width = data[prefix + 'width'] || this.defaultWidth;
+            let height = data[prefix + 'height'] || this.defaultHeight;
+
+            // Viewport size, to constrain window
+            // TODO: Compensate for page scrollbar width
+            let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+            addEventListener('resize', (event) => {
+                let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+            });
+
+            // Constrain to viewport
+            if (height > vh) height = vh;
+            if (top + height > vh) top = vh - height;
+            if (width > vw) width = vw;
+            if (left + width > vw) left = vw - width;
+            // TODO: Shrink size if we end up with negative values?
+            if (top < 0) top = 0;
+            if (left < 0) left = 0;
+
+            const windowEl = ce('SECTION', {
+                className: 'cwm-fw-window cwm-floating-window-' + sluggify(this.name)
+            });
+
+            const headerEl = ce('H2', {
+                className: 'cwm-fw-header',
+                textContent: this.title
+            });
+
+            /* const titleButtonsEl = ce('SPAN', {
+                className: 'samh-buttons'
+            });
+
+            const minimizeEl = ce('SPAN', {
+                className: 'samh-tools'
+            }); */
+
+            const contentEl = ce('DIV', {
+                className: 'cwm-fw-content'
+            });
+
+            windowEl.append(headerEl, contentEl);
+
+            this.windowEl = windowEl;
+            this.headerEl = headerEl;
+            this.contentEl = contentEl;
+
+            document.body.append(windowEl);
+
+            // Drag & Resize
+
+            windowEl.style.width = width + 'px';
+            windowEl.style.height = height + 'px';
+            windowEl.style.left = left + 'px';
+            windowEl.style.top = top + 'px';
+
+            windowEl.setAttribute('data-x', left);
+            windowEl.setAttribute('data-y', top);
+
+            interact(windowEl).resizable({
+                // resize from all edges and corners
+                edges: { left: true, right: true, bottom: true, top: true },
+                margin: 8,
+                listeners: {
+                    move (event) {
+                        var target = event.target;
+
+                        var x = (parseFloat(target.getAttribute('data-x')) || 0);
+                        var y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+                        // update the element's style
+                        target.style.width = event.rect.width + 'px';
+                        target.style.height = event.rect.height + 'px';
+
+                        // translate when resizing from top or left edges
+                        x += event.deltaRect.left;
+                        y += event.deltaRect.top;
+
+                        // target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                        target.style.left = x + 'px';
+                        target.style.top = y + 'px';
+
+                        target.setAttribute('data-x', x);
+                        target.setAttribute('data-y', y);
+
+                        // Store values
+                        set(prefix + 'width', event.rect.width);
+                        set(prefix + 'height', event.rect.height);
+
+                        set(prefix + 'left', x);
+                        set(prefix + 'top', y);
+                    }
+                },
+                modifiers: [
+                    // keep the edges inside the parent
+                    interact.modifiers.restrictEdges({
+                        outer: document.body
+                    }),
+
+                    // minimum size
+                    interact.modifiers.restrictSize({
+                        min: { width: 100, height: 50 }
+                    })
+                ] //,
+                // inertia: true
+            }).draggable({
+                cursorChecker() {},
+                allowFrom: '.cwm-fw-header',
+                listeners: {
+                    move (event) {
+                        var target = event.target;
+                        // keep the dragged position in the data-x/data-y attributes
+                        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                        // constrain to viewport
+                        if (x + event.rect.width > vw) x = vw - event.rect.width;
+                        if (y + event.rect.height > vh) y = vh - event.rect.height;
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
+
+                        // translate the element
+                        // target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                        target.style.left = x + 'px';
+                        target.style.top = y + 'px';
+
+                        // update the posiion attributes
+                        target.setAttribute('data-x', x);
+                        target.setAttribute('data-y', y);
+
+                        // Store values
+                        set(prefix + 'left', x);
+                        set(prefix + 'top', y);
+                    }
+                },
+                // inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictEdges({
+                        outer: {
+                            left: 0, // the left edge must be >= 0
+                            top: 0, // the top edge must be >= 0
+                            // These don't seem to work
+                            right: vw, // the right edge must be <= viewport width
+                            bottom: vh // the bottom edge must be <= viewport height
+                        }
+                    })
+                ]
+            });
+        }
+    }
+
+    ////////////////////////////////
     // Export
     ////////////////////////////////
 
@@ -715,6 +930,9 @@
 
         // pubsub
         sub: sub,
-        before: before
+        before: before,
+
+        // ui
+        floatingWindow: floatingWindow
     };
 })();
