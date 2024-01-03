@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 /* Usage:
-    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.3
+    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.4
 
     // CWM
     const {
@@ -20,7 +20,7 @@
         // stuff
         sluggify, roundTo, once,
         // storage
-        set, get,
+        set, get, remove,
         // dom
         ce, qs, qsa, trigger, pageScrollTop, ngSetValue, append, prepend, addCSS,
         // dom updates
@@ -167,6 +167,10 @@
 
     function get(name) {
         return localStorage.getItem(name);
+    }
+
+    function remove(name) {
+        return localStorage.removeItem(name);
     }
 
     ////////////////////////////////
@@ -901,6 +905,7 @@
         // storage
         set: set,
         get: get,
+        remove: remove,
 
         // dom
         ce: ce,
