@@ -34,7 +34,7 @@
         // pubsub
         sub, before,
         // ui
-        floatingWindow
+        floatingWindow, TimerReminder, Timer
         } = window.CWM;
 */
 
@@ -698,8 +698,7 @@
             left: 100
         });
     */
-    
-    // TODO: Move to CWM
+
     class floatingWindow {
         constructor(params) {
             this.params = params;
@@ -891,6 +890,198 @@
     }
 
     ////////////////////////////////
+    // Timers
+    ////////////////////////////////
+
+    /* Usage:
+        // Assuming we are loading store data in with this tye of format
+        const data = {'my-timer': {}}
+
+        // setup
+        const d = new Date();
+        const dp6 = new Date(d.getTime() + 6 * 60 * 60 * 1000);
+
+        const my10mReminderSound = new Sound({
+            gain: .3,
+            sequence: [{frequency: 500, time: .05}, {frequency: 1, time: .03}, {frequency: 600, time: .05}, {frequency: 1, time: .03}, {frequency: 700, time: .05}]
+        });
+
+        const my0mReminderSound = new Sound({
+            gain: .3,
+            sequence: [{frequency: 700, time: .05}, {frequency: 1, time: .03}, {frequency: 800, time: .05}, {frequency: 1, time: .03}, {frequency: 900, time: .05}]
+        });
+
+        const key = 'my-timer';
+        const time = dp6.getTime();
+        const value = data[key];
+
+        value.time = time;
+
+        const timerEl = ce('SPAN', {
+            className: 'my-timer'
+        });
+
+        // Create reminders
+
+        let reminders = [];
+
+        if (!value.triggered10m) {
+            reminders.push(new TimerReminder({
+                key: key,
+                property: 'triggered10m',
+                title: '10m warning',
+                text: 'This timer will expire in 10 minutes.',
+                image: 'https://i.imgur.com/Z8bK9AA.jpg',
+                sound: my10mReminderSound,
+                remaining: 10 * 60 * 1000,
+                fn() {
+                    data[key].triggered10m = 1;
+                    setValue(key, value);
+                }
+            }));
+        }
+
+        if (!value.triggered0m) {
+            reminders.push(new TimerReminder({
+                key: key,
+                property: 'triggered0m',
+                title: 'Timer expired',
+                text: 'This timer has expired.',
+                image: 'https://i.imgur.com/Z8bK9AA.jpg',
+                sound: my0mReminderSound,
+                remaining: 0,
+                fn() {
+                    data[key].triggered0m = 1;
+                    setValue(key, value);
+                }
+            }));
+        }
+
+        // Create timer
+        const timer = new Timer(timerEl, time, reminders);
+
+        timer.update();
+
+        document.body.append(timerEl);
+    */
+
+    class TimerReminder {
+        constructor(params) {
+            this.params = params;
+
+            // notification
+            this.text = params.text;
+            this.title = params.title;
+            this.image = params.image;
+
+            // other
+            this.key = params.key; // Used to make sure we don't fire reminders on multiple tabs
+            this.property = params.property; // SAA
+
+            this.remaining = params.remaining;
+            this.sound = params.sound;
+            this.fn = params.fn;
+
+            // state
+            this.triggered = false;
+        }
+
+        trigger() {
+            // Only fire once
+            if (this.triggered) return false;
+            this.triggered = true;
+
+            // See if this has already been triggered
+            GM.getValue(this.key).then((value) => {
+                if (!value || value[this.property]) return;
+                const triggeringKey = this.key + '.' + this.property;
+                const triggering = get(triggeringKey);
+                if (triggering) return;
+                set(triggeringKey, 1);
+
+                if (this.text) {
+                    GM.notification(this.params);
+                }
+
+                if (this.sound) {
+                    this.sound.play();
+                }
+
+                if (this.fn) {
+                    this.fn();
+                }
+
+                setTimeout(() => {
+                    // TODO: Add to CWM, derp
+                    localStorage.removeItem(triggeringKey);
+                });
+            });
+        }
+    }
+
+    class Timer {
+        constructor(el, time, reminders) {
+            this.el = el;
+            this.time = time;
+            this.reminders = reminders;
+            this.timeout = null;
+        }
+
+        update() {
+            clearTimeout(this.timeout);
+            const now = Date.now();
+            let remaining = this.time - now;
+            let first = 0;
+            let second = 0;
+            let unit = 's';
+            let nextto = 1000;
+            let secondPadAmount = 2;
+
+            if (this.reminders) {
+                this.reminders.forEach((reminder, i) => {
+                    reminder = this.reminders[i];
+
+                    if (remaining < reminder.remaining) {
+                        reminder.trigger();
+                        delete this.reminders[i];
+                    }
+                });
+            }
+
+            // done
+            if (remaining <= 0) {
+                this.el.classList.add('done');
+                nextto = null;
+            // seconds
+            } else if (remaining < 60 * 1000) {
+                first = Math.floor(remaining / 1000);
+                second = remaining - (first * 1000);
+                nextto = 100;
+                secondPadAmount = 3;
+            // minutes
+            } else if (remaining < 60 * 60 * 1000) {
+                first = Math.floor(remaining / 60 / 1000);
+                second = Math.floor((remaining - (first * 60 * 1000)) / 1000);
+                unit = 'm';
+            // hours
+            } else {
+                first = Math.floor(remaining / 60 / 60 / 1000);
+                second = Math.floor((remaining - (first * 60 * 60 * 1000)) / 60 / 1000);
+                unit = 'h';
+            }
+
+            first = ('' + first).padStart(2, '0');
+            second = ('' + second).padStart(secondPadAmount, '0');
+
+            this.el.textContent = `${first}:${second} ${unit}`;
+
+            if (nextto) {
+                this.timeout = setTimeout(this.update.bind(this), nextto);
+            }
+        }
+    }
+
+    ////////////////////////////////
     // Export
     ////////////////////////////////
 
@@ -938,6 +1129,8 @@
         before: before,
 
         // ui
-        floatingWindow: floatingWindow
+        floatingWindow: floatingWindow,
+        TimerReminder: TimerReminder,
+        Timer: Timer,
     };
 })();
