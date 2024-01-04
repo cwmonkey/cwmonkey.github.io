@@ -1025,6 +1025,13 @@
             this.time = time;
             this.reminders = reminders;
             this.timeout = null;
+
+            const date = new Date(time);
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            this.hours = hours % 12 || 12;
+            this.minutes = ('' + minutes).padStart(2, '0');
+            this.ampm = hours >= 12 ? 'pm' : 'am';
         }
 
         update() {
@@ -1036,6 +1043,10 @@
             let unit = 's';
             let nextto = 1000;
             let secondPadAmount = 2;
+
+            const hours = this.hours;
+            const minutes = this.minutes;
+            const ampm = this.ampm;
 
             if (this.reminders) {
                 this.reminders.forEach((reminder, i) => {
@@ -1073,7 +1084,7 @@
             first = ('' + first).padStart(2, '0');
             second = ('' + second).padStart(secondPadAmount, '0');
 
-            this.el.textContent = `${first}:${second} ${unit}`;
+            this.el.textContent = `${first}:${second} ${unit} (${hours}:${minutes} ${ampm})`;
 
             if (nextto) {
                 this.timeout = setTimeout(this.update.bind(this), nextto);
