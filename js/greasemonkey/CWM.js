@@ -22,7 +22,7 @@
         // storage
         set, get, remove,
         // dom
-        ce, qs, qsa, trigger, pageScrollTop, ngSetValue, append, prepend, addCSS,
+        ce, qs, qsa, trigger, addEventListener, dispatchEvent, pageScrollTop, ngSetValue, append, prepend, addCSS,
         // dom updates
         Observer, pollFor,
         // audio
@@ -218,7 +218,32 @@
         return scrollTop;
     }
 
+    let cwmEl = null;
+
+    function _getCwmEl() {
+        if (cwmEl) return cwmEl;
+        cwmEl = document.querySelector('#__cwm');
+        if (!cwmEl) {
+            cwmEl = document.createElement('DIV');
+            cwmEl.id = '__cwm';
+            document.body.append(cwmEl);
+        }
+        return cwmEl;
+    }
+
+    function addEventListener(type, listener, options, el) {
+        el = el || _getCwmEl();
+        el.addEventListener(type, listener, options);
+    }
+
+    function dispatchEvent(type, detail, el) {
+        el = el || _getCwmEl();
+        const event = new CustomEvent(type, {detail: detail});
+        el.dispatchEvent(event);
+    }
+
     function trigger(eventName, el) {
+        el = el || _getCwmEl();
         const event = new MouseEvent(eventName, {
             view: window,
             bubbles: true,
@@ -723,6 +748,9 @@
             this.windowEl = null;
             this.headerEl = null;
             this.contentEl = null;
+            this.vpEl = null;
+
+            this.sections = {};
 
             // init
             this.create();
@@ -741,12 +769,12 @@
 
             // Viewport size, to constrain window
             // TODO: Compensate for page scrollbar width
-            let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-            let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+            let vw = Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            let vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
             addEventListener('resize', (event) => {
-                let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-                let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+                vw = Math.min(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                vh = Math.min(document.documentElement.clientHeight || 0, window.innerHeight || 0);
             });
 
             // Constrain to viewport
@@ -881,11 +909,63 @@
                             top: 0, // the top edge must be >= 0
                             // These don't seem to work
                             right: vw, // the right edge must be <= viewport width
-                            bottom: vh // the bottom edge must be <= viewport height
+                            bottom: vh, // the bottom edge must be <= viewport height
                         }
                     })
                 ]
             });
+        }
+
+        addSection(params) {
+            const className = params.className || '';
+            const sectionEl = ce('SECTION', {
+                className: 'cwm-fw-section ' + className
+            });
+            const key = params.key || floatingWindow.getNewKey();
+            this.sections[key] = sectionEl;
+            this.contentEl.append(sectionEl);
+
+            return sectionEl;
+        }
+
+        createRow(params) {
+            params = params || {};
+            const className = params.className || '';
+            const rowEl = ce('DIV', { className: 'cwm-fw-row ' + className });
+            const rowContentEl = ce('DIV', { className: 'cwm-fw-row-content' });
+            const rowActionsEl = ce('DIV', { className: 'cwm-fw-row-actions' });
+            rowEl.append(rowContentEl, rowActionsEl);
+
+            return {
+                rowEl: rowEl,
+                rowContentEl: rowContentEl,
+                rowActionsEl: rowActionsEl
+            };
+        }
+
+        createTimerRow(params) {
+            const els = this.createRow();
+            const {rowEl, rowContentEl, rowActionsEl} = els;
+            const timerEl = ce('SPAN', {
+                className: 'cwm-fw-timer'
+            });
+
+            const reminders = params.reminders;
+
+            const timer = new Timer(timerEl, params.time, reminders);
+
+            timer.update();
+
+            rowContentEl.append(ce('STRONG', { textContent: params.title + ': ' }), timerEl);
+
+            return els;
+        }
+
+        static keyCounter = 0;
+
+        static getNewKey() {
+            floatingWindow.keyCounter++;
+            return 'cwm-fw-' + Date.now() + floatingWindow.keyCounter;
         }
     }
 
@@ -995,6 +1075,7 @@
             GM.getValue(this.key).then((value) => {
                 if (!value || value[this.property]) return;
                 const triggeringKey = this.key + '.' + this.property;
+                dispatchEvent(this.property, {key: triggeringKey, newValue: '1'});
                 const triggering = get(triggeringKey);
                 if (triggering) return;
                 set(triggeringKey, 1);
@@ -1040,9 +1121,11 @@
             let remaining = this.time - now;
             let first = 0;
             let second = 0;
-            let unit = 's';
             let nextto = 1000;
             let secondPadAmount = 2;
+
+            let firstUnit = 'h';
+            let secondUnit = 'm';
 
             const hours = this.hours;
             const minutes = this.minutes;
@@ -1069,22 +1152,24 @@
                 second = remaining - (first * 1000);
                 nextto = 100;
                 secondPadAmount = 3;
+                firstUnit = 's';
+                secondUnit = 'ms';
             // minutes
             } else if (remaining < 60 * 60 * 1000) {
                 first = Math.floor(remaining / 60 / 1000);
                 second = Math.floor((remaining - (first * 60 * 1000)) / 1000);
-                unit = 'm';
+                firstUnit = 'm';
+                secondUnit = 's';
             // hours
             } else {
                 first = Math.floor(remaining / 60 / 60 / 1000);
                 second = Math.floor((remaining - (first * 60 * 60 * 1000)) / 60 / 1000);
-                unit = 'h';
             }
 
             first = ('' + first).padStart(2, '0');
             second = ('' + second).padStart(secondPadAmount, '0');
 
-            this.el.textContent = `${first}:${second} ${unit} (${hours}:${minutes} ${ampm})`;
+            this.el.textContent = `${first}${firstUnit}${second}${secondUnit} (${hours}:${minutes}${ampm})`;
 
             if (nextto) {
                 this.timeout = setTimeout(this.update.bind(this), nextto);
@@ -1114,6 +1199,8 @@
         qs: qs,
         qsa: qsa,
         trigger: trigger,
+        addEventListener: addEventListener,
+        dispatchEvent: dispatchEvent,
         pageScrollTop: pageScrollTop,
         ngSetValue: ngSetValue,
         append: append,
