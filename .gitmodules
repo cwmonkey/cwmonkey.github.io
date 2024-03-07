@@ -1,6 +1,3 @@
 [submodule "reactor-knockoff"]
 	path = reactor-knockoff
 	url = https://github.com/cwmonkey/reactor-knockoff
-[submodule "nms-expeditions"]
-	path = nms-expeditions
-	url = git@github.com:cwmonkey/nms-expeditions.git
