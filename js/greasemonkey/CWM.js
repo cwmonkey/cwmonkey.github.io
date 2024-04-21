@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 /* Usage:
-    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.4
+    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.5
 
     // CWM
     const {
@@ -41,7 +41,7 @@
 (function() {
     'use strict';
 
-    console.log('CWM 0.4');
+    console.log('CWM 0.5');
 
     ////////////////////////////////
     // Pretty Debug
@@ -353,7 +353,7 @@
 
     /* Usage:
 
-        pollFor('.yt-live-chat-item-list-renderer').then((el) => {
+        pollFor('ytd-menu-service-item-renderer.ytd-menu-popup-renderer', 'Save to Watch later').then((el) => {
             el.querySelectorAll('yt-live-chat-text-message-renderer').forEach((el) => {
                 processMessage(el);
             });
@@ -364,12 +364,25 @@
     function pollFor(selector, text) {
         const prm = new Promise((resolve, reject) => {
             const poll = function() {
-                const el = qs(selector);
+                if (text) {
+                    const els = Array.from(qsa(selector));
 
-                if (el && (!text || text === el.innerText)) {
-                    resolve(el);
+                    for (let i = 0, l = els.length, el; i < l; i++) {
+                        el = els[i];
+
+                        if (el.innerText.trim() === text) {
+                            resolve(el);
+                            return;
+                        }
+                    }
                 } else {
-                    setTimeout(poll, 100);
+                    const el = qs(selector);
+
+                    if (el) {
+                        resolve(el);
+                    } else {
+                        setTimeout(poll, 100);
+                    }
                 }
             };
 
