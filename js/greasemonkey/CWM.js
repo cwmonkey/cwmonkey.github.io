@@ -11,14 +11,16 @@
 // ==/UserScript==
 
 /* Usage:
-    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.5
+    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.6
+    // for local testing
+    // @require      http://cwmonkey.local:8080/js/greasemonkey/CWM.js?0.6
 
     // CWM
     const {
         // pretty debug output
         prettyDebug,
         // stuff
-        sluggify, roundTo, once,
+        sluggify, roundTo, once, getQueryVariable,
         // storage
         set, get, remove,
         // dom
@@ -41,7 +43,7 @@
 (function() {
     'use strict';
 
-    console.log('CWM 0.5');
+    console.log('CWM 0.6');
 
     ////////////////////////////////
     // Pretty Debug
@@ -155,6 +157,25 @@
         if (onces[fn]) return;
         onces[fn] = true;
         fn();
+    }
+
+    ////////////////////////////////
+    // Get Querystring Variable
+    ////////////////////////////////
+
+    function getQueryVariable(variable, href) {
+        if (typeof href === 'undefined') href = window.location.href;
+
+        const query = href.split('?')[1] || '';
+        const vars = query.split('&');
+
+        for (let i = 0, l = vars.length; i < l; i++) {
+            const pair = vars[i].split('=');
+
+            if (decodeURIComponent(pair[0]) == variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
     }
 
     ////////////////////////////////
@@ -1201,6 +1222,7 @@
         sluggify: sluggify,
         roundTo: roundTo,
         once: once,
+        getQueryVariable: getQueryVariable,
 
         // storage
         set: set,
