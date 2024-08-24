@@ -203,10 +203,19 @@
         'for': 1
     };
 
+    // Used to avoid "This document requires 'TrustedHTML' assignment." Chrome issue
+    const escapeHTMLPolicy = trustedTypes.createPolicy("forceInner", {
+        createHTML: (to_escape) => to_escape
+    })
+
     // document.createElement
     function ce(tagName, properties) {
         const el = document.createElement(tagName);
         properties = properties || {};
+
+        if (properties.innerHTML) {
+            properties.innerHTML = escapeHTMLPolicy.createHTML(properties.innerHTML);
+        }
 
         Object.assign(el, properties);
 
@@ -1155,7 +1164,7 @@
             let remaining = this.time - now;
             let first = 0;
             let second = 0;
-            let nextto = 1000;
+            let nextto = remaining;
             let secondPadAmount = 2;
 
             let firstUnit = 'h';
@@ -1184,7 +1193,7 @@
             } else if (remaining < 60 * 1000) {
                 first = Math.floor(remaining / 1000);
                 second = remaining - (first * 1000);
-                nextto = 100;
+                nextto = 500;
                 secondPadAmount = 3;
                 firstUnit = 's';
                 secondUnit = 'ms';
@@ -1203,7 +1212,12 @@
             first = ('' + first).padStart(2, '0');
             second = ('' + second).padStart(secondPadAmount, '0');
 
-            this.el.textContent = `${first}${firstUnit}${second}${secondUnit} (${hours}:${minutes}${ampm})`;
+            const textContent = `${first}${firstUnit}${second}${secondUnit} (${hours}:${minutes}${ampm})`;
+
+            if (this.el.dataset.textContent !== textContent) {
+                this.el.textContent = textContent;
+                this.el.dataset.textContent == textContent
+            }
 
             if (nextto) {
                 this.timeout = setTimeout(this.update.bind(this), nextto);
