@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CWM
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.7
 // @description  try to take over the world!
 // @author       You
 // @match        http*://*/*
@@ -11,9 +11,9 @@
 // ==/UserScript==
 
 /* Usage:
-    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.6
+    // @require      https://cwmonkey.github.io/js/greasemonkey/CWM.js?0.7
     // for local testing
-    // @require      http://cwmonkey.local:8080/js/greasemonkey/CWM.js?0.6
+    // @require      http://cwmonkey.local:8080/js/greasemonkey/CWM.js?0.7
 
     // CWM
     const {
@@ -204,9 +204,9 @@
     };
 
     // Used to avoid "This document requires 'TrustedHTML' assignment." Chrome issue
-    const escapeHTMLPolicy = trustedTypes.createPolicy("forceInner", {
+    const escapeHTMLPolicy = window.trustedTypes ? window.trustedTypes.createPolicy("forceInner", {
         createHTML: (to_escape) => to_escape
-    })
+    }) : {createHTML: (html) => { return html }};
 
     // document.createElement
     function ce(tagName, properties) {
