@@ -31,12 +31,16 @@
 		// Null checking to be safe
 		if (!event.data || !event.data['twttr.embed']) return;
 
-		if (event.data['twttr.embed'].id) {
+		const data = event.data['twttr.embed'];
+
+		if (data.id) {
 			const iframe = document.getElementById('my-' + event.data['twttr.embed'].id);
 
-			if (iframe && event.data['twttr.embed'].params && event.data['twttr.embed'].params[0]) {
-				if (event.data['twttr.embed'].params[0].width) iframe.style.width = event.data['twttr.embed'].params[0].width + 'px';
-				if (event.data['twttr.embed'].params[0].height) iframe.style.height = event.data['twttr.embed'].params[0].height + 'px';
+			if (iframe && data.params && data.params[0]) {
+				const params = data.params[0];
+
+				if (params.width) iframe.style.width = params.width + 'px';
+				if (params.height) iframe.style.height = params.height + 'px';
 			}
 		}
 	});
