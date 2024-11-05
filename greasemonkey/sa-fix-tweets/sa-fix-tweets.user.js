@@ -15,7 +15,7 @@
 	// Hide doubled-up twitter embeds in case the user isn't blocking the following url pattern somehow:
 	// https://api.twitter.com/1/statuses/oembed.json?*
 	GM_addStyle(`
-		.my-twitter-embed + a,
+		.my-twitter-embed:not(.my-not-found) + a,
 		.my-twitter-embed + .tweet {
 			display: none !important;
 		}
@@ -30,7 +30,6 @@
 	window.addEventListener('message', (event) => {
 		// Null checking to be safe
 		if (!event.data || !event.data['twttr.embed']) return;
-
 		const data = event.data['twttr.embed'];
 
 		if (data.id) {
@@ -41,6 +40,11 @@
 
 				if (params.width) iframe.style.width = params.width + 'px';
 				if (params.height) iframe.style.height = params.height + 'px';
+
+				// Edge case with old tweets? 404ing, in spite of still being accessible via .com
+				if (params.height && params.height < 77) {
+					iframe.classList.add('my-not-found');
+				}
 			}
 		}
 	});
