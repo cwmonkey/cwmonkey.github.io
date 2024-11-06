@@ -32,10 +32,11 @@
 		if (!event.data || !event.data['twttr.embed']) return;
 		const data = event.data['twttr.embed'];
 
-		if (data.id) {
-			const iframe = document.getElementById('my-' + event.data['twttr.embed'].id);
+		if (data.id && data.method === 'twttr.private.resize') {
+			const iframe = document.getElementById(event.data['twttr.embed'].id);
 
-			if (iframe && data.params && data.params[0]) {
+			// Null check and make sure it's one of our iframes
+			if (iframe && iframe.matches('.my-twitter-embed') && data.params && data.params[0]) {
 				const params = data.params[0];
 
 				if (params.width) iframe.style.width = params.width + 'px';
@@ -62,8 +63,8 @@
 	postLinkEls.forEach((el) => {
 		const matches = el.href.match(twitterReg);
 		if (!matches) return;
-		const src = 'https://platform.twitter.com/embed/Tweet.html?dnt=true&embedId=twitter-widget-' + twitterId + '&id=' + matches[2] + '&' + twitterParams + '&theme=' + theme;
-		div.innerHTML = '<iframe src="about:blank" class="my-twitter-embed" id="my-twitter-widget-' + twitterId + '" style="position: static; visibility: visible; min-width: 550px; width: 550px; height: 528px; display: block; flex-grow: 1;" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" title="X Post" ></iframe>';
+		const src = 'https://platform.twitter.com/embed/Tweet.html?dnt=true&embedId=my-twitter-widget-' + twitterId + '&id=' + matches[2] + '&' + twitterParams + '&theme=' + theme;
+		div.innerHTML = '<iframe src="about:blank" class="my-twitter-embed" id="my-twitter-widget-' + twitterId + '" style="position: static; visibility: visible; width: 550px; height: 528px; display: block; flex-grow: 1;" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" title="X Post" ></iframe>';
 		const iframe = div.firstChild;
 		el.parentNode.insertBefore(iframe, el);
 		iframe.src = src;
