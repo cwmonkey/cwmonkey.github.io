@@ -63,7 +63,7 @@
 		const matches = el.href.match(twitterReg);
 		if (!matches) return;
 		const src = 'https://platform.twitter.com/embed/Tweet.html?dnt=true&embedId=twitter-widget-' + twitterId + '&id=' + matches[2] + '&' + twitterParams + '&theme=' + theme;
-		div.innerHTML = '<iframe src="about:blank" class="my-twitter-embed" id="my-twitter-widget-' + twitterId + '" style="position: static; visibility: visible; width: 550px; height: 528px; display: block; flex-grow: 1;" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" title="X Post" ></iframe>';
+		div.innerHTML = '<iframe src="about:blank" class="my-twitter-embed" id="my-twitter-widget-' + twitterId + '" style="position: static; visibility: visible; min-width: 550px; width: 550px; height: 528px; display: block; flex-grow: 1;" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" title="X Post" ></iframe>';
 		const iframe = div.firstChild;
 		el.parentNode.insertBefore(iframe, el);
 		iframe.src = src;
