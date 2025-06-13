@@ -10,7 +10,7 @@
 
 	// Regex to determine twitter links
 	// TODO: Add the other stupid domains people use to post tweets
-	const twitterReg = /^https?:\/\/(twitter.com|x.com|fxtwitter.com|nitter.net|vxtwitter.com|www.twitter.com)\/[a-zA-Z0-9\-_]+\/status\/([0-9]+)/;
+	const twitterReg = /^https?:\/\/(twitter.com|x.com|xcancel.com|fxtwitter.com|nitter.net|vxtwitter.com|www.twitter.com)\/[a-zA-Z0-9\-_]+\/status\/([0-9]+)/;
 
 	// Hide doubled-up twitter embeds in case the user isn't blocking the following url pattern somehow:
 	// https://api.twitter.com/1/statuses/oembed.json?*
