@@ -15,7 +15,7 @@
 	// Hide doubled-up twitter embeds in case the user isn't blocking the following url pattern somehow:
 	// https://api.twitter.com/1/statuses/oembed.json?*
 	GM_addStyle(`
-		.my-twitter-embed:not(.my-not-found) + a,
+		/* .my-twitter-embed:not(.my-not-found) + a, */
 		.my-twitter-embed + .tweet {
 			display: none !important;
 		}
