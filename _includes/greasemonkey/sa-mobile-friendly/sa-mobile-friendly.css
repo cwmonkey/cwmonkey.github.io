@@ -3,13 +3,13 @@
 *,
 *:before,
 *:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #container {
-    padding: 0;
+  padding: 0;
 }
 
 #nav_purchase,
@@ -17,13 +17,13 @@
 #threadiklist,
 .bottom_forms,
 .threadrate {
-    display: none !important;
+  display: none !important;
 }
 
 #nav_title {
-    div {
-        display: inline;
-    }
+  div {
+    display: inline;
+  }
 }
 
 div.pages a,
@@ -31,24 +31,24 @@ div.pages span.disabled, .letternav li a,
 .letternav li a:hover,
 .messages_nextprev a,
 .modqueue #main_full div.pages a {
-    height: auto;
+  height: auto;
 }
 
 #something_awful .breadcrumbs {
-    margin-bottom: 10px !important;
-    
-    span {
-        white-space: normal !important;
-        line-height: 1.5;
-    }
-    
-    .index {
-        display: none !important;
-    }
+  margin-bottom: 10px !important;
+  
+  span {
+    white-space: normal !important;
+    line-height: 1.5;
+  }
+  
+  .index {
+    display: none !important;
+  }
 }
 
 .pages {
-    float: none;
+  float: none;
 }
 
 /* --------------------------------
@@ -56,21 +56,21 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .forumdisplay {
-    #mp_bar {
-        display: none;
+  #mp_bar {
+    display: none;
+  }
+
+  .threadlist {
+    .icon,
+    .author,
+    .replies,
+    .rate,
+    .rating,
+    .views,
+    .lastpost {
+      display: none;
     }
-    
-    .threadlist {
-        .icon,
-        .author,
-        .replies,
-        .rate,
-        .rating,
-        .views,
-        .lastpost {
-            display: none;
-        }
-    }
+  }
 }
 
 /* --------------------------------
@@ -78,89 +78,162 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .showthread {
-    #nav_title {
+  #nav_title {
+    display: none;
+  }
+
+  
+  .threadbar.top {
+    display: none;
+  }
+  
+  #thread {
+    .post {
+      margin-bottom: 10px;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+
+      .postdate a,
+      .profilelinks,
+      img[src$="sa-history2.gif"] {
         display: none;
+      }
+
+      td {
+        display: block;
+      }
+
+      tr:first-child {
+        display: flex;
+        flex-direction: column;
+      }
+
+      tr:last-child {
+        display: flex;
+
+        .postdate {
+          background: none;
+        }
+
+        .postlinks {
+          background-image: none;
+          flex-grow: 1;
+        }
+      }
     }
 
-    
-    .threadbar.top {
+    td.userinfo {
+      padding: 0 !important;
+      width: 100%;
+      display: flex;
+      background-image: none;
+
+      .author {
+        order: 1;
+      }
+    }
+
+    dl.userinfo {
+      display: flex !important;
+      width: 100% !important;
+      flex-wrap: nowrap;
+      background-image: none;
+      padding: 0;
+
+      .author {
+        margin-bottom: 0 !important;
+        line-height: 32px !important;
+        white-space: nowrap;
+      }
+
+      .registered,
+      .special_title {
         display: none;
+      }
+
+      .title {
+        padding: 0 !important;
+        margin: 0 5px 0 0 !important;
+        white-space: nowrap;
+        line-height: 32px;
+        width: 32px;
+        overflow: hidden;
+        order: 0;
+
+        img {
+          max-width: 32px;
+          max-height: 32px;
+          padding: 0 !important;
+          vertical-align: top;
+        }
+
+        br {
+          display: none;
+        }
+      }
     }
     
-    #thread {
-        .post {
-            td {
-                display: block;
-                width: 100%;
+    .postbody {
+      padding: 5px;
+      background-image: none;
 
-                &.userinfo {
-                    padding: 0;
-                }
-            }
-            
-            tr:nth-child(2) {
-                display: none;
-            }
-        }
+      * {
+        max-width:100%;
+      }
+      
+      a {
+        word-break: break-all;
+      }
+    }
+    
+    .bbc-block {
+      margin: 10px;
+      padding: 2px 10px;
+    }
+  }
 
-        dl.userinfo {
-            display: flex !important;
-            width: 100% !important;
-            flex-wrap: nowrap;
+  .threadbar.bottom + .breadcrumbs {
+    margin-bottom: 25px !important;
 
-            .author {
-                margin-bottom: 0 !important;
-                line-height: 32px !important;
-                white-space: nowrap;
-            }
+    .up ~ * {
+    }
+  }
 
-            .registered {
-                display: none;
-            }
+}
 
+/* --------------------------------
+   REPLY
+-------------------------------- */
 
-            .title {
-                padding: 0 !important;
-                margin: 0 !important;
-                white-space: nowrap;
-                line-height: 32px;
+.newreply {
+  #content {
+    width: auto !important;
+  }
 
-                img {
-                    max-width: 32px;
-                    max-height: 32px;
-                    padding: 0 !important;
-                    vertical-align: top;
-                }
-                br {
-                    display: none;
-                }
-            }
-        }
-        
-        .postbody {
-            padding: 5px;
-            background-image: none;
-            
-            * {
-                max-width:100%;
-            }
-            
-            a {
-                word-break: break-all;
-            }
-        }
-        
-        .bbc-block {
-            margin: 10px;
-            padding: 2px 10px;
-        }
+  .breadcrumbs {
+    display: none;
+  }
+
+  #main_full {
+    tbody > tr > td:first-child {
+      display: none;
     }
 
-    .threadbar.bottom + .breadcrumbs {
-        margin-bottom: 25px !important;
-
-        .up ~ * {
-        }
+    .postinfo {
+      height: auto;
     }
 
+    .save-state {
+      margin-bottom: 5px;
+
+      strong {
+        display: block;
+      }
+
+      a {
+        float: none;
+      }
+    }
+  }
 }
