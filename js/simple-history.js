@@ -27,12 +27,6 @@
     start: function(matcher) {
       this.matcher = matcher;
       window.addEventListener("popstate", function(event) {
-        // workaround to always ignore first popstate event (Chrome)
-        // a timeout isn't reliable enough
-        if (initial && initial === location.href) {
-          initial = null;
-          return;
-        }
         SimpleHistory.notify(event.state || {});
       }, false);
     }
