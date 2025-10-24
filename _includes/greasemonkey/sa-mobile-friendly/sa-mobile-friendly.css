@@ -8,21 +8,28 @@
   box-sizing: border-box;
 }
 
+* {
+  max-width:100%;
+}
+
 #container {
-  padding: 0;
+  padding: 0 0 5px 0;
 }
 
 #nav_purchase,
 #navigation,
 #threadiklist,
 .bottom_forms,
-.threadrate {
+.threadrate,
+.navigation {
   display: none !important;
 }
 
 #nav_title {
+  padding: 0 5px;
+
   div {
-    display: inline;
+    display: inline-block;
   }
 }
 
@@ -36,6 +43,7 @@ div.pages span.disabled, .letternav li a,
 
 #something_awful .breadcrumbs {
   margin-bottom: 10px !important;
+  padding: 0 5px;
   
   span {
     white-space: normal !important;
@@ -49,6 +57,36 @@ div.pages span.disabled, .letternav li a,
 
 .pages {
   float: none;
+
+  span {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 18px !important;
+  }
+
+  a,
+  span,
+  select {
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+  }
+
+  a,
+  button,
+  span {
+    box-shadow: none !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  button {
+    margin-right: 3px !important;
+  }
+
+  input {
+    box-shadow: none !important;
+    margin-left: 3px !important;
+  }
 }
 
 /* --------------------------------
@@ -56,7 +94,8 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .forumdisplay {
-  #mp_bar {
+  #mp_bar,
+  #filter {
     display: none;
   }
 
@@ -165,7 +204,7 @@ div.pages span.disabled, .letternav li a,
           max-width: 32px;
           max-height: 32px;
           padding: 0 !important;
-          vertical-align: top;
+          vertical-align: middle;
         }
 
         br {
@@ -178,10 +217,6 @@ div.pages span.disabled, .letternav li a,
       padding: 5px;
       background-image: none;
 
-      * {
-        max-width:100%;
-      }
-      
       a {
         word-break: break-all;
       }
