@@ -1,11 +1,9 @@
-/* <meta name="viewport" content="width=device-width , initial-scale=1.0"> */
-
 *,
 *:before,
 *:after {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #container {
@@ -49,6 +47,28 @@ div.pages span.disabled, .letternav li a,
 
 .pages {
     float: none;
+}
+
+/* --------------------------------
+   FORUM
+-------------------------------- */
+
+.forumdisplay {
+    #mp_bar {
+        display: none;
+    }
+    
+    .threadlist {
+        .icon,
+        .author,
+        .replies,
+        .rate,
+        .rating,
+        .views,
+        .lastpost {
+            display: none;
+        }
+    }
 }
 
 /* --------------------------------
