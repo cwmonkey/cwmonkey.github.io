@@ -12,3 +12,5 @@
 .jekyll-cache
 .jekyll-metadata
 vendor
+/*.sublime-project
+/*.sublime-workspace
