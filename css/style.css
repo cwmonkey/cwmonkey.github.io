@@ -159,7 +159,7 @@ a:hover {
 #main_headline a {
 	color: #000;
 	text-decoration: none;
-	font-weight: bold;
+	font-weight: normal;
 	font-size: 1em;
 	display: block;
 }
@@ -397,6 +397,7 @@ a:hover {
 
 	#main_headline {
 		margin-left: 0;
+		border-radius: 0;
 	}
 }
 
@@ -441,7 +442,6 @@ a:hover {
 		white-space: nowrap;
 		z-index: 2;
 		width: 100%;
-		background: #6C6F9F;
 	}
 
 	.navopen #header {
