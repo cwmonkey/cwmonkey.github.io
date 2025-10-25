@@ -219,7 +219,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 					postdate = new Date(new Date($postdate.text().trim()) - (1000*60*60*7));
 					var ago = new Date() - postdate;
 
-					$post.find('.author').prepend($('<span>' + (ago/1000) + ' </span>'));
+					// $post.find('.author').prepend($('<span>' + (ago/1000) + ' </span>'));
 					$post.find('a').attr('target', '_blank');
 					// / Post date
 
@@ -262,7 +262,7 @@ a.each(function() {
 		if (!/^http/.test($(this).text())) {
 				return
 		}
-		var e = $(this).attr("href").match(/^(?:https|http):\/\/(?:mobile\.)?twitter.com\/[0-9a-zA-Z_]+\/(?:status|statuses)\/([0-9]+)/);
+		var e = $(this).attr("href").match(/^(?:https|http):\/\/(?:mobile\.)?(?:twitter|x).com\/[0-9a-zA-Z_]+\/(?:status|statuses)\/([0-9]+)/);
 		if (e == null) {
 				return
 		}
