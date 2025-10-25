@@ -12,7 +12,9 @@
       if (el.href.match(subforumRegex)) el.remove();
     });
 
-    document.querySelectorAll('link[href^="https://i.somethingawful.com/css/platicons.css"] ~ link[type="text/css"]').forEach(el => el.remove());
+    document.querySelectorAll(`link[href^="https://i.somethingawful.com/css/platicons.css"] + link[type="text/css"],
+    link[href^="https://i.somethingawful.com/css/platicons.css"] + style,
+    link[href^="https://i.somethingawful.com/css/platicons.css"] + style + link[type="text/css"]`).forEach(el => el.remove());
   }
 
   function tryRemoveStylesheets() {
