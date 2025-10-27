@@ -33,6 +33,13 @@
   }
 }
 
+#nav_subtitle {
+  &:before {
+    content: " - ";
+    display: inline;
+  }
+}
+
 div.pages a,
 div.pages span.disabled, .letternav li a,
 .letternav li a:hover,
@@ -150,14 +157,29 @@ div.pages span.disabled, .letternav li a,
 
       tr:last-child {
         display: flex;
+        background: none;
+        flex-wrap: wrap;
+
+        > td {
+          display: inline;
+          width: auto;
+        }
 
         .postdate {
-          background: none;
+          background: none !important;
+          border: none !important;
+          padding-right: 10px;
         }
 
         .postlinks {
-          background-image: none;
+          background: none !important;
           flex-grow: 1;
+          text-align: right;
+        }
+
+        .postbuttons {
+          float: none;
+          display: inline-flex;
         }
       }
     }
