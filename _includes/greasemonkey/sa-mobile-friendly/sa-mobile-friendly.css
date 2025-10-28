@@ -8,25 +8,75 @@
   box-sizing: border-box;
 }
 
+/* Nav button from js */
+
+.sa-mobile-friendly-menu-button {
+  text-indent: 100%;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 32px;
+  width: 32px;
+  box-shadow: none;
+  border-top: none;
+  border-right: none;
+
+  &:before {
+    text-indent: 0;
+    display: block;
+    content: "☰";
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 2.1;
+  }
+}
+
+/* Mobile friendly styling */
+
 * {
-  max-width:100%;
+  max-width: 100%;
+}
+
+body {
+  background-image: none !important;
+
+  &:not(.sa-mobile-friendly-menu-button-clicked) {
+    #nav_purchase,
+    #navigation,
+    #threadiklist,
+    .bottom_forms,
+    .threadrate,
+    .navigation {
+      display: none !important;
+    }
+  }
+
+  &.sa-mobile-friendly-menu-button-clicked {
+    #container {
+      padding-top: 32px;
+    }
+
+    .sa-mobile-friendly-menu-button:before {
+      content: "✖";
+    }
+  }
 }
 
 #container {
   padding: 0 0 5px 0;
-}
 
-#nav_purchase,
-#navigation,
-#threadiklist,
-.bottom_forms,
-.threadrate,
-.navigation {
-  display: none !important;
+  .breadcrumbs:first-child .bclast {
+    padding-right: 37px;
+  }
 }
 
 #nav_title {
-  padding: 0 5px;
+  padding: 5px 37px 5px 5px;
+  line-height: 32px;
 
   div {
     display: inline-block;
@@ -55,6 +105,10 @@ div.pages span.disabled, .letternav li a,
   span {
     white-space: normal !important;
     line-height: 1.5;
+  }
+
+  .up span {
+    display: none !important;
   }
   
   .index {
@@ -166,13 +220,14 @@ div.pages span.disabled, .letternav li a,
         }
 
         .postdate {
-          background: none !important;
+          background-image: none !important;
           border: none !important;
           padding-right: 10px;
+          flex-grow: 1;
         }
 
         .postlinks {
-          background: none !important;
+          background-image: none !important;
           flex-grow: 1;
           text-align: right;
         }
@@ -209,7 +264,8 @@ div.pages span.disabled, .letternav li a,
       }
 
       .registered,
-      .special_title {
+      .special_title,
+      .special_title_v2 {
         display: none;
       }
 
