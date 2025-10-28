@@ -39,7 +39,11 @@
 			if (iframe && iframe.matches('.my-twitter-embed') && data.params && data.params[0]) {
 				const params = data.params[0];
 
-				if (params.width) iframe.style.width = params.width + 'px';
+				if (params.width) {
+					iframe.style.boxSizing = 'content-box';
+					iframe.style.width = params.width + 'px';
+				}
+
 				if (params.height) iframe.style.height = params.height + 'px';
 
 				// Edge case with old tweets? 404ing, in spite of still being accessible via .com
