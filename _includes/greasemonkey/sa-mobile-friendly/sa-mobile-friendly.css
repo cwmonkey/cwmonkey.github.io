@@ -83,7 +83,13 @@ body {
 #container {
   padding: 0 0 5px 0;
 
-  .mainbodytextlarge {
+  body:not(.forumdisplay) & {
+    .mainbodytextlarge {
+      padding-right: 37px;
+    }
+  }
+
+  .online_users {
     padding-right: 37px;
   }
 }
