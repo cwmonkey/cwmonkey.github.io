@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+:target {
+  outline: 3px dashed yellow;
+  outline-offset: -3px;
+}
+
 /* Nav button from js */
 
 .sa-mobile-friendly-menu-button {
@@ -53,6 +58,15 @@ body {
     .navigation {
       display: none !important;
     }
+
+    /* POSTS */
+    &.showthread #thread .post {
+      .postdate a,
+      .profilelinks,
+      img[src$="sa-history2.gif"] {
+        display: none;
+      }
+    }
   }
 
   &.sa-mobile-friendly-menu-button-clicked {
@@ -61,7 +75,7 @@ body {
     }
 
     .sa-mobile-friendly-menu-button:before {
-      content: "✖";
+      content: "X";
     }
   }
 }
@@ -69,7 +83,7 @@ body {
 #container {
   padding: 0 0 5px 0;
 
-  .breadcrumbs:first-child .bclast {
+  .mainbodytextlarge {
     padding-right: 37px;
   }
 }
@@ -155,6 +169,10 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .forumdisplay {
+  #forum {
+    width: 100%;
+  }
+
   #mp_bar,
   #filter {
     display: none;
@@ -182,23 +200,16 @@ div.pages span.disabled, .letternav li a,
     display: none;
   }
 
-  
   .threadbar.top {
     display: none;
   }
-  
+
   #thread {
     .post {
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       border-left: none;
       border-right: none;
       border-top: none;
-
-      .postdate a,
-      .profilelinks,
-      img[src$="sa-history2.gif"] {
-        display: none;
-      }
 
       td {
         display: block;
@@ -222,13 +233,16 @@ div.pages span.disabled, .letternav li a,
         .postdate {
           background-image: none !important;
           border: none !important;
-          padding-right: 10px;
+          padding-right: 12px !important;
           flex-grow: 1;
+          text-align: right;
+          line-height: 43px !important;
         }
 
         .postlinks {
           background-image: none !important;
-          flex-grow: 1;
+          height: auto !important;
+          max-height: none !important;
           text-align: right;
         }
 
@@ -271,7 +285,7 @@ div.pages span.disabled, .letternav li a,
 
       .title {
         padding: 0 !important;
-        margin: 0 5px 0 0 !important;
+        margin: 0 5px 0 10px !important;
         white-space: nowrap;
         line-height: 32px;
         width: 32px;
@@ -292,7 +306,7 @@ div.pages span.disabled, .letternav li a,
     }
     
     .postbody {
-      padding: 5px;
+      padding: 5px 10px;
       background-image: none;
 
       a {
