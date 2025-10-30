@@ -50,12 +50,14 @@ body {
   background-image: none !important;
 
   &:not(.sa-mobile-friendly-menu-button-clicked) {
+    #nav_title,
     #nav_purchase,
     #navigation,
     #threadiklist,
     .bottom_forms,
     .threadrate,
-    .navigation {
+    .navigation,
+    .online_users {
       display: none !important;
     }
 
@@ -121,52 +123,80 @@ div.pages span.disabled, .letternav li a,
 #something_awful .breadcrumbs {
   margin-bottom: 10px !important;
   padding: 0 5px;
-  
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
   span {
     white-space: normal !important;
     line-height: 1.5;
+    display: inline-block;
   }
 
-  .up span {
-    display: none !important;
-  }
-  
-  .index {
-    display: none !important;
-  }
-}
+  .mainbodytextlarge {
+    height: auto !important;
+    flex-grow: 1;
+    font-size: 0;
 
-.pages {
-  float: none;
+    .up {
+      font-size: 15px;
+      display: block;
 
-  span {
-    padding-top: 0;
-    padding-bottom: 0;
-    line-height: 18px !important;
-  }
+      span {
+        display: none !important;
+      }
+    }
+    
+    .index {
+      display: none !important;
+    }
 
-  a,
-  span,
-  select {
-    margin-left: 3px !important;
-    margin-right: 3px !important;
-  }
-
-  a,
-  button,
-  span {
-    box-shadow: none !important;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
+    .bclast {
+      font-size: 15px;
+      display: block;
+      font-weight: normal;
+    }
   }
 
-  button {
-    margin-right: 3px !important;
-  }
+  .pages {
+    float: none;
+    white-space: nowrap;
+    align-content: end;
+    flex-grow: 1;
 
-  input {
-    box-shadow: none !important;
-    margin-left: 3px !important;
+    span {
+      line-height: 18px !important;
+    }
+
+    a,
+    span,
+    select {
+      margin-left: 3px !important;
+      margin-right: 3px !important;
+    }
+
+    a,
+    button,
+    span {
+      box-shadow: none !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+    }
+
+    button {
+      margin-right: 3px !important;
+    }
+
+    input {
+      box-shadow: none !important;
+      margin-left: 3px !important;
+    }
+
+    select {
+      height: 32px;
+      box-shadow: none;
+      margin-bottom: 3px;
+    }
   }
 }
 
@@ -202,20 +232,19 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .showthread {
-  #nav_title {
-    display: none;
-  }
-
   .threadbar.top {
     display: none;
   }
 
   #thread {
     .post {
-      margin-bottom: 4px;
       border-left: none;
       border-right: none;
       border-top: none;
+      
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
 
       td {
         display: block;
@@ -240,7 +269,7 @@ div.pages span.disabled, .letternav li a,
           background-image: none !important;
           border: none !important;
           padding-right: 12px !important;
-          flex-grow: 1;
+          flex-grow: 1000;
           text-align: right;
           line-height: 43px !important;
         }
@@ -250,6 +279,8 @@ div.pages span.disabled, .letternav li a,
           height: auto !important;
           max-height: none !important;
           text-align: right;
+          flex-grow: 1;
+          flex-shrink: 1;
         }
 
         .postbuttons {
@@ -291,9 +322,10 @@ div.pages span.disabled, .letternav li a,
 
       .title {
         padding: 0 !important;
-        margin: 0 5px 0 10px !important;
+        margin: 0 10px 0 10px !important;
         white-space: nowrap;
         line-height: 32px;
+        height: 32px;
         width: 32px;
         overflow: hidden;
         order: 0;
@@ -303,9 +335,10 @@ div.pages span.disabled, .letternav li a,
           max-height: 32px;
           padding: 0 !important;
           vertical-align: middle;
+          border-radius: 5px;
         }
 
-        br {
+        *:not(img:first-of-type) {
           display: none;
         }
       }
@@ -323,14 +356,12 @@ div.pages span.disabled, .letternav li a,
     .bbc-block {
       margin: 10px;
       padding: 2px 10px;
+      border-left-width: 4px;
     }
   }
 
   .threadbar.bottom + .breadcrumbs {
     margin-bottom: 25px !important;
-
-    .up ~ * {
-    }
   }
 
 }
@@ -351,6 +382,10 @@ div.pages span.disabled, .letternav li a,
   #main_full {
     tbody > tr > td:first-child {
       display: none;
+    }
+
+    textarea {
+      font-size: 16px !important;
     }
 
     .postinfo {
