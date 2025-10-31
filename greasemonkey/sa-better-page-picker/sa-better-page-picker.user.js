@@ -46,7 +46,6 @@
             line-height: 30px;
             border-radius: 0;
             border: 1px solid #666;
-            border-left: none;
             vertical-align: bottom;
             box-shadow: inset 1px 1px 1px #fff, inset -1px -1px 1px #bbb, 2px 2px 2px rgba(26,26,26,.39);
         }
