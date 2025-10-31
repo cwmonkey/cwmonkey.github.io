@@ -56,7 +56,7 @@
     if (document.body) {
       addMobileButton();
     } else {
-      setTimeout(tryAddMeta, 100);
+      setTimeout(tryAddMobileButton, 100);
     }
   }
 
