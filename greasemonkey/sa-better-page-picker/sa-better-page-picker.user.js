@@ -21,7 +21,6 @@
             line-height: 30px;
             border-radius: 0;
             border: 1px solid #666;
-            border-right: none;
             vertical-align: bottom;
             box-shadow: inset 1px 1px 1px #fff, inset -1px -1px 1px #bbb, 2px 2px 2px rgba(26,26,26,.39);
         }
@@ -46,6 +45,7 @@
             line-height: 30px;
             border-radius: 0;
             border: 1px solid #666;
+            border-left: none;
             vertical-align: bottom;
             box-shadow: inset 1px 1px 1px #fff, inset -1px -1px 1px #bbb, 2px 2px 2px rgba(26,26,26,.39);
         }
@@ -59,7 +59,6 @@
     const darkStyleOverrides = `
         div.pages input {
             border: #304867 1px solid;
-            border-right: none;
             box-shadow: inset 1px 1px 1px #65a1ee, inset -1px -1px 1px #65a1ee, 2px 2px 2px rgba(96,96,96,.39);
         }
 
