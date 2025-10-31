@@ -61,12 +61,18 @@ body {
       display: none !important;
     }
 
-    /* POSTS */
-    &.showthread #thread .post {
-      .postdate a,
-      .profilelinks,
-      img[src$="sa-history2.gif"] {
+    /* THREAD */
+    &.showthread {
+      .threadbar.top {
         display: none;
+      }
+
+      #thread .post {
+        .postdate a,
+        .profilelinks,
+        img[src$="sa-history2.gif"] {
+          display: none;
+        }
       }
     }
   }
@@ -85,10 +91,9 @@ body {
 #container {
   padding: 0 0 5px 0;
 
-  body:not(.forumdisplay) & {
-    .mainbodytextlarge {
-      padding-right: 37px;
-    }
+  .pages,
+  .mainbodytextlarge {
+    padding-right: 37px;
   }
 
   .online_users {
@@ -155,6 +160,8 @@ div.pages span.disabled, .letternav li a,
       font-size: 15px;
       display: block;
       font-weight: normal;
+      color: inherit;
+      pointer-events: none;
     }
   }
 
@@ -232,8 +239,8 @@ div.pages span.disabled, .letternav li a,
 -------------------------------- */
 
 .showthread {
-  .threadbar.top {
-    display: none;
+  .postbuttons {
+    float: none !important;
   }
 
   #thread {
@@ -367,9 +374,10 @@ div.pages span.disabled, .letternav li a,
 }
 
 /* --------------------------------
-   REPLY
+   REPLY/EDIT
 -------------------------------- */
 
+.editpost,
 .newreply {
   #content {
     width: auto !important;

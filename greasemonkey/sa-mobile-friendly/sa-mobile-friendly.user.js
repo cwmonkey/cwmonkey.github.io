@@ -49,14 +49,14 @@
       }
     });
 
-    $container.prepend($button);
+    $container.append($button);
   }
 
   function tryAddMobileButton() {
     $container = document.querySelector('#container');
 
     if ($container) {
-      addMobileButton();
+      setTimeout(addMobileButton, 100);
     } else {
       setTimeout(tryAddMeta, 100);
     }
