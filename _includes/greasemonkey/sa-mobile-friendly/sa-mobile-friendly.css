@@ -90,15 +90,6 @@ body {
 
 #container {
   padding: 0 0 5px 0;
-
-  .pages,
-  .mainbodytextlarge {
-    padding-right: 37px;
-  }
-
-  .online_users {
-    padding-right: 37px;
-  }
 }
 
 #nav_title {
@@ -118,7 +109,8 @@ body {
 }
 
 div.pages a,
-div.pages span.disabled, .letternav li a,
+div.pages span.disabled,
+.letternav li a,
 .letternav li a:hover,
 .messages_nextprev a,
 .modqueue #main_full div.pages a {
@@ -131,6 +123,13 @@ div.pages span.disabled, .letternav li a,
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+
+  &:first-child {
+    .pages,
+    .mainbodytextlarge {
+      padding-right: 37px;
+    }
+  }
 
   span {
     white-space: normal !important;
@@ -170,6 +169,10 @@ div.pages span.disabled, .letternav li a,
     white-space: nowrap;
     align-content: end;
     flex-grow: 1;
+
+    .disabled {
+      display: none;
+    }
 
     span {
       line-height: 18px !important;
