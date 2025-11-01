@@ -370,10 +370,18 @@ div.pages span.disabled,
     }
   }
 
-  .threadbar.bottom + .breadcrumbs {
-    margin-bottom: 25px !important;
-  }
+  .threadbar.bottom {
+    display: flex;
 
+    .postbuttons {
+      flex-grow: 1;
+      text-align: right;
+    }
+
+    + .breadcrumbs {
+      margin-bottom: 25px !important;
+    }
+  }
 }
 
 /* --------------------------------
