@@ -18,7 +18,7 @@
 .sa-mobile-friendly-menu-button {
   text-indent: 100%;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
   height: 32px;
@@ -423,4 +423,23 @@ div.pages span.disabled,
       }
     }
   }
+}
+
+/* --------------------------------
+   EDIT THREAD
+-------------------------------- */
+
+div.posticon {
+  margin-bottom: 5px;
+
+  img {
+    padding: 0;
+    vertical-align: baseline;
+  }
+}
+
+.threads_editthread #content table.standard tr td:first-child {
+  min-width: 0;
+  width: auto;
+  white-space: nowrap;
 }
