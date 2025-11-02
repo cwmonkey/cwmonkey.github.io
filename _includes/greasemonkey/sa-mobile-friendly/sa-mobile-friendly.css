@@ -89,6 +89,7 @@ body {
 }
 
 #container {
+  background-image: none !important;
   padding: 0 0 5px 0;
 }
 
@@ -429,17 +430,31 @@ div.pages span.disabled,
    EDIT THREAD
 -------------------------------- */
 
-div.posticon {
-  margin-bottom: 5px;
+.threads_editthread {
+  #content table.standard {
+    tr {
+      display: flex;
+      flex-wrap: wrap;
 
-  img {
-    padding: 0;
-    vertical-align: baseline;
+      td,
+      th {
+        flex-grow: 1;
+      }
+    }
+
+    tr td:first-child {
+      min-width: 0;
+      width: auto;
+      white-space: nowrap;
+    }
   }
-}
 
-.threads_editthread #content table.standard tr td:first-child {
-  min-width: 0;
-  width: auto;
-  white-space: nowrap;
+  div.posticon {
+    margin-bottom: 5px;
+
+    img {
+      padding: 0;
+      vertical-align: baseline;
+    }
+  }
 }
