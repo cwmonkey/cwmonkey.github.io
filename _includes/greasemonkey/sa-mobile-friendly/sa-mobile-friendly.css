@@ -349,7 +349,7 @@ div.pages span.disabled,
           border-radius: 5px;
         }
 
-        *:not(img:first-of-type) {
+        *:not(img:first-of-type, .banlink) {
           display: none;
         }
       }
