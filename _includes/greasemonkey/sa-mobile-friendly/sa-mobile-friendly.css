@@ -437,6 +437,12 @@ div.pages span.disabled,
   }
 
   #content table.standard {
+    display :block;
+
+    tbody {
+      display: block;
+    }
+
     tr {
       display: flex;
       flex-wrap: wrap;
