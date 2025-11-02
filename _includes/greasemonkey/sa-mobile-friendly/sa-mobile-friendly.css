@@ -439,6 +439,7 @@ div.pages span.disabled,
       td,
       th {
         flex-grow: 1;
+        display: block;
       }
     }
 
