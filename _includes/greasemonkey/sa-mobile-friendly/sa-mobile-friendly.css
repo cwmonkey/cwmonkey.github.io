@@ -431,6 +431,11 @@ div.pages span.disabled,
 -------------------------------- */
 
 .threads_editthread {
+  #main_wide {
+    width: 100%;
+    max-width: 100%;
+  }
+
   #content table.standard {
     tr {
       display: flex;
