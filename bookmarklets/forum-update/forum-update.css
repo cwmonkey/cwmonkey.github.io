@@ -9,6 +9,7 @@
 	right: 5px;
 	color: black;
 	text-decoration: none;
+	-webkit-text-stroke: 1px #fff;
 }
 
 .fustarred .fustar {
