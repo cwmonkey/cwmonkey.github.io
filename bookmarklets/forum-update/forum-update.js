@@ -12,6 +12,9 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 	var queryString = myScript.src.replace(/^[^\?]+\??/,'');
 	var params = parseQuery( queryString );
 
+	const $loggedinusername = document.querySelector('#loggedinusername');
+	const loggedinusername = ($loggedinusername) ? $loggedinusername.textContent : null;
+
 	function parseQuery ( query ) {
 		var Params = new Object ();
 		if ( ! query ) return Params; // return empty object
@@ -55,7 +58,7 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			var scroll_speed = 200;
 			var post_parent_selector = '#thread';
 			var post_selector = '.post';
-			var next_page_selector = '.pages.bottom a[title="Next page"]';
+			var next_page_selector = '.pages a[title="Next page"]';
 			var posts = [];
 			var links_in_new = true;
 			var reply_selector = '.postbuttons a';
@@ -227,8 +230,8 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 					$post.append($star);
 
 					$post.addClass('funew');
-					if ( $post.text().indexOf('WrasslorMonkey') !== -1 ) {
-						$post.find('.postbody').addClass('userquoted');
+					if (loggedinusername && $post.find('.postbody').text().indexOf(loggedinusername) !== -1) {
+						$post.find('.postbody .bbc-block').addClass('userquoted');
 					}
 
 					$parent.append($post);
