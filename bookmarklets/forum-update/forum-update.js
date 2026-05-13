@@ -86,7 +86,6 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			window.forumUpdate_running = function() {
 				allstop = !allstop;
 				if ( allstop ) {
-//console.log('stopping all');
 					clearTimeout(get_posts_to);
 					//clearInterval(show_post_interval);
 					clearTimeout(show_post_interval);
@@ -111,8 +110,11 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 					})
 					.done(function(data) {
 						data = clean_ajax(data);
-						var $div = $('<div/>').html(data);
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(data, 'text/html');
+						const $div = $(doc);
 						delete data;
+
 						var $form = $div.find(reply_form_selector);
 						$form.find('*:not(input, select, textarea):not(:has(input, select, textarea))').remove();
 						$form.addClass('fureply');
@@ -141,14 +143,16 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			var get_posts = function() {
 				current_url = current_url.split('#')[0];
 
-//console.log('get_posts');
 				$.ajax(current_url, {
 
 				})
 				.done(function(data) {
 					data = clean_ajax(data);
-					var $div = $('<div/>').html(data);
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(data, 'text/html');
+					const $div = $(doc);
 					delete data;
+
 					var rate = check_rate;
 
 					$posts = $div.find(post_parent_selector).find(post_selector);
@@ -164,12 +168,9 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 							$post.fuurl = current_url;
 							posts.push($post);
 							found++;
-
-							//.postdate Jul 5, 2016 01:01
 						}
 
 						rate = next_check_rate;
-//console.log('get_posts got ' + found + ' posts');
 					}
 
 					$next_page = $div.find(next_page_selector);
@@ -191,7 +192,6 @@ window.cwmForumUpdate = window.cwmForumUpdate || {};
 			};
 
 			var show_post = function() {
-//console.log('show_post')
 				show_post_interval = setTimeout(show_post, window.show_post_rate);
 				if ( !posts.length ) return;
 
@@ -301,10 +301,8 @@ a.each(function() {
 
 					if ( $window.scrollTop() >= $document.height() - $window.height() ) {
 						suspend = false;
-//console.log('restarting');
 					} else {
 						suspend = true;
-//console.log('suspending');
 					}
 
 					check_scroll = true;
