@@ -151,7 +151,7 @@ div.pages span.disabled,
         display: none !important;
       }
     }
-    
+
     .index {
       display: none !important;
     }
@@ -236,6 +236,38 @@ div.pages span.disabled,
       display: none;
     }
   }
+
+  .title_pages {
+    font-size: 0;
+
+    .pagenumber {
+      display: none;
+      font-size: 13px;
+
+      &:first-of-type,
+      &:nth-last-of-type(1),
+      &:nth-last-of-type(2) {
+        display: inline;
+        margin-right: 5px;
+
+        &:after {
+          content: " - ";
+          display: inline-block;
+          pointer-events: none;
+          position: absolute;
+          margin-left: 3px;
+        }
+
+        &:hover {
+          border: 0;
+        }
+      }
+
+      &:nth-last-of-type(1):after {
+        display: none;
+      }
+    }
+  }
 }
 
 /* --------------------------------
@@ -252,7 +284,7 @@ div.pages span.disabled,
       border-left: none;
       border-right: none;
       border-top: none;
-      
+
       &:not(:last-child) {
         margin-bottom: 8px;
       }
