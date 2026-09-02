@@ -302,6 +302,8 @@ div.pages span.disabled,
         display: flex;
         background: none;
         flex-wrap: wrap;
+        position: sticky;
+        bottom: 0;
 
         > td {
           display: inline;
