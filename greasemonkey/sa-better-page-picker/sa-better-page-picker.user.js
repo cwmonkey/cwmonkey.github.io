@@ -155,7 +155,8 @@
 
             // Append new page picker elements after old select element
             select.after(input, button);
-            select.remove();
+            select.classList.add('--replaced');
+            //select.remove();
         } else {
             // If not found, keep polling for select
             setTimeout(addNewPagePicker.bind(this, existsSelector, selector), 30);
@@ -163,6 +164,6 @@
     }
 
     // Poll for old page picker and add new page pickers
-    addNewPagePicker("#thread", ".breadcrumbs .pages select");
-    addNewPagePicker("#copyright", ".breadcrumbs .pages select");
+    addNewPagePicker("#thread", ".breadcrumbs .pages select:not(.--replaced)");
+    addNewPagePicker("#copyright", ".breadcrumbs .pages select:not(.--replaced)");
 })();
