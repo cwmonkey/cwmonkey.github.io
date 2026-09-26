@@ -10,3 +10,6 @@ protocol: https
 javascripts: javascripts.html
 stylesheets: stylesheets.html
 debug: false
+exclude:
+  - cwmonkey.github.io.sublime-workspace
+  - cwmonkey.github.io.sublime-project
