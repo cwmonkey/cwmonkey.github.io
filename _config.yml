@@ -13,3 +13,8 @@ debug: false
 exclude:
   - cwmonkey.github.io.sublime-workspace
   - cwmonkey.github.io.sublime-project
+  - Gemfile
+  - Gemfile.lock
+  - run.bat
+  - _plugins/build_hooks.rb
+  - after_build.ps1
