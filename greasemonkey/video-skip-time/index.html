@@ -1,0 +1,60 @@
+---
+layout: default
+title: Greasemonkey - Video - Skip Time/Change Playback Speed
+---
+
+<section id="description" class="cms">
+	<h2><a href="#description">Usage and description</a></h2>
+	<p>
+		<a href="#install-script">Install the Greasemonkey script below</a> to add a way to skip specific amounts of time in a video OR change the playback speed, in conjunction with bookmarklets.
+	</p>
+
+	<p>
+		After installing the script, drag any of these bookmarklets to your bookmarks bar (or make your own):
+	</p>
+
+	<ul>
+		<li><a href="javascript:(()=>{window.postMessage('2x','*');})();">2x</a> - 2x playback speed</li>
+		<li><a href="javascript:(()=>{window.postMessage('4x','*');})();">4x</a> - 4x playback speed</li>
+		<li><a href="javascript:(()=>{window.postMessage('8x','*');})();">8x</a> - 8x playback speed</li>
+		<li><a href="javascript:(()=>{window.postMessage('16x','*');})();">16x</a> - 16x playback speed (max)</li>
+		<li><a href="javascript:(()=>{window.postMessage('1x','*');})();">1x</a> - 1x playback speed</li>
+
+		<li><a href="javascript:(()=>{window.postMessage(1,'*');})();">1</a> - skip forward 1 second</li>
+		<li><a href="javascript:(()=>{window.postMessage(10,'*');})();">10</a> - skip forward 10 seconds</li>
+		<li><a href="javascript:(()=>{window.postMessage(60,'*');})();">60</a></li>
+		<li><a href="javascript:(()=>{window.postMessage(60*5,'*');})();">5m</a></li>
+		<li><a href="javascript:(()=>{window.postMessage(0.03333,'*');})();">.03</a> - skip forward 1 frame (@30fps)</li>
+		<li><a href="javascript:(()=>{window.postMessage(0.016666,'*');})();">.016</a> - skip forward 1 frame (@60fps)</li>
+		<li><a href="javascript:(()=>{window.postMessage(0.03333,'*');})();">.03</a> - skip forward 1 frame (@30fps)</li>
+
+		<li><a href="javascript:(()=>{window.postMessage('5%','*');})();">5%</a> - skip forward 5% of the video's total duration</li>
+		<li><a href="javascript:(()=>{window.postMessage('10%','*');})();">10%</a></li>
+		<li><a href="javascript:(()=>{window.postMessage('24%','*');})();">24%</a></li>
+
+		<li><a href="javascript:(()=>{window.postMessage(-1,'*');})();">-1</a> - skip backward 1 second</li>
+		<li><a href="javascript:(()=>{window.postMessage(-10,'*');})();">-10</a> - skip backward 10 seconds</li>
+		<li><a href="javascript:(()=>{window.postMessage(-60,'*');})();">-60</a></li>
+		<li><a href="javascript:(()=>{window.postMessage(-60*5,'*');})();">-5m</a></li>
+		<li><a href="javascript:(()=>{window.postMessage(-0.03333,'*');})();">-.03</a> - skip backward 1 frame (@30fps)</li>
+	</ul>
+
+	<h3>Versions</h3>
+
+	<ul>
+		<li>
+			2026-09-26
+			<ul>
+				<li>First release.</li>
+			</ul>
+		</li>
+	</ul>
+</section>
+
+{% include greasemonkey/_install-greasemonkey.html %}
+
+<section id="install-script" class="cms">
+	<h2><a href="#install-script">The Script</a></h2>
+
+	<p>Once you have installed Greasemonkey, <a href="//{{ site.domain }}/greasemonkey/sa-fix-tweets/sa-fix-tweets.user.js">click this link to install the script</a>.</p>
+</section>
