@@ -5,12 +5,12 @@
 ////////////////////////////////
 
 async function waitForElement(selector) {
-	while (true) {
-	const element = document.querySelector(selector);
-	if (element) return element;
+  while (true) {
+  const element = document.querySelector(selector);
+  if (element) return element;
 
-	await new Promise(resolve => setTimeout(resolve, 30));
-	}
+  await new Promise(resolve => setTimeout(resolve, 30));
+  }
 }
 
 {% endunless %}
