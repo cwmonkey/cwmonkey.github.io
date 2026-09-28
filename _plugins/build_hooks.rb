@@ -1,27 +1,21 @@
-Jekyll::Hooks.register :site, :post_write do |site|
-  # Use backslashes appropriately for Windows paths
-  ps_script = File.expand_path("after_build.ps1", site.source).gsub('/', '\\')
+require "fileutils"
 
-  if File.exist?(ps_script)
-    Jekyll.logger.info "PowerShell Hook:", "Spawning background script..."
-    
-    begin
-      # Passing arguments as an array prevents injection crashes and handles spaces in Windows paths flawlessly
-      pid = Process.spawn(
-         "powershell.exe", 
-         "-NoProfile", 
-         "-ExecutionPolicy", "Bypass", 
-      #   "-WindowStyle", "Hidden", 
-         "-File", ps_script
-      )
-      
-      # Detach tells Ruby not to wait around or monitor the process lifecycle
-      Process.detach(pid)
-      
-    rescue Exception => e
-      Jekyll.logger.error "PowerShell Hook Error:", "#{e.class}: #{e.message}"
-    end
-  else
-    Jekyll.logger.warn "PowerShell Hook:", "Could not find script at #{ps_script}"
+Jekyll::Hooks.register :site, :post_write do |site|
+  files = {
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/fix-ugly-links/fix-ugly-links.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/33f388b0-dd9e-4683-92cc-dd8dd73adaa2.user.js",
+
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/remove-right-click-blocker-and-popups/remove-right-click-blocker-and-popups.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/e9426b70-ec3e-4687-9470-10b0e9a5512f.user.js",
+
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/video-skip-time/video-skip-time.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/de79f065-5670-4754-870c-21082a49826e.user.js",
+
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/yt-video-dark-mode/yt-video-dark-mode.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/5df73b9c-682a-40b9-98eb-cdef87343126.user.js"
+  }
+
+  files.each do |source, destination|
+    FileUtils.cp(source, destination)
   end
 end
