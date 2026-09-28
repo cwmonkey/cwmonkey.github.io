@@ -98,24 +98,24 @@ function createBlockerSection() {
       &:not(.display_refresh) .refresh {
         display: none;
       }
-    }
 
-    li {
-      color: #cfc;
-
-      .allow {
-        display: none;
-      }
-
-      &.disallowed {
-        color: #fcc;
+      li {
+        color: #cfc;
 
         .allow {
-          display: inline-block;
+          display: none;
         }
 
-        .disallow {
-          display: none;
+        &.disallowed {
+          color: #fcc;
+
+          .allow {
+            display: inline-block;
+          }
+
+          .disallow {
+            display: none;
+          }
         }
       }
     }
@@ -146,7 +146,7 @@ function createBlockerSection() {
     }
 
     const span = createElementFromHTML(`<span>${spanText}</span>`);
-    li.prepend(span);
+    li.append(span);
     li.dataset.key = key;
 
     if (blocked) {

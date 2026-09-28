@@ -60,32 +60,31 @@ let outlineStylesSection;
 
 function createOutlineStylesSection() {
   outlineStylesSection = createElementFromHTML(/* html */`
-    <section id="blockerSection">
+    <section id="outlineStylesSection">
       <h3>Outline links:</h3>
       <ul></ul>
     </section>
   `);
 
   addStyle(/* css */`
-    #blockerSection {
-    }
-
-    li {
-      color: #fcc;
-
-      .disable {
-        display: none;
-      }
-
-      &.enabled {
-        color: #cfc;
+    #outlineStylesSection {
+      li {
+        color: #fcc;
 
         .disable {
-          display: inline-block;
+          display: none;
         }
 
-        .enable {
-          display: none;
+        &.enabled {
+          color: #cfc;
+
+          .disable {
+            display: inline-block;
+          }
+
+          .enable {
+            display: none;
+          }
         }
       }
     }
@@ -103,7 +102,7 @@ function createOutlineStylesSection() {
 
     const enabled = localStorage.getItem(setting.key);
     const span = createElementFromHTML(`<span>${setting.text}</span>`);
-    li.prepend(span);
+    li.append(span);
     li.dataset.key = setting.key;
 
     if (enabled) {

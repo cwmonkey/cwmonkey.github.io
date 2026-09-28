@@ -67,7 +67,7 @@ function createToolsWindow() {
   toolsWindow = createShadowElementFromHTML(/* html */`
     <aside>
       <header>
-        <h2>CWM Tools</h2>
+        <h2>Monkey's Tools</h2>
         <button class="close">x</button>
       </header>
       <div id="sections"></div>
@@ -114,7 +114,7 @@ function createToolsWindow() {
     }
 
     #sections {
-      padding: 5px;
+      padding: 5px 5px 0 5px;
     }
 
     section {
@@ -122,10 +122,27 @@ function createToolsWindow() {
       background: #3C3F4F;
       border-radius: 4px;
       color: #ddd;
+      margin-bottom: 5px;
+      border: 1px solid #6E738F;
 
       h3 {
         margin-top: 0;
         color: #fff;
+      }
+    }
+
+    li {
+      margin-bottom: 3px;
+
+      button {
+        color: #fff;
+        border: 1px solid #6E738F;
+        background: #2C2F3F;
+        border-radius: 4px;
+
+        &:hover {
+          background: #3C3F4F;
+        }
       }
     }
 
