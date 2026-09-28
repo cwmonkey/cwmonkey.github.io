@@ -1,15 +1,10 @@
 {% unless included_createElementFromHTML %}{% assign included_createElementFromHTML = true %}
 
+{% include greasemonkey/_shared/contentPolicy.js %}
+
 ////////////////////////////////
 // createElementFromHTML
 ////////////////////////////////
-
-/* global trustedTypes */
-const contentPolicy = trustedTypes.createPolicy('myAppPolicy', {
-	createHTML: (string) => {
-		return string;
-	}
-});
 
 function createElementFromHTML(htmlString) {
 	const template = document.createElement('template');
