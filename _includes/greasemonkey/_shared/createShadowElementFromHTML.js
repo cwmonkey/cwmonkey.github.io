@@ -2,6 +2,8 @@
 // createShadowElementFromHTML
 ////////////////////////////////
 
+{% include greasemonkey/_shared/contentPolicy.js %}
+
 function createShadowElementFromHTML(htmlString, host) {
   if (!host) {
     host = document.createElement('DIV');

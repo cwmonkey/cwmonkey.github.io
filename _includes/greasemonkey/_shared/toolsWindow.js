@@ -1,6 +1,67 @@
 {% unless included_toolsWindow %}{% assign included_toolsWindow = true %}
 
+{% include greasemonkey/_shared/createElementFromHTML.js %}
+
+{% include greasemonkey/_shared/createShadowElementFromHTML.js %}
+
 let toolsWindow;
+const toolsWindowAEL = Element.prototype.addEventListener;
+let id = `__cwmToolsWindow-${Date.now() + Math.random()}`.replace('.', '_');
+let toolsWindowHost = createElementFromHTML(/* html */`<div id="${id}" class="__cwmToolsWindow"></div>`);
+let toolsWindowExistingHost;
+
+window.addEventListener('message', (event) => {
+  if (event.data.type === '__cwmToolsWindow-shown') {
+    if (!toolsWindow) {
+      toolsWindow = toolsWindowExistingHost.shadowRoot;
+    }
+  }
+});
+
+async function toolsWindowInit() {
+  await waitForElement('body');
+
+  toolsWindowExistingHost = document.body.querySelector('.__cwmToolsWindow');
+  if (toolsWindowExistingHost) return;
+
+  document.body.append(toolsWindowHost);
+
+  window.postMessage({type: '__cwmToolsWindow-id', id: id})
+
+  let rmousedown = false;
+  let showedToolsWindow = false;
+
+  toolsWindowAEL.apply(document.body, ['mousedown', (event) => {
+    if (event.button === 2) rmousedown = true;
+  }, true]);
+
+  toolsWindowAEL.apply(document.body, ['click', (event) => {
+    if (rmousedown) {
+      showToolsWindow();
+      showedToolsWindow = true;
+    }
+  }, true]);
+
+  toolsWindowAEL.apply(document.body, ['contextmenu', (event) => {
+    if (showedToolsWindow) {
+      event.preventDefault();
+    }
+
+    rmousedown = false;
+    showedToolsWindow = false;
+  }, true]);
+}
+
+toolsWindowInit();
+
+function showToolsWindow() {
+  if (!toolsWindow) {
+    createToolsWindow();
+  }
+
+  toolsWindow.host.style.display = '';
+  window.postMessage({type: '__cwmToolsWindow-shown', id: toolsWindow.host.id}, '*');
+}
 
 function createToolsWindow() {
   toolsWindow = createShadowElementFromHTML(/* html */`
@@ -12,7 +73,10 @@ function createToolsWindow() {
       <div id="sections"></div>
       <p><small>(Hold right click and press left click to show this menu)</small></p>
     </aside>
-  `);
+  `, toolsWindowHost);
+
+  toolsWindow.host.id = '__cwmToolsWindow';
+  toolsWindow.host.style.display = 'none';
 
   addStyle(/* css */`
     :host { all: initial }
@@ -79,42 +143,16 @@ function createToolsWindow() {
       border-bottom: 0;
       border-radius: 0;
     }
-
-    li {
-      color: #cfc;
-
-      .allow {
-        display: none;
-      }
-
-      &.disallowed {
-        color: #fcc;
-
-        .allow {
-          display: inline-block;
-        }
-
-        .disallow {
-          display: none;
-        }
-      }
-    }
   `, toolsWindow);
+
+  toolsWindow.host.id = id;
 
   toolsWindow.addEventListener('click', (event) => {
     if (event.target.closest('.close')) {
-      toolsWindow.host.remove();
+      toolsWindow.host.style.display = 'none';
     }
   });
 }
-
-function showToolsWindow() {
-  if (!toolsWindow) {
-    createToolsWindow();
-  }
-}
-
-{% include greasemonkey/_shared/createShadowElementFromHTML.js %}
 
 {% include greasemonkey/_shared/addStyle.js %}
 

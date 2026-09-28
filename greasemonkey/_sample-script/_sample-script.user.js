@@ -9,7 +9,7 @@ console.log('---=== Sample Script ===---');
 ////////////////////////////////
 
 async function init() {
-	await waitForElement('body');
+  await waitForElement('body');
 }
 
 init();

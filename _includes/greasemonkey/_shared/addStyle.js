@@ -5,12 +5,12 @@
 ////////////////////////////////
 
 function addStyle(styleString, host) {
-  host = host || document.body;
+  host = typeof host !== 'undefined' ? host : document.body;
 
   const style = document.createElement('STYLE');
   style.textContent = styleString;
 
-  host.append(style);
+  if (host) host.append(style);
 
   return style;
 }

@@ -5,6 +5,8 @@
 
 console.log('---=== Remove Right Click Blocker and Popups ===---');
 
+{% include greasemonkey/_shared/toolsWindow.js %}
+
 let allowEvents = true;
 let showPopup = true;
 let blockedPopup;
@@ -23,6 +25,7 @@ let blockers = [
 ];
 
 const oldAEL = Element.prototype.addEventListener;
+const oldWindowAEL = window.addEventListener;
 let hijackedAddEventListener = false;
 
 function hijackAddEventListener() {
@@ -36,7 +39,11 @@ function hijackAddEventListener() {
       return true;
     }
 
-    return oldAEL.apply(this, arguments);
+    try {
+      return oldAEL.apply(this, arguments);
+    } catch(e) {
+      return oldWindowAEL.apply(this, arguments);
+    }
   }
 }
 
@@ -64,49 +71,11 @@ blockers.forEach((blocker) => {
   }
 });
 
-
-async function init() {
-  await waitForElement('body');
-
-  let rmousedown = false;
-  let showedToolsWindow = false;
-  oldAEL.apply(document.body, ['mousedown', (event) => {
-    if (event.button === 2) rmousedown = true;
-  }, true]);
-
-  oldAEL.apply(document.body, ['click', (event) => {
-    if (rmousedown) {
-      showBlockerSection();
-      showedToolsWindow = true;
-    }
-  }, true]);
-
-  /*document.body.addEventListener('keypress', (event) => {
-    if (rightMouseDown && event.key.toLowerCase() === 'r') showBlockedPopup();
-  }, true);*/
-
-  /* oldAEL.apply(document.body, ['mouseup', (event) => {
-    if (event.button === 2) {
-      if (showedToolsWindow) {
-        event.preventDefault();
-      }
-
-      rmousedown = false;
-      showedToolsWindow = false;
-    }
-  }, true]); */
-
-  oldAEL.apply(document.body, ['contextmenu', (event) => {
-    if (showedToolsWindow) {
-      event.preventDefault();
-    }
-
-    rmousedown = false;
-    showedToolsWindow = false;
-  }, true]);
-}
-
-init();
+window.addEventListener('message', (event) => {
+  if (event.data.type === '__cwmToolsWindow-shown') {
+    showBlockerSection();
+  }
+});
 
 let blockerSection;
 function showBlockerSection() {
@@ -116,8 +85,6 @@ function showBlockerSection() {
 }
 
 function createBlockerSection() {
-  createToolsWindow();
-
   blockerSection = createElementFromHTML(/* html */`
     <section id="blockerSection">
       <h3>Site settings:</h3>
@@ -134,11 +101,15 @@ function createBlockerSection() {
     }
 
     li {
+      color: #cfc;
+
       .allow {
         display: none;
       }
 
       &.disallowed {
+        color: #fcc;
+
         .allow {
           display: inline-block;
         }
@@ -206,8 +177,6 @@ function createBlockerSection() {
     }
   }, true]);
 }
-
-{% include greasemonkey/_shared/toolsWindow.js %}
 
 {% include greasemonkey/_shared/createElementFromHTML.js %}
 
