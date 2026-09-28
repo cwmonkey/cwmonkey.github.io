@@ -69,13 +69,23 @@ function toggleToolsWindow() {
 
 function createToolsWindow() {
   toolsWindow = createShadowElementFromHTML(/* html */`
-    <aside>
+    <aside data-position-h="${localStorage.getItem('__cwmToolsWindow-positionH')}" data-position-v="${localStorage.getItem('__cwmToolsWindow-positionV')}">
       <header>
         <h2>Monkey's Tools</h2>
         <button class="close">x</button>
       </header>
       <div id="sections"></div>
-      <p><small>(Hold right click and press left click to show this menu)</small></p>
+      <p><small>(Hold right click and press left click to show this menu)</small> <button id="toggle_settings">⚙</button></p>
+      <menu id="settings" style="display: none">
+        <h3>Window Settings</h3>
+        <section id="position">
+          <h4>Position (on ${window.location.host})</h4>
+          <button id="anchor-top_left" data-position-h="left" data-position-v="top">⇱</button>
+          <button id="anchor-top_right" data-position-h="right" data-position-v="top">⇱</button>
+          <button id="anchor-bottom_left" data-position-h="left" data-position-v="bottom">⇲</button>
+          <button id="anchor-bottom_right" data-position-h="right" data-position-v="bottom">⇲</button>
+        </section>
+      </menu>
     </aside>
   `, toolsWindowHost);
 
@@ -101,9 +111,47 @@ function createToolsWindow() {
       font-family: arial;
       border-bottom-left-radius: 8px;
       border: 1px solid #3C3F4F;
-      border-right: 0;
-      border-top: 0;
+      border-right-width: 0;
+      border-top-width: 0;
       max-width: 400px;
+      overflow: hidden;
+
+      &[data-position-v="top"] {
+        &[data-position-h="left"] {
+          border-radius: 0;
+          border-bottom-left-radius: 8px;
+        }
+
+        &[data-position-h="right"] {
+        }
+      }
+
+      &[data-position-v="bottom"] {
+        top: auto;
+        bottom: 0;
+        border-top-width: 1px;
+        border-bottom-width: 0;
+
+        &[data-position-h="left"] {
+          border-radius: 0;
+          border-top-right-radius: 8px;
+        }
+
+        &[data-position-h="right"] {
+          border-radius: 0;
+          border-top-left-radius: 8px;
+        }
+      }
+
+      &[data-position-h="left"] {
+        right: auto;
+        left: 0;
+        border-right-width: 1px;
+        border-left-width: 0
+      }
+
+      &[data-position-h="right"] {
+      }
     }
 
     header {
@@ -152,10 +200,18 @@ function createToolsWindow() {
     }
 
     p {
-      padding: 5px;
       background: #3C3F4F;
-      padding: 5px;
       margin: 5px;
+      display: flex;
+      flex-direction: row;
+
+      small {
+        padding: 5px;
+      }
+
+      #toggle_settings {
+        margin-left: auto;
+      }
     }
 
     .close {
@@ -165,6 +221,29 @@ function createToolsWindow() {
       border-bottom: 0;
       border-radius: 0;
     }
+
+    #settings {
+      padding: 5px;
+      margin: 0;
+
+      h3 {
+        margin: 0 5px 5px 5px;
+      }
+
+      h4 {
+        margin: 0 0 5px 0;
+      }
+
+      menu {
+        padding: 0;
+        margin: 0;
+      }
+
+      #anchor-top_right,
+      #anchor-bottom_left {
+        transform: scaleX(-1);
+      }
+    }
   `, toolsWindow);
 
   toolsWindow.host.id = id;
@@ -172,6 +251,16 @@ function createToolsWindow() {
   toolsWindow.addEventListener('click', (event) => {
     if (event.target.closest('.close')) {
       toolsWindow.host.style.display = 'none';
+    } else if (event.target.closest('#toggle_settings')) {
+      const style = toolsWindow.querySelector('#settings').style;
+      style.display ? style.display = '' : style.display = 'none';
+    } else if (event.target.closest('#position button')) {
+      const button = event.target.closest('#position button');
+      const aside = toolsWindow.querySelector('aside');
+      aside.dataset.positionH = button.dataset.positionH;
+      aside.dataset.positionV = button.dataset.positionV;
+      localStorage.setItem('__cwmToolsWindow-positionH', button.dataset.positionH);
+      localStorage.setItem('__cwmToolsWindow-positionV', button.dataset.positionV);
     }
   });
 }
