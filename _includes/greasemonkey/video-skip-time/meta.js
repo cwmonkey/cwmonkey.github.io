@@ -7,4 +7,7 @@
 // @match        *://*/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
 // @grant        unsafeWindow
+// @grant        GM.setValue
+// @grant        GM.getValue
+// @grant        GM_addValueChangeListener
 // ==/UserScript==
