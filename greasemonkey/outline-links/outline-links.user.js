@@ -62,7 +62,9 @@ function createOutlineStylesSection() {
   outlineStylesSection = createElementFromHTML(/* html */`
     <section id="outlineStylesSection">
       <h3>Outline links:</h3>
-      <ul></ul>
+      <div class="content">
+        <ul></ul>
+      </div>
     </section>
   `);
 

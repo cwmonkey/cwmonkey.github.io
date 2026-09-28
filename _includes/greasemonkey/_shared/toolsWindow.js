@@ -80,10 +80,12 @@ function createToolsWindow() {
         <h3>Window Settings</h3>
         <section id="position">
           <h4>Position (on ${window.location.host})</h4>
-          <button id="anchor-top_left" data-position-h="left" data-position-v="top">⇱</button>
-          <button id="anchor-top_right" data-position-h="right" data-position-v="top">⇱</button>
-          <button id="anchor-bottom_left" data-position-h="left" data-position-v="bottom">⇲</button>
-          <button id="anchor-bottom_right" data-position-h="right" data-position-v="bottom">⇲</button>
+          <div clas="content">
+            <button id="anchor-top_left" data-position-h="left" data-position-v="top">⇱</button>
+            <button id="anchor-top_right" data-position-h="right" data-position-v="top">⇱</button>
+            <button id="anchor-bottom_left" data-position-h="left" data-position-v="bottom">⇲</button>
+            <button id="anchor-bottom_right" data-position-h="right" data-position-v="bottom">⇲</button>
+          </div>
         </section>
       </menu>
     </aside>
@@ -171,16 +173,28 @@ function createToolsWindow() {
     }
 
     section {
-      padding: 5px;
       background: #3C3F4F;
       border-radius: 4px;
       color: #ddd;
       margin-bottom: 5px;
       border: 1px solid #6E738F;
 
-      h3 {
-        margin-top: 0;
+      h3,
+      h4 {
+        margin: 0 0 5px 0;
         color: #fff;
+        background: #6E738F;
+        padding: 5px;
+        font-weight: normal;
+      }
+
+      .content {
+        padding: 5px;
+      }
+
+      ul {
+        margin: 0 0 5px 0;
+        padding-left: 2em;
       }
 
       button {
@@ -223,21 +237,8 @@ function createToolsWindow() {
     }
 
     #settings {
-      padding: 5px;
-      margin: 0;
-
-      h3 {
-        margin: 0 5px 5px 5px;
-      }
-
-      h4 {
-        margin: 0 0 5px 0;
-      }
-
-      menu {
-        padding: 0;
-        margin: 0;
-      }
+      margin: 5px;
+      padding: 0;
 
       #anchor-top_right,
       #anchor-bottom_left {

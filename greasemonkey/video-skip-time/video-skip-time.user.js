@@ -78,7 +78,7 @@ async function createVideoControlsSection() {
   videoControlsSection = createElementFromHTML(/* html */`
     <section id="videoControlsSection">
       <h3>Video Controls:</h3>
-      <menu></menu>
+      <menu class="content"></menu>
     </section>
   `);
 
@@ -86,7 +86,6 @@ async function createVideoControlsSection() {
     #videoControlsSection {
       menu {
         margin: 0;
-        padding: 0;
         text-wrap: nowrap;
       }
 

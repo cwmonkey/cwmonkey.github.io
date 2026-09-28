@@ -88,8 +88,10 @@ function createBlockerSection() {
   blockerSection = createElementFromHTML(/* html */`
     <section id="blockerSection">
       <h3>Site settings:</h3>
-      <ul></ul>
-      <button class="refresh">Refresh</button>
+      <div class="content">
+        <ul></ul>
+        <button class="refresh">Refresh</button>
+      </div>
     </section>
   `);
 
