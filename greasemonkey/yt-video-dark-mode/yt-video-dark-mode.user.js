@@ -8,7 +8,7 @@ console.log('---=== YouTube - Video Dark Mode ===---');
 // Styles
 ////////////////////////////////
 
-GM_addStyle(   /* css */   `
+GM_addStyle(/* css */`
 	.__darkMode_button {
 		position: absolute;
 		top: 20px;
