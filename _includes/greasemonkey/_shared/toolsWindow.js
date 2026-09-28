@@ -37,7 +37,7 @@ async function toolsWindowInit() {
 
   toolsWindowAEL.apply(document.body, ['click', (event) => {
     if (rmousedown) {
-      showToolsWindow();
+      toggleToolsWindow();
       showedToolsWindow = true;
     }
   }, true]);
@@ -54,13 +54,17 @@ async function toolsWindowInit() {
 
 toolsWindowInit();
 
-function showToolsWindow() {
+function toggleToolsWindow() {
   if (!toolsWindow) {
     createToolsWindow();
   }
 
-  toolsWindow.host.style.display = '';
-  window.postMessage({type: '__cwmToolsWindow-shown', id: toolsWindow.host.id}, '*');
+  if (toolsWindow.host.style.display) {
+    toolsWindow.host.style.display = '';
+    window.postMessage({type: '__cwmToolsWindow-shown', id: toolsWindow.host.id}, '*');
+  } else {
+    toolsWindow.host.style.display = 'none';
+  }
 }
 
 function createToolsWindow() {
@@ -99,6 +103,7 @@ function createToolsWindow() {
       border: 1px solid #3C3F4F;
       border-right: 0;
       border-top: 0;
+      max-width: 400px;
     }
 
     header {
@@ -129,10 +134,6 @@ function createToolsWindow() {
         margin-top: 0;
         color: #fff;
       }
-    }
-
-    li {
-      margin-bottom: 3px;
 
       button {
         color: #fff;
@@ -144,6 +145,10 @@ function createToolsWindow() {
           background: #3C3F4F;
         }
       }
+    }
+
+    li {
+      margin-bottom: 3px;
     }
 
     p {
