@@ -2,6 +2,9 @@ require "fileutils"
 
 Jekyll::Hooks.register :site, :post_write do |site|
   files = {
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/discord-snippets/discord-snippets.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/f5fd88c0-d7ed-4943-9b73-464ed26c5064.user.js",
+
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/fix-ugly-links/fix-ugly-links.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/33f388b0-dd9e-4683-92cc-dd8dd73adaa2.user.js",
 
