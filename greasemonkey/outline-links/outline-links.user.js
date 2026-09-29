@@ -17,6 +17,20 @@ const settings = [
     a:active {
       outline: 3px dashed red !important;
     }
+
+    .__cwmInvertColors {
+      a:link {
+        outline-color: #0072ff !important
+      }
+
+      a:visited {
+        outline-color: #a385ff !important;
+      }
+
+      a:active {
+        outline-color: #ff7070 !important;
+      }
+    }
   `},
   {text: 'Outline internal elements of links', key: '__cwmOutlineInternal', css: /* css */`
     a:link * {
@@ -27,6 +41,20 @@ const settings = [
     }
     a:active * {
       outline: 3px dashed red !important;
+    }
+
+    .__cwmInvertColors {
+      a:link * {
+        outline-color: #0072ff !important
+      }
+
+      a:visited * {
+        outline-color: #a385ff !important;
+      }
+
+      a:active * {
+        outline-color: #ff7070 !important;
+      }
     }
   `}
 ];
@@ -116,7 +144,7 @@ function createOutlineStylesSection() {
 
   sections.append(outlineStylesSection);
 
-  toolsWindow.addEventListener('click', (event) => {
+  outlineStylesSection.addEventListener('click', (event) => {
     if (event.target.closest('.disable')) {
       const li = event.target.closest('li');
       li.classList.remove('enabled');

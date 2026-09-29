@@ -97,6 +97,10 @@ function createToolsWindow() {
   addStyle(/* css */`
     :host { all: initial }
 
+    :host-context(body.__cwmInvertColors) aside {
+      filter: invert(1) hue-rotate(180deg) !important;
+    }
+
     * {
       font-family: inherit;
       font-size: inherit;

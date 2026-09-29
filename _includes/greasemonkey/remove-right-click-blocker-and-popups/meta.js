@@ -4,7 +4,7 @@
 // @version      {% include greasemonkey/remove-right-click-blocker-and-popups/version %}
 // @description  try to take over the world!
 // @author       cwmonkey
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=cwmonkey.github.io
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @grant        GM.listValues

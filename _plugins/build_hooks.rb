@@ -5,6 +5,9 @@ Jekyll::Hooks.register :site, :post_write do |site|
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/fix-ugly-links/fix-ugly-links.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/33f388b0-dd9e-4683-92cc-dd8dd73adaa2.user.js",
 
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/invert-colors/invert-colors.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/fe67d747-cd4e-42c8-bb7c-4292907b8a7d.user.js",
+
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/outline-links/outline-links.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/c77becbc-1e54-47a0-b2b4-e15066105750.user.js",
 
