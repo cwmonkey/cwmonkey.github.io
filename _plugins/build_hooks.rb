@@ -17,6 +17,9 @@ Jekyll::Hooks.register :site, :post_write do |site|
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/remove-right-click-blocker-and-popups/remove-right-click-blocker-and-popups.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/e9426b70-ec3e-4687-9470-10b0e9a5512f.user.js",
 
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/text-editor/text-editor.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/12c8626b-ce4b-4ce3-b09f-13b3292b80ec.user.js",
+
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/video-skip-time/video-skip-time.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/de79f065-5670-4754-870c-21082a49826e.user.js",
 
