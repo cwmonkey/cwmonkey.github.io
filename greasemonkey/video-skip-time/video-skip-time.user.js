@@ -12,8 +12,8 @@ console.log('---=== Video - Skip Time/Change Playback Speed ===---');
 
 unsafeWindow.addEventListener('message', (event) => {
   let data = event.data;
-
-  if (Number(data) === data || (data.match && data.match(/[0-9]+(\.[0-9]+)?%/))) {
+console.log(event);
+  if (Number(data) == data || (data.match && data.match(/[0-9]+(\.[0-9]+)?%/))) {
     data = {
       type: 'skip',
       amount: event.data
@@ -32,10 +32,12 @@ unsafeWindow.addEventListener('message', (event) => {
 
   if (data.type === 'skip' || data.type === 'speed' || data.type === 'position') {
     document.querySelectorAll('video').forEach((el) => {
+      if (!el.duration) return;
+
       if (data.type === 'position') {
         el.currentTime = parseFloat(data.amount);
-      } else if (Number(data.amount) === data.amount) {
-        el.currentTime += data.amount;
+      } else if (Number(data.amount) == data.amount) {
+        el.currentTime += parseFloat(data.amount);
       } else if(data.amount.match(/[0-9]+(\.[0-9]+)?%/)) {
         el.currentTime += el.duration * (parseFloat(data.amount)/100);
       } else if(data.type === 'speed') {
@@ -124,9 +126,11 @@ async function createVideoControlsSection() {
   sections.append(videoControlsSection);
 
   videoControlsSection.addEventListener('click', (event) => {
-    if (event.target.closest('.control')) {
-      const button = event.target.closest('.control');
-      window.postMessage(button.textContent, '*');
+    const target = event.composedPath()[0];
+
+    if (target.closest('.control')) {
+      const button = target.closest('.control');
+      unsafeWindow.postMessage(button.textContent, '*');
     }
   }, true);
 }
