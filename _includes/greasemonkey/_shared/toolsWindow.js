@@ -116,7 +116,7 @@ function createToolsWindow() {
       font-size: 12px;
       font-family: arial;
       border-bottom-left-radius: 8px;
-      border: 1px solid #3C3F4F;
+      border: 1px solid #6E738F;
       border-right-width: 0;
       border-top-width: 0;
       max-width: 400px;
