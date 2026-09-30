@@ -13,7 +13,11 @@ async function GM_getValuesMatching(regex) {
     return [key, data];
   });
 
-  return await Promise.all(fetchPromises);
+  const gmvalues = await Promise.all(fetchPromises);
+
+  return gmvalues.filter((value) => {
+    return typeof value !== 'undefined';
+  });
 }
 
 {% endunless %}
