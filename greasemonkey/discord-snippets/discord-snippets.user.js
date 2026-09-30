@@ -204,6 +204,7 @@ addStyle(/* css */`
           }
         }
 
+        blockquote,
         li {
           padding: 7px;
           background: #121214;
@@ -310,8 +311,8 @@ function addSnippetWindowSection(key, data) {
 
   const content = section.querySelector('.__snippetWindow_section_content');
   content.innerHTML = converter.makeHtml(data.html)
-    .replace(/<blockquote>[\s\n]*/g, '<ul><li>')
-    .replace(/[\s\n]*<\/blockquote>/g, '</li></ul>')
+    //.replace(/<blockquote>[\s\n]*/g, '<ul><li>')
+    //.replace(/[\s\n]*<\/blockquote>/g, '</li></ul>')
     .replace(/[ ]*(?=<p>)/g, '')
     .trim();
 
@@ -324,6 +325,8 @@ function updateSectionServerExtras() {
   if (!snippetWindow || !currentServer) return;
   const inner = snippetWindow.querySelector('.__snippetWindow_inner');
   const sectionEls = inner.querySelector('.__snippetWindow_section');
+
+  if (!sectionEls) return;
 
   sectionEls.forEach((sectionEl) => {
     const key = sectionEl.dataset.key;
@@ -347,7 +350,11 @@ function writePost(ev, send) {
     const extraCheckbox = section.querySelector('.__snippetWindow_section_extraCheckbox');
     const serverExtraCheckbox = section.querySelector('.__snippetWindow_section_serverExtraCheckbox');
     const quoteCheckbox = section.querySelector('.__snippetWindow_section_quoteCheckbox');
-    const snippet = (quoteCheckbox.checked ? '> ' : '') + li.textContent;
+
+    const tagName = li.tagName.toLowerCase();
+    const html = tagName === 'li' ? li.innerHTML : li.outerHTML.replace(/<\/p>\n<p>/g, "{BR}{BR}").replace(/<\/?p>/g, '');
+
+    const snippet = (quoteCheckbox.checked && tagName !== 'blockquote' ? '> ' : '') + turndownService.turndown(html);
     let text = snippet;
 
     const extra = snippetWindowSections[section.dataset.key].extra;
@@ -715,17 +722,19 @@ function getCurrentServer() {
   let name;
 
   if (icon) {
-    const walker = document.createTreeWalker(
+    /*const walker = document.createTreeWalker(
       document.querySelector('[aria-label="Channel header"]'), 
       NodeFilter.SHOW_TEXT, 
       null
     );
     walker.nextNode();
 
-    name = walker.currentNode.trim();
+    if (walker.currentNode) {
+      name = walker.currentNode.trim();
+    }*/
   } else {
     icon = document.querySelector('[class^="title_"] [class*="guildIcon_"]')?.style.backgroundImage;
-    name = document.querySelector('[class^="bar_"] [class^="title_"] [class^="title_"]')?.textContent.trim();
+    // name = document.querySelector('[class^="bar_"] [class^="title_"] [class^="title_"]')?.textContent.trim();
   }
 
   if (!icon) return;
@@ -734,7 +743,7 @@ function getCurrentServer() {
 
   if (!id) return;
 
-  currentServer = {name: name, id: id};
+  currentServer = { /*name: name,*/ id: id};
 
   // GM.setValue('server:', {
   //   id: id,
