@@ -9,6 +9,7 @@ console.log('---=== Discord Snippets ===---');
 // Markdown converters
 ////////////////////////////////
 
+/* global TurndownService */
 const turndownService = new TurndownService();
 
 const allowedTags = ['strong', 'em', 'ul', 'ol', 'li', 'blockquote'];
@@ -30,7 +31,7 @@ turndownService.addRule('multilineBlockquote', {
       .split('{BR}')
       .map(line => line.trim())
       .map(line => `> ${line}`)
-      .join('\n'); // Add markdown spacing
+      .join('\n');
 
     return formatted + '\n\n';
   }
@@ -49,7 +50,6 @@ async function init() {
   observe(document.body, { attributes: false, childList: true, subtree: true }, update);
 
   snippetMessageActionsInit();
-  snippetWindowInit();
 }
 
 init();
@@ -58,7 +58,7 @@ init();
 // showSnippetWindow
 ////////////////////////////////
 
-GM_addStyle(/* css */`
+addStyle(/* css */`
   .__snippetWindow_wrapper {
     position: fixed;
     left: 0;
@@ -143,18 +143,33 @@ GM_addStyle(/* css */`
         display: flex;
         flex-direction: row;
 
-        .__delete {
-          margin-left: auto;
+        button {
           opacity: .5;
           background: transparent;
           border: 0;
+          color: #fff;
+          padding: 1px;
 
           &:hover {
             opacity: 1;
           }
+
+          &:first-of-type {
+            margin-left: auto;
+          }
+
+          &:active {
+            padding: 2px 0 0 2px;
+          }
+
+          .rotate90 {
+            rotate: 90deg;
+            display: block;
+          }
         }
       }
 
+      .__snippetWindow_section_serverExtra,
       .__snippetWindow_section_extra {
         padding-bottom: 7px;
         border-bottom: 1px solid #3b3b41;
@@ -196,8 +211,12 @@ GM_addStyle(/* css */`
           border-left: 4px solid #1e2327;
           border-radius: 4px;
           word-break: break-word;
-          padding: 11px;
-          margin-bottom: 7px;
+          padding: 8px;
+          margin-bottom: 4px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-left: 0;
 
           &:hover {
             background: #222225;
@@ -221,80 +240,6 @@ const snippetWindowHTML = /* html */`
     </div>
   </div>
 `;
-
-function snippetWindowInit() {
-  function writePost(ev, send) {
-    const li = ev.target.closest('.__snippetWindow_section_content li, .__snippetWindow_section_content blockquote');
-
-    if (li) {
-      const editor = document.querySelector('div[role="textbox"]');
-
-      const section = li.closest('.__snippetWindow_section');
-      const extraCheckbox = section.querySelector('.__snippetWindow_section_extraCheckbox');
-      const quoteCheckbox = section.querySelector('.__snippetWindow_section_quoteCheckbox');
-      const snippet = (quoteCheckbox.checked ? '> ' : '') + li.textContent;
-
-      if (editor) simulatePaste(editor, (extraCheckbox.checked && snippetWindowSections[section.dataset.key].extra ? snippetWindowSections[section.dataset.key].extra + "\n\n" : '') + snippet);
-
-      hideSnippetWindow();
-
-      if (send) setTimeout(() => document.querySelector('[aria-label="Send Message"]').click(), 100);
-      return true;
-    }
-
-    return false;
-  }
-
-  document.body.addEventListener('click', (ev) => {
-    if (writePost(ev)) return;
-
-    const del = ev.target.closest('.__delete');
-
-    if (del) {
-      const section = ev.target.closest('.__snippetWindow_section');
-
-      GM.deleteValue(section.dataset.key);
-
-      section.remove();
-    }
-  });
-
-  document.body.addEventListener('contextmenu', (ev) => {
-    if (writePost(ev, true)) return;
-  }, true);
-
-  document.body.addEventListener('change', (ev) => {
-    if (ev.target.matches('.__snippetWindow_section_serverCheckbox')) {
-      const section = ev.target.closest('.__snippetWindow_section');
-
-      if (ev.target.checked) {
-        section.classList.add('__snippetWindow_onlyShowOnServer');
-      } else {
-        section.classList.remove('__snippetWindow_onlyShowOnServer');
-      }
-
-      snippetWindowSections[section.dataset.key].onlyShowOnServer = ev.target.checked;
-      GM.setValue(section.dataset.key, section.dataset.data);
-    } else if (ev.target.matches('.__snippetWindow_section_quoteCheckbox')) {
-      const section = ev.target.closest('.__snippetWindow_section');
-      snippetWindowSections[section.dataset.key].quote = ev.target.checked;
-      GM.setValue(section.dataset.key, section.dataset.data);
-    } else if (ev.target.matches('.__snippetWindow_section_extraCheckbox')) {
-      const section = ev.target.closest('.__snippetWindow_section');
-
-      if (ev.target.checked) {
-        snippetWindowSections[section.dataset.key].extra = prompt('Enter text to be prepended to each snippet:', snippetWindowSections[section.dataset.key].extra) || '';
-      }
-
-      if (!snippetWindowSections[section.dataset.key].extra) ev.target.checked = false;
-
-      const extra = section.querySelector('.__snippetWindow_section_extra');
-      extra.textContent = snippetWindowSections[section.dataset.key].extra;
-      snippetWindowSections[section.dataset.key].extraChecked = ev.target.checked;
-      GM.setValue(section.dataset.key, snippetWindowSections[section.dataset.key]);
-    }
-  });
-}
 
 let snippetWindow;
 let snippetWindowWrapper;
@@ -324,9 +269,13 @@ function addSnippetWindowSection(key, data) {
       <h3 class="__snippetWindow_section_header">${data.header?data.header:''}</h3>
       <div class="__snippetWindow_section_config">
         <p class="__snippetWindow_section_extra">${data.extra?data.extra:''}</p>
+        <p class="__snippetWindow_section_serverExtra">${currentServer && data.serverExtras ? data.serverExtras[currentServer.id] : ''}</p>
         <p class="__snippetWindow_section_settings">
           <label class="__snippetWindow_section_extraWrapper">
             <input type="checkbox" class="__snippetWindow_section_extraCheckbox" ${data.extraChecked && data.extra?'checked':''}> Show extra
+          </label>
+          <label class="__snippetWindow_section_serverExtraWrapper">
+            <input type="checkbox" class="__snippetWindow_section_serverExtraCheckbox" ${data.serverExtraChecked?'checked':''}> Show server extra
           </label>
           <label>
             <input type="checkbox" class="__snippetWindow_section_serverCheckbox" ${data.onlyShowOnServer?'checked':''}> Only on home server
@@ -334,6 +283,7 @@ function addSnippetWindowSection(key, data) {
           <label>
             <input type="checkbox" class="__snippetWindow_section_quoteCheckbox" ${data.quote?'checked':''}> Add quote tags
           </label>
+          <button class="__download"><span class="rotate90">➜]</span></button>
           <button class="__delete">❌</button>
         </p>
         ${data.link ?
@@ -345,7 +295,7 @@ function addSnippetWindowSection(key, data) {
   `);
 
   if (data.server) {
-    GM_addStyle(/* css */`
+    addStyle(/* css */`
       .__snippetWindow_onlyShowOnServer.__snippetWindow_server${data.server} {
         display: none;
 
@@ -370,11 +320,68 @@ function addSnippetWindowSection(key, data) {
   inner.append(section);
 }
 
+function updateSectionServerExtras() {
+  if (!snippetWindow || !currentServer) return;
+  const inner = snippetWindow.querySelector('.__snippetWindow_inner');
+  const sectionEls = inner.querySelector('.__snippetWindow_section');
+
+  sectionEls.forEach((sectionEl) => {
+    const key = sectionEl.dataset.key;
+
+    if (!serverExtra[key].serverExtras) return;
+
+    sectionEl.querySelector('.__snippetWindow_section_serverExtra').textContent = serverExtra[key].serverExtras[currentServer.id] || '';
+  })
+}
+
 const snippetWindowSections = {}
+const sections = {};
+
+function writePost(ev, send) {
+  const li = ev.target.closest('.__snippetWindow_section_content li, .__snippetWindow_section_content blockquote');
+
+  if (li) {
+    const editor = document.querySelector('div[role="textbox"]');
+
+    const section = li.closest('.__snippetWindow_section');
+    const extraCheckbox = section.querySelector('.__snippetWindow_section_extraCheckbox');
+    const serverExtraCheckbox = section.querySelector('.__snippetWindow_section_serverExtraCheckbox');
+    const quoteCheckbox = section.querySelector('.__snippetWindow_section_quoteCheckbox');
+    const snippet = (quoteCheckbox.checked ? '> ' : '') + li.textContent;
+    let text = snippet;
+
+    const extra = snippetWindowSections[section.dataset.key].extra;
+    const serverExtra = currentServer && snippetWindowSections[section.dataset.key].serverExtras ? snippetWindowSections[section.dataset.key].serverExtras[currentServer.id] : '';
+
+    if (extraCheckbox && extra) text += "\n\n" + extra;
+    if (serverExtraCheckbox && serverExtra) text += "\n\n" + serverExtra;
+
+    if (editor) simulatePaste(editor, text);
+
+    hideSnippetWindow();
+
+    if (send) setTimeout(() => document.querySelector('[aria-label="Send Message"]').click(), 100);
+    return true;
+  }
+
+  return false;
+}
 
 async function makeSnippetWindowWrapper() {
   if (!snippetWindowWrapper) {
     snippetWindowWrapper = createElementFromHTML(snippetWindowHTML);
+
+    const disruptiveEvents = [
+      'contextmenu', 'copy', 'cut', 'paste', 
+      'keydown', 'keyup', 'keypress', 
+      'mousedown', 'mouseup', 'selectstart'
+    ];
+
+    disruptiveEvents.forEach(eventType => {
+      snippetWindowWrapper.addEventListener(eventType, (e) => {
+        e.stopPropagation();
+      });
+    });
 
     snippetWindowWrapper.addEventListener('click', (ev) => {
       if (ev.target === snippetWindowWrapper) hideSnippetWindow();
@@ -388,6 +395,74 @@ async function makeSnippetWindowWrapper() {
         const data = await GM.getValue(value);
         snippetWindowSections[value] = data;
         addSnippetWindowSection(value, data);
+        sections[value] = data;
+      }
+    });
+
+    snippetWindowWrapper.addEventListener('click', async (ev) => {
+      if (writePost(ev)) return;
+
+      const del = ev.target.closest('.__delete');
+      const download = ev.target.closest('.__download');
+
+      if (del) {
+        if (confirm('Really delete?')) {
+          const section = ev.target.closest('.__snippetWindow_section');
+          GM.deleteValue(section.dataset.key);
+
+          section.remove();
+        }
+      } else if (download) {
+        const section = ev.target.closest('.__snippetWindow_section');
+        await navigator.clipboard.writeText(sections[section.dataset.key].html);
+      }
+    });
+
+    snippetWindowWrapper.addEventListener('contextmenu', (ev) => {
+      if (writePost(ev, true)) return;
+    }, true);
+
+    snippetWindowWrapper.addEventListener('change', (ev) => {
+      if (ev.target.matches('.__snippetWindow_section_serverCheckbox')) {
+        const section = ev.target.closest('.__snippetWindow_section');
+
+        if (ev.target.checked) {
+          section.classList.add('__snippetWindow_onlyShowOnServer');
+        } else {
+          section.classList.remove('__snippetWindow_onlyShowOnServer');
+        }
+
+        snippetWindowSections[section.dataset.key].onlyShowOnServer = ev.target.checked;
+        GM.setValue(section.dataset.key, section.dataset.data);
+      } else if (ev.target.matches('.__snippetWindow_section_quoteCheckbox')) {
+        const section = ev.target.closest('.__snippetWindow_section');
+        snippetWindowSections[section.dataset.key].quote = ev.target.checked;
+        GM.setValue(section.dataset.key, section.dataset.data);
+      } else if (ev.target.matches('.__snippetWindow_section_extraCheckbox')) {
+        const section = ev.target.closest('.__snippetWindow_section');
+
+        if (ev.target.checked) {
+          snippetWindowSections[section.dataset.key].extra = prompt('Enter text to be prepended to each snippet:', snippetWindowSections[section.dataset.key].extra) || '';
+        }
+
+        if (!snippetWindowSections[section.dataset.key].extra) ev.target.checked = false;
+
+        const extra = section.querySelector('.__snippetWindow_section_extra');
+        extra.textContent = snippetWindowSections[section.dataset.key].extra;
+        snippetWindowSections[section.dataset.key].extraChecked = ev.target.checked;
+        GM.setValue(section.dataset.key, snippetWindowSections[section.dataset.key]);
+      } else if (ev.target.matches('.__snippetWindow_section_serverExtraCheckbox')) {
+        const section = ev.target.closest('.__snippetWindow_section');
+
+        if (ev.target.checked) {
+          snippetWindowSections[section.dataset.key].serverExtras = snippetWindowSections[section.dataset.key].serverExtras || {};
+          snippetWindowSections[section.dataset.key].serverExtras[currentServer.id] = prompt('Enter text to be prepended to each snippet on this server:', snippetWindowSections[section.dataset.key].serverExtras[currentServer.id]) || '';
+        }
+
+        const serverExtra = section.querySelector('.__snippetWindow_section_serverExtra');
+        serverExtra.textContent = snippetWindowSections[section.dataset.key].serverExtras[currentServer.id];
+        snippetWindowSections[section.dataset.key].serverExtraChecked = ev.target.checked;
+        GM.setValue(section.dataset.key, snippetWindowSections[section.dataset.key]);
       }
     });
   }
@@ -466,7 +541,7 @@ function checkSnippetButton() {
 // message actions
 ////////////////////////////////
 
-GM_addStyle(/* css */`
+addStyle(/* css */`
   .__snippetMessageActions_image {
     font-weight: bold;
     font-size: 30px;
@@ -519,11 +594,10 @@ function snippetMessageActionsInit() {
       const message = ev.target.closest('[class^="messageListItem__"]');
       const content = message.querySelector('[class^="contents_"] [id^="message-content-"]');
 
-      // favorites
-      const icon = document.querySelector('[class*="guildBreadcrumbIcon_"]')?.style.backgroundImage || document.querySelector('[class^="title_"] [class*="guildIcon_"]')?.style.backgroundImage;
-      const server = [...icon.matchAll(/.+\/icons\/([0-9]+)\//g)][0][1];
+      const server = getCurrentServer();
+
       const messagePath = [...message.id.matchAll(/^chat-messages-(.+)$/g)][0][1].replace('-', '/');
-      const link = `https://discord.com/channels/${server}/${messagePath}`;
+      const link = `https://discord.com/channels/${server.id}/${messagePath}`;
 
       //navigator.clipboard.writeText = function() { console.log([...arguments]) }
 
@@ -539,19 +613,15 @@ function snippetMessageActionsInit() {
         .replace(/<span class="edited_[^"]+">[^<]+<\/span>/g, '')
         .replace(/\n/g, '{BR}');
 
-      //console.log('html');
-      //console.log(html);
-
       const markdown = turndownService.turndown(html)
-        .replace(/\{BR\}/g, "\n");
-
-      //console.log('markdown');
-      //console.log(markdown);
+        .replace(/\{BR\}/g, "\n")
+        .replace(/\n\n[\n]+/g, "\n\n")
+        .replace(/^\*   /gm, '- ');
 
       data.html = markdown;
 
       data.updated = Date.now();
-      data.server = server;
+      data.server = server.id;
       data.link = link;
 
       GM.setValue(key, data);
@@ -559,6 +629,21 @@ function snippetMessageActionsInit() {
       addSnippetWindowSection(key, data);
     }
   }, true);
+
+  window.addEventListener('message', async (event) => {
+    const data = event.data;
+
+    if (data.type === 'addSnippet') {
+      const id = data.id;
+      const key = `snippet-item:${id}`;
+      const gdata = await GM.getValue(key) || {};
+      gdata.html = data.text;
+      gdata.updated = Date.now();
+      GM.setValue(key, gdata);
+      snippetWindowSections[key] = gdata;
+      addSnippetWindowSection(key, gdata);
+    }
+  });
 }
 
 let checkSnippetMessageActionsDelayTO;
@@ -622,6 +707,43 @@ function checkSnippetMessageActions() {
 // checkCurrentServer
 ////////////////////////////////
 
+let currentServer;
+function getCurrentServer() {
+  currentServer = null;
+
+  let icon = document.querySelector('[class*="guildBreadcrumbIcon_"]')?.style.backgroundImage;
+  let name;
+
+  if (icon) {
+    const walker = document.createTreeWalker(
+      document.querySelector('[aria-label="Channel header"]'), 
+      NodeFilter.SHOW_TEXT, 
+      null
+    );
+    walker.nextNode();
+
+    name = walker.currentNode.trim();
+  } else {
+    icon = document.querySelector('[class^="title_"] [class*="guildIcon_"]')?.style.backgroundImage;
+    name = document.querySelector('[class^="bar_"] [class^="title_"] [class^="title_"]')?.textContent.trim();
+  }
+
+  if (!icon) return;
+
+  const id = [...icon.matchAll(/.+\/icons\/([0-9]+)\//g)][0][1];
+
+  if (!id) return;
+
+  currentServer = {name: name, id: id};
+
+  // GM.setValue('server:', {
+  //   id: id,
+  //   name: name
+  // });
+
+  return currentServer;
+}
+
 let checkCurrentServerDelayTO;
 function checkCurrentServerDelay() {
   clearTimeout(checkCurrentServerDelayTO);
@@ -633,16 +755,14 @@ function checkCurrentServer() {
 
   if (!main) return;
 
-  const icon = document.querySelector('[class*="guildBreadcrumbIcon_"]')?.style.backgroundImage || document.querySelector('[class^="title_"] [class*="guildIcon_"]')?.style.backgroundImage;
-
-  if (!icon) return;
-
-  const server = [...icon.matchAll(/.+\/icons\/([0-9]+)\//g)][0][1];
+  const server = getCurrentServer();
 
   if (!server) return;
 
+  updateSectionServerExtras();
+
   main.classList.add('__server_updated');
-  document.body.className = '__server_' + server;
+  document.body.className = '__server_' + server.id;
 }
 
 ////////////////////////////////
@@ -664,3 +784,7 @@ function update(mutationList, observer) {
 {% include greasemonkey/_shared/waitForElement.js %}
 
 {% include greasemonkey/_shared/createElementFromHTML.js %}
+
+{% include greasemonkey/_shared/addStyle.js %}
+
+{% include greasemonkey/_shared/GM_getValuesMatching.js %}

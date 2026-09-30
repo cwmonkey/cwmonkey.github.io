@@ -9,7 +9,6 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/turndown/7.2.4/turndown.min.js
 // @run-at       document-start
-// @grant        GM_addStyle
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @grant        GM.listValues
