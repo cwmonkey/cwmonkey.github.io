@@ -12,7 +12,7 @@ console.log('---=== Video - Skip Time/Change Playback Speed ===---');
 
 unsafeWindow.addEventListener('message', (event) => {
   let data = event.data;
-console.log(event);
+
   if (Number(data) == data || (data.match && data.match(/[0-9]+(\.[0-9]+)?%/))) {
     data = {
       type: 'skip',
