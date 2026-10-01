@@ -15,7 +15,7 @@ async function init() {
 init();
 
 ////////////////////////////////
-// tools
+//// Tools
 ////////////////////////////////
 
 {% include greasemonkey/_shared/waitForElement.js %}
