@@ -8,6 +8,9 @@ var $body = $('body');
 var nav_focus_TO;
 var nav_unfocus_TO;
 $body
+	.delegate('#menu_toggle', 'click', function() {
+		$('[name="secondary_junk"]').focus().click();
+	})
 	.delegate('.secondary .item', 'mouseenter focusin', function() {
 		var $this = $(this);
 		clearTimeout(nav_focus_TO);
