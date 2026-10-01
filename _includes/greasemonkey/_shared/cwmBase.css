@@ -1,0 +1,58 @@
+:host {
+  --color: #DDD;
+  --accent-color: #6E738F;
+  --window-background-color: #2C2F3F;
+
+  --button-background-color: #2C2F3F;
+  --button-hover-background-color: #3C3F4F;
+  --button-color: #FFF;
+  --button-font-size: 13px;
+
+  --panel-background-color: #3C3F4F;
+  --panel-padding: 8px;
+
+  --header-color: #FFF;
+  --bar-background-color: #F6ECDA;
+  --bar-color: #000;
+  --link-color: #FFE7BF;
+  --link-visited-color: #E2DACE;
+  --link-hover-color: red;
+  --link-active-color: red;
+  --font-family: sans-serif;
+  --font-size: 14px;
+
+
+  --enabled-color: #cfc;
+  --disabled-color: #fcc;
+
+  a:link {
+    color: var(--link-color);
+  }
+
+  a:visited {
+    color: var(--link-visited-color);
+  }
+
+  a:active {
+    color: var(--link-active-color);
+  }
+
+  a:hover {
+    color: var(--link-hover-color);
+  }
+
+  button {
+    background: var(--button-background-color);
+    color: var(--button-color);
+    border: 1px solid var(--accent-color);
+    font-size: var(--button-font-size);
+
+    &:active {
+      transform: translate(1px, 1px);
+    }
+
+    &:hover {
+      background: var(--button-hover-background-color);
+    }
+  }
+}

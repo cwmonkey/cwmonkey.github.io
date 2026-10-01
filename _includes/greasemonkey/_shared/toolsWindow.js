@@ -95,7 +95,8 @@ function createToolsWindow() {
   toolsWindow.host.style.display = 'none';
 
   addStyle(/* css */`
-    :host { all: initial }
+    {% include greasemonkey/_shared/shadowDomReset.css %}
+    {% include greasemonkey/_shared/cwmBase.css %}
 
     :host-context(body.__cwmInvertColors) aside {
       filter: invert(1) hue-rotate(180deg) !important;
