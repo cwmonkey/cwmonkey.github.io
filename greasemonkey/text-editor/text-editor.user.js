@@ -65,15 +65,7 @@ function createWindow() {
   let undefined;
 
   addStyle(/* css */`
-    :host { all: initial }
-
-    *,
-    *:before,
-    *:after {
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-    }
+    {% include greasemonkey/_shared/shadowDomReset.css %}
 
     a:link {
       color: #FFE7BF;
@@ -187,6 +179,10 @@ function createWindow() {
 
       .copy {
         margin: 2px;
+      }
+
+      .suggest {
+        color: red;
       }
 
       p,
@@ -388,6 +384,21 @@ async function setupWindow() {
 let lines;
 let sections;
 
+const suggestions = [
+  {reg: /\b(and)\b/gi, replace: '&'},
+  {reg: /\b(at)\b/gi, replace: '@'},
+  {reg: /\b(with)\b/gi, replace: 'w/'},
+  {reg: /\b(with ?out)\b/gi, replace: 'w/o'},
+  {reg: /\b(rendezvous)\b/gi, replace: 'rdv'}
+];
+function suggest(el) {
+  el.querySelectorAll('li, p').forEach((el) => {
+    suggestions.forEach((sug) => {
+      el.innerHTML = el.innerHTML.replace(sug.reg, '<span class="suggest">$1</span>');
+    })
+  });
+}
+
 function updatePreview(event) {
   const value = editor.value;
   lines = [];
@@ -435,6 +446,7 @@ function updatePreview(event) {
       charactersToAdd += blockquoteText.length;
       blockquoteLines = [];
 
+      suggest(div);
       if (sectionCharacterCount + charactersToAdd >= 2000) {
         addSectionCopy(sectionCharacterCount);
         preview.append(div);
@@ -478,6 +490,7 @@ function updatePreview(event) {
       lines.push(line);
       charactersToAdd += line.length;
 
+      suggest(div);
       if (sectionCharacterCount + charactersToAdd >= 2000) {
         addSectionCopy(sectionCharacterCount);
         preview.append(div);
