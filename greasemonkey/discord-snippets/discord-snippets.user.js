@@ -360,8 +360,8 @@ function writePost(ev, send) {
     const extra = snippetWindowSections[section.dataset.key].extra;
     const serverExtra = currentServer && snippetWindowSections[section.dataset.key].serverExtras ? snippetWindowSections[section.dataset.key].serverExtras[currentServer.id] : '';
 
-    if (extraCheckbox && extra) text += "\n\n" + extra;
-    if (serverExtraCheckbox && serverExtra) text += "\n\n" + serverExtra;
+    if (extraCheckbox.checked && extra) text += "\n\n" + extra;
+    if (serverExtraCheckbox.checked && serverExtra) text += "\n\n" + serverExtra;
 
     if (editor) simulatePaste(editor, text);
 
