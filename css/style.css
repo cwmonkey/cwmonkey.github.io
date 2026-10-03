@@ -213,18 +213,18 @@ a:hover {
 	display: inline-block;
 	margin-right: 1em;
 	vertical-align: bottom;
-}
 
-.secondary .item a {
-	display: block;
-	padding: .5em 1em;
-	font-size: .875em;
-}
+	a {
+		display: block;
+		padding: .5em 1em;
+		font-size: .875em;
 
-.secondary .item a:focus,
-.secondary .item a:hover {
-	background: #2C2F3F;
-	color: #fff;
+		&:focus,
+		&:hover {
+			background: #2C2F3F;
+			color: #fff;
+		}
+	}
 }
 
 .secondary .list .list {
@@ -264,17 +264,23 @@ a:hover {
 	display: block;
 	white-space: nowrap;
 	margin: 0;
-}
 
-.secondary .item .item a {
-	padding: .5em 1em;
-	display: block;
-	transition: all .2s linear;
-}
+	&.item_headline {
+		padding: .5em 1em;
+		display: block;
+		font-weight: bold;
+	}
 
-.secondary .item .item a:focus,
-.secondary .item .item a:hover {
-	background: #4C4F5F;
+	a {
+		padding: .5em 1em;
+		display: block;
+		transition: all .2s linear;
+
+		&:focus,
+		&:hover {
+			background: #4C4F5F;
+		}
+	}
 }
 
 .secondary .item .item:hover  {
