@@ -260,7 +260,7 @@ function createWindow() {
   const resizeObserver = new ResizeObserver(callDelay((entries) => {
     for (let entry of entries) {
       const { width, height } = entry.contentRect;
-      GM.setValue('editorWidth', width);
+      if (width) GM.setValue('editorWidth', width);
     }
   }));
   resizeObserver.observe(editor);
