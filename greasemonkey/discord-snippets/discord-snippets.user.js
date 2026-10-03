@@ -426,7 +426,10 @@ async function makeSnippetWindowWrapper() {
     });
 
     snippetWindowWrapper.addEventListener('contextmenu', (ev) => {
-      if (writePost(ev, true)) return;
+      if (writePost(ev, true)) {
+        ev.preventDefault();
+        return;
+      }
     }, true);
 
     snippetWindowWrapper.addEventListener('change', (ev) => {
