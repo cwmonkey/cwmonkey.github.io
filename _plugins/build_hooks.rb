@@ -11,6 +11,9 @@ Jekyll::Hooks.register :site, :post_write do |site|
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/invert-colors/invert-colors.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/fe67d747-cd4e-42c8-bb7c-4292907b8a7d.user.js",
 
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/notifications-window/notifications-window.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/06cf30c9-00eb-48f1-8f6b-d0a9620d2c5e.user.js",
+
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/outline-links/outline-links.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/c77becbc-1e54-47a0-b2b4-e15066105750.user.js",
 
@@ -19,6 +22,9 @@ Jekyll::Hooks.register :site, :post_write do |site|
 
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/text-editor/text-editor.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/12c8626b-ce4b-4ce3-b09f-13b3292b80ec.user.js",
+
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/timers/timers.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/207a282d-dde6-41f3-90c0-b74ac827b627.user.js",
 
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/video-skip-time/video-skip-time.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/de79f065-5670-4754-870c-21082a49826e.user.js",
