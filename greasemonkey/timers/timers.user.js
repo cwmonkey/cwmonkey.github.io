@@ -39,11 +39,6 @@ function createTimersSection() {
       #timer_year {
         width: 5em;
       }
-
-      .__remaining {
-        min-width: 5em;
-        text-align: right;
-      }
     }
   `, toolsWindow);
 
@@ -239,6 +234,8 @@ function addTimer(key, data) {
     </li>
   `);
 
+  const oldLi = timersEl.querySelector(`[data-key="${key}"]`);
+
   li.dataset.key = key;
 
   const remaining = li.querySelector('.__remaining');
@@ -321,7 +318,11 @@ function addTimer(key, data) {
 
   checkRemaining();
 
-  timersEl.append(li);
+  if (oldLi) {
+    oldLi.replaceWith(li);
+  } else {
+    timersEl.append(li);
+  }
 }
 
 async function showTimers() {
@@ -344,6 +345,11 @@ async function showTimers() {
         &[data-priority="high"] .__priority:after {
           content: attr(data-priority-high);
         }
+      }
+
+      .__remaining {
+        min-width: 5em;
+        text-align: right;
       }
     }
   `, notificationWindowShadowRoot);
@@ -474,10 +480,15 @@ function formatTimeRemaining(totalSeconds, skipZeroS) {
   if (seconds < 0) seconds = 0;
 
   // Format to two digits with leading zeros
-  const paddedDays = days > 0 ? days + 'd' : '';
-  const paddedHours = hours > 0 ? hours + 'h' : '';
-  const paddedMinutes = !days && minutes > 0 ? minutes + 'm' : '';
-  const paddedSeconds = hours > 0 || (skipZeroS && seconds === 0) ? '' : Math.round(seconds) + 's';
+  let paddedDays = `${days}d`;
+  let paddedHours = `${hours}h`;
+  let paddedMinutes = `${minutes}m`;
+  let paddedSeconds = `${Math.round(seconds)}s`;
+
+  if (totalSeconds < 60 * 60 * 24) paddedDays = '';
+  if (!hours || totalSeconds < 60 * 60) paddedHours = '';
+  if (!minutes || totalSeconds < 60 || totalSeconds >= 60 * 60 * 24) paddedMinutes = '';
+  if ((seconds === 0 && skipZeroS) || totalSeconds >= 60 * 60) paddedSeconds = '';
 
   return `${paddedDays} ${paddedHours} ${paddedMinutes} ${paddedSeconds}`;
 }
