@@ -227,6 +227,10 @@ function createWindow() {
           <select id="selector"></select>
         </label>
 
+        <label>
+          Character count max: <input type="number" id="word_count" value="${parseInt(localStorage.getItem('__cwmTools_textEditor_wordCount') || 2000)}">
+        </label>
+
         <button id="close">x</button>
       </header>
       <div id="content">
@@ -274,6 +278,11 @@ function createWindow() {
     if (!hasEdits || confirm("Close before saving?")) {
       toggleWindow();
     }
+  });
+
+  textWindow.querySelector('#word_count').addEventListener('change', (event) => {
+    localStorage.setItem('__cwmTools_textEditor_wordCount', event.target.value);
+     callDelay(updatePreview, 500);
   });
 
   textWindow.querySelector('#save').addEventListener('click', (event) => {
@@ -403,6 +412,7 @@ function updatePreview(event) {
   const value = editor.value;
   lines = [];
   sections = [];
+  const charMax = parseInt(localStorage.getItem('__cwmTools_textEditor_wordCount') || 2000);
 
   preview.replaceChildren();
 
@@ -447,7 +457,7 @@ function updatePreview(event) {
       blockquoteLines = [];
 
       suggest(div);
-      if (sectionCharacterCount + charactersToAdd >= 2000) {
+      if (sectionCharacterCount + charactersToAdd >= charMax) {
         addSectionCopy(sectionCharacterCount);
         preview.append(div);
         sectionCharacterCount = charactersToAdd + 1;
@@ -491,7 +501,7 @@ function updatePreview(event) {
       charactersToAdd += line.length;
 
       suggest(div);
-      if (sectionCharacterCount + charactersToAdd >= 2000) {
+      if (sectionCharacterCount + charactersToAdd >= charMax) {
         addSectionCopy(sectionCharacterCount);
         preview.append(div);
         sectionCharacterCount = charactersToAdd + 1;
