@@ -29,6 +29,9 @@ Jekyll::Hooks.register :site, :post_write do |site|
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/timers/timers.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/207a282d-dde6-41f3-90c0-b74ac827b627.user.js",
 
+    "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/unfurl-links/unfurl-links.user.js" =>
+      "F:/Tools/tamperdav/dav/Tampermonkey/sync/ad9a969d-b181-45f0-b1c2-b8e30661d7c4.user.js",
+
     "E:/wamp64/www/cwmonkey.github.io/_site/greasemonkey/video-skip-time/video-skip-time.user.js" =>
       "F:/Tools/tamperdav/dav/Tampermonkey/sync/de79f065-5670-4754-870c-21082a49826e.user.js",
 
