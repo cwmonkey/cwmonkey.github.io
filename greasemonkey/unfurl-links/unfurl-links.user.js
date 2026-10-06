@@ -71,7 +71,7 @@ async function unfurl(a, force) {
 
   let key = `unfurl:${a.href}`
   let data;
-force = true;
+
   if (!force) {
     data = await GM.getValue(key);
 
@@ -119,6 +119,7 @@ force = true;
     // Published fallback
     if (!data.published) {
       const time = page.querySelector('time[datetime]');
+
       if (time) data.published = time.getAttribute('datetime');
     }
 
@@ -178,6 +179,7 @@ force = true;
         max-width: 720px;
 
         .content {
+          flex-shrink: 1;
         }
 
         .title {
@@ -212,12 +214,15 @@ force = true;
         }
 
         .image {
+          width: 100%;
           max-width: 150px;
+          position: relative;
+          overflow: hidden;
 
           img {
             object-fit: cover;
             width: 100%;
-            height: 100%;
+            position: absolute;
           }
         }
       }
