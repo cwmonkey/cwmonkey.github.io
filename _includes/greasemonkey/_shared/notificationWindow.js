@@ -1,31 +1,22 @@
----
----
-{% include greasemonkey/notifications-window/meta.js %}
+{% unless included_notificationWindow %}{% assign included_notificationWindow = true %}
 
-console.log('---=== Notifications Window ===---');
+{% include greasemonkey/_shared/createElementFromHTML.js %}
+
+{% include greasemonkey/_shared/createShadowElementFromHTML.js %}
 
 let shown = localStorage.getItem('__cwmNotificationsWindowShown');
-let notificationWindow;
 
 ////////////////////////////////
 //// toolsWindow
 ////////////////////////////////
 
-let notificationsSection;
-
 {% include greasemonkey/_shared/toolsWindow.js %}
-
-window.addEventListener('message', (event) => {
-  if (event.data.type === '__cwmToolsWindow-shown') {
-    if (!notificationsSection) {
-      createNotificationsSection();
-    }
-  }
-});
 
 ////////////////////////////////
 //// createNotificationsSection
 ////////////////////////////////
+
+let notificationsSection;
 
 function createNotificationsSection() {
   addStyle(/* css */`
@@ -93,13 +84,12 @@ function createNotificationsSection() {
 
 function show() {
   shown = true;
-  runNotificationWindow();
+  notificationWindow.host.style.display = '';
 }
 
 function hide() {
   shown = false;
-  // TODO: Send a message so other things can unload
-  notificationWindow.remove();
+  notificationWindow.host.style.display = 'none';
 }
 
 window.addEventListener('message', (event) => {
@@ -124,34 +114,105 @@ window.addEventListener('storage', (event) => {
   }
 });
 
-async function init() {
-  if (!shown) return;
+////////////////////////////////
+//// notificationWindowInit
+////////////////////////////////
 
+let notificationWindow;
+const notificationWindowAEL = Element.prototype.addEventListener;
+let notificationWindowId = `__cwmNotificationWindow-${Date.now() + Math.random()}`.replace('.', '_');
+let notificationWindowHost = createElementFromHTML(/* html */`<div id="${notificationWindowId}" class="__cwmNotificationWindow"></div>`);
+let notificationWindowExistingHost;
+
+window.addEventListener('message', (event) => {
+  if (event.data.type === '__cwmNotificationWindow-shown') {
+    if (!notificationWindow) {
+      notificationWindow = notificationWindowExistingHost.shadowRoot;
+    }
+  }
+});
+
+async function notificationWindowInit() {
   await waitForElement('body');
 
-  runNotificationWindow();
+  notificationWindowExistingHost = document.body.querySelector('.__cwmNotificationWindow');
+  if (notificationWindowExistingHost) return;
+
+  document.body.append(notificationWindowHost);
+
+  window.postMessage({type: '__cwmNotificationWindow-id', id: notificationWindowId})
+
+  // Create notification section when main window is shown
+  window.addEventListener('message', (event) => {
+    if (event.data.type === '__cwmToolsWindow-shown') {
+      if (!notificationsSection) {
+        createNotificationsSection();
+      }
+    }
+  });
+
+  let rmousedown = false;
+  let showedNotificationWindow = false;
+
+  notificationWindowAEL.apply(document.body, ['mousedown', (event) => {
+    if (event.button === 2) rmousedown = true;
+  }, true]);
+
+  notificationWindowAEL.apply(document.body, ['click', (event) => {
+    if (rmousedown) {
+      toggleNotificationWindow();
+      showedNotificationWindow = true;
+    }
+  }, true]);
+
+  notificationWindowAEL.apply(document.body, ['contextmenu', (event) => {
+    if (showedNotificationWindow) {
+      event.preventDefault();
+    }
+
+    rmousedown = false;
+    showedNotificationWindow = false;
+  }, true]);
+
+  if (localStorage.getItem('__cwmNotificationsWindowShown')) {
+    toggleNotificationWindow();
+  }
 }
 
-init();
+notificationWindowInit();
 
-////////////////////////////////
-//// runNotificationWindow
-////////////////////////////////
+function toggleNotificationWindow() {
+  if (!notificationWindow) {
+    createNotificationWindow();
+  }
 
-async function runNotificationWindow() {
-  if (notificationWindow) return;
+  if (notificationWindow.host.style.display) {
+    notificationWindow.host.style.display = '';
+    window.postMessage({type: '__cwmNotificationWindow-shown', id: notificationWindow.host.id}, '*');
+  } else {
+    notificationWindow.host.style.display = 'none';
+  }
+}
 
-  notificationWindow = createShadowElementFromHTML(`
+function createNotificationWindow() {
+  notificationWindow = createShadowElementFromHTML(/* html */`
     <aside id="notificationWindow">
       <h2>Notifications</h2>
     </aside>
-  `, createElementFromHTML(`<div id="__cwmNotificationWindow"></div>`));
+  `, notificationWindowHost);
+
+  // notificationWindow.host.id = '__cwmNotificationWindow';
+  notificationWindow.host.style.display = 'none';
 
   addStyle(/* css */`
     {% include greasemonkey/_shared/shadowDomReset.css %}
     {% include greasemonkey/_shared/cwmBase.css %}
 
     #notificationWindow {
+      :host-context(body.__cwmInvertColors) & {
+        filter: invert(1) hue-rotate(180deg) !important;
+      }
+
       position: fixed;
       right: 10px;
       top: 50px;
@@ -229,17 +290,25 @@ async function runNotificationWindow() {
     }
   `, notificationWindow);
 
-  document.body.append(notificationWindow.host);
-}
+  // notificationWindow.host.id = notificationWindowId;
 
-////////////////////////////////
-// tools
-////////////////////////////////
+  /* notificationWindow.addEventListener('click', (event) => {
+    if (event.target.closest('.close')) {
+      notificationWindow.host.style.display = 'none';
+    } else if (event.target.closest('#toggle_settings')) {
+      const style = notificationWindow.querySelector('#settings').style;
+      style.display ? style.display = '' : style.display = 'none';
+    } else if (event.target.closest('#position button')) {
+      const button = event.target.closest('#position button');
+      const aside = notificationWindow.querySelector('aside');
+      aside.dataset.positionH = button.dataset.positionH;
+      aside.dataset.positionV = button.dataset.positionV;
+      localStorage.setItem('__cwmNotificationWindow-positionH', button.dataset.positionH);
+      localStorage.setItem('__cwmNotificationWindow-positionV', button.dataset.positionV);
+    }
+  });*/
+}
 
 {% include greasemonkey/_shared/addStyle.js %}
 
-{% include greasemonkey/_shared/createShadowElementFromHTML.js %}
-
-{% include greasemonkey/_shared/createElementFromHTML.js %}
-
-{% include greasemonkey/_shared/waitForElement.js %}
+{% endunless %}

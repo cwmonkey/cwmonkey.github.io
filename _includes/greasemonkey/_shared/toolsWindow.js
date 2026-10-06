@@ -6,8 +6,8 @@
 
 let toolsWindow;
 const toolsWindowAEL = Element.prototype.addEventListener;
-let id = `__cwmToolsWindow-${Date.now() + Math.random()}`.replace('.', '_');
-let toolsWindowHost = createElementFromHTML(/* html */`<div id="${id}" class="__cwmToolsWindow"></div>`);
+let toolsWindowId = `__cwmToolsWindow-${Date.now() + Math.random()}`.replace('.', '_');
+let toolsWindowHost = createElementFromHTML(/* html */`<div id="${toolsWindowId}" class="__cwmToolsWindow"></div>`);
 let toolsWindowExistingHost;
 
 window.addEventListener('message', (event) => {
@@ -26,7 +26,7 @@ async function toolsWindowInit() {
 
   document.body.append(toolsWindowHost);
 
-  window.postMessage({type: '__cwmToolsWindow-id', id: id})
+  window.postMessage({type: '__cwmToolsWindow-id', id: toolsWindowId})
 
   let rmousedown = false;
   let showedToolsWindow = false;
@@ -252,7 +252,7 @@ function createToolsWindow() {
     }
   `, toolsWindow);
 
-  toolsWindow.host.id = id;
+  toolsWindow.host.id = toolsWindowId;
 
   toolsWindow.addEventListener('click', (event) => {
     if (event.target.closest('.close')) {

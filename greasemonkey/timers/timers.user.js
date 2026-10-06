@@ -4,6 +4,8 @@
 
 console.log('---=== Timers ===---');
 
+{% include greasemonkey/_shared/notificationWindow.js %}
+
 ////////////////////////////////
 //// toolsWindow
 ////////////////////////////////
@@ -21,7 +23,7 @@ window.addEventListener('message', (event) => {
 });
 
 ////////////////////////////////
-//// createNotificationsSection
+//// createTimersSection
 ////////////////////////////////
 
 function createTimersSection() {
@@ -180,23 +182,15 @@ function createTimersSection() {
 //// init
 ////////////////////////////////
 
-let notificationWindowShadowRoot;
-let notificationWindow;
 const timers = {};
 
-async function init() {
-  if (!localStorage.getItem('__cwmToolsTimers--show')) return;
-
-  const notificationWindowHost = await waitForElement('#__cwmNotificationWindow');
-  notificationWindowShadowRoot = notificationWindowHost.shadowRoot;
-  notificationWindow = notificationWindowShadowRoot.querySelector('#notificationWindow');
-
-  await getTimers();
-
-  showTimers();
-}
-
-init();
+window.addEventListener('message', async (event) => {
+  if (event.data.type === '__cwmNotificationWindow-shown') {
+    if (!localStorage.getItem('__cwmToolsTimers--show')) return;
+    await getTimers();
+    showTimers();
+  }
+});
 
 ////////////////////////////////
 // getTimers
@@ -352,7 +346,7 @@ async function showTimers() {
         text-align: right;
       }
     }
-  `, notificationWindowShadowRoot);
+  `, notificationWindow);
 
   notificationWindow.addEventListener('click', (ev) => {
     if (ev.target.closest('.__timers .__delete')) {
@@ -400,7 +394,7 @@ async function showTimers() {
 
   timersEl = createElementFromHTML(`<ul class="__timers"></ul>`);
 
-  notificationWindow.append(timersEl);
+  notificationWindow.querySelector('#notificationWindow').append(timersEl);
 
   Object.entries(timers).forEach(([key, data]) => {
     addTimer(key, data);
