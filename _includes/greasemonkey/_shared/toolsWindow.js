@@ -36,7 +36,7 @@ async function toolsWindowInit() {
   }, true]);
 
   toolsWindowAEL.apply(document.body, ['click', (event) => {
-    if (rmousedown) {
+    if (rmousedown && !document.body.matches('.__cwmToolsWindow--takeNoAction')) {
       toggleToolsWindow();
       showedToolsWindow = true;
     }
