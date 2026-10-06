@@ -141,6 +141,9 @@ a:hover {
 	transition: margin .2s linear, left .2s linear;
 	position: relative;
 	z-index: 0;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 #main.loading {
@@ -177,6 +180,8 @@ a:hover {
 	padding: 1em;
 	font-size: 12px;
 	margin-top: auto;
+	background: #3C3F4F;
+	text-align: center;
 }
 
 /* Site Nav */
@@ -191,38 +196,38 @@ a:hover {
 	padding-left: 3em;
 	position: relative;
 	z-index: 2;
-}
-
-.secondary a {
-	text-decoration: none;
-	font-size: 1.1em;
-}
-
-.secondary .headline {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-}
-
-.secondary .item {
-	display: inline-block;
-	margin-right: 1em;
-	vertical-align: bottom;
 
 	a {
-		display: block;
-		padding: .5em 1em;
-		font-size: .875em;
+		text-decoration: none;
+		font-size: 1.1em;
+	}
 
-		&:focus,
-		&:hover {
-			background: #2C2F3F;
-			color: #fff;
+	.headline {
+		border: 0;
+		clip: rect(0 0 0 0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+
+	.item {
+		display: inline-block;
+		margin-right: 1em;
+		vertical-align: bottom;
+
+		a {
+			display: block;
+			padding: .5em 1em;
+			font-size: .875em;
+
+			&:focus,
+			&:hover {
+				background: #2C2F3F;
+				color: #fff;
+			}
 		}
 	}
 }
@@ -236,6 +241,9 @@ a:hover {
 	z-index: -1;
 	opacity: 0;
 	box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.25);
+	border: 1px solid #6E738F;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
 }
 
 .secondary .has_no_focus .list {
@@ -294,18 +302,25 @@ a:hover {
 	padding: 1px 1.5em 1px 1.5em;
 	line-height: 1.5;
 	font-size: .875em;
-}
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 
-.sub .about p {
-	margin-left: 1.5em;
-}
+	.about p {
+		margin-left: 1.5em;
+	}
 
-.sub > section,
-.sub > div {
-	background: #3C3F4F;
-	padding: 1em 1.5em 1em 1.5em;
-	margin: 1em 0;
-	border-radius: 6px;
+	> section,
+	> div {
+		background: #3C3F4F;
+		padding: 1em 1.5em 1em 1.5em;
+		margin: 1em 0;
+		border-radius: 6px;
+
+		&:last-child {
+			flex-grow: 1;
+		}
+	}
 }
 
 /* ------------------------------------------------------------
@@ -323,14 +338,29 @@ a:hover {
  */
 
 .visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+
+	/*
+	 * Extends the .visuallyhidden class to allow the element to be focusable
+	 * when navigated to via the keyboard: h5bp.com/p
+	 */
+
+	&.focusable:active,
+	&.focusable:focus {
+		clip: auto;
+		height: auto;
+		margin: 0;
+		overflow: visible;
+		position: static;
+		width: auto;
+	}
 }
 
 /* cms sections */
@@ -349,21 +379,6 @@ a:hover {
 		background: rgba(0, 0, 0, .8);
 		color: #e4e4e4;
 	}
-}
-
-/*
- * Extends the .visuallyhidden class to allow the element to be focusable
- * when navigated to via the keyboard: h5bp.com/p
- */
-
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
 }
 
 /* user script */
@@ -408,6 +423,21 @@ a:hover {
 	width: 100%;
 	height: 300px;
 	font-family: monospace;
+}
+
+/* Greasemonkey ---------------- */
+
+.greasemonkey_page {
+	.item {
+		display: block;
+		padding-left: 1em;
+	}
+
+	.item_headline {
+		font-weight: bold;
+		color: #fff;
+		padding-left: 0;
+	}
 }
 
 /* ------------------------------------------------------------
