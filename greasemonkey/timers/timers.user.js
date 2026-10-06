@@ -408,10 +408,17 @@ async function showTimers() {
     const key = event.data.key;
     const data = event.data.data;
 
-    timers[key] = data;
-    GM.setValue(key, data);
+    if (timers[key]) {
+      timers[key].start = data.start;
+      timers[key].duration = data.duration;
+      timers[key].alerts = data.alerts;
+    } else {
+      timers[key] = data;
+    }
 
-    addTimer(key, data);
+    GM.setValue(key, timers[key]);
+
+    addTimer(key, timers[key]);
   });
 }
 
