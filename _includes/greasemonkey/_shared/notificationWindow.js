@@ -151,29 +151,6 @@ async function notificationWindowInit() {
     }
   });
 
-  let rmousedown = false;
-  let showedNotificationWindow = false;
-
-  notificationWindowAEL.apply(document.body, ['mousedown', (event) => {
-    if (event.button === 2) rmousedown = true;
-  }, true]);
-
-  notificationWindowAEL.apply(document.body, ['click', (event) => {
-    if (rmousedown) {
-      toggleNotificationWindow();
-      showedNotificationWindow = true;
-    }
-  }, true]);
-
-  notificationWindowAEL.apply(document.body, ['contextmenu', (event) => {
-    if (showedNotificationWindow) {
-      event.preventDefault();
-    }
-
-    rmousedown = false;
-    showedNotificationWindow = false;
-  }, true]);
-
   if (localStorage.getItem('__cwmNotificationsWindowShown')) {
     toggleNotificationWindow();
   }
