@@ -186,7 +186,7 @@ const timers = {};
 
 window.addEventListener('message', async (event) => {
   if (event.data.type === '__cwmNotificationWindow-shown') {
-    if (!localStorage.getItem('__cwmToolsTimers--show')) return;
+    if (!localStorage.getItem('__cwmToolsTimers--show') || timersEl) return;
     await getTimers();
     showTimers();
   }
