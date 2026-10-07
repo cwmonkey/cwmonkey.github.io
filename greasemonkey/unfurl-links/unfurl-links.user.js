@@ -144,10 +144,10 @@ async function unfurl(a, force) {
 
     if (!data.published) {
       // Just get the first thing that looks like an ISO date
-      const matches = res.responseText.matchAll(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))/gi);
+      const matches = [...res.responseText.matchAll(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))/gi)];
 
-      if (matches) {
-        data.published = [...matches][0][0];
+      if (matches.length) {
+        data.published = matches[0][0];
       }
     }
 
@@ -157,9 +157,26 @@ async function unfurl(a, force) {
       if (title) data.title = title.textContent;
     }
 
+    if (!data.title) {
+      const title = page.querySelector('shreddit-title');
+      if (title) data.title = title.getAttribute('title');
+    }
+
+    // Description fallback
+    if (!data.description) {
+      const description = page.querySelector('shreddit-post-text-body');
+      if (description) data.description = description.textContent;
+    }
+
     // URL
     if (!data.url) {
       data.url = a.href;
+    }
+
+    // image fallback
+    if (!data.image) {
+      const image = page.querySelector('shreddit-post');
+      if (image) data.image = image.getAttribute('content-href');
     }
 
     if (data.url !== a.href) {
