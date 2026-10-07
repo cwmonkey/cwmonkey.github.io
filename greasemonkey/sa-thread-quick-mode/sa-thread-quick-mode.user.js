@@ -18,7 +18,11 @@ async function init() {
 
   addStyle(/* css */`
     body.__cwmQuickMode #thread .post:not(.__cwmQuickModeInteresting) {
-      display: none;
+      overflow: hidden;
+      height: 0;
+      display: block;
+      border: 0 !important;
+      margin: 0;
     }
   `);
 
