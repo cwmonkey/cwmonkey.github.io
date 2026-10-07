@@ -254,6 +254,18 @@ async function unfurl(a, force) {
           margin: 0;
         }
 
+        .reply {
+          display: flex;
+          flex-direction: row;
+
+          button {
+            min-height: 2em;
+            flex-grow: 1;
+            border-right: 0;
+            border-bottom: 0;
+          }
+        }
+
         .image {
           width: 100%;
           max-width: 150px;
@@ -286,8 +298,19 @@ async function unfurl(a, force) {
             ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
             ${data.site?data.site:''}
             ${data.site || data.icon ? ' - ' : ''}
-            ${data.published?(new Date(data.published)).toLocaleString():''}</p>`:''}
+            ${data.published?(new Date(data.published)).toLocaleString('en-US', {
+              month: 'short',
+              day: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }):''}</p>`:''}
           ${data.description?`<p class="description">${data.description}</p>`:''}
+          ${window.location.host==='app.slack.com'?`<div class="reply">
+            <button type="button" class="send_to_slack">Reply (Thread)</button>
+            <button type="button" class="send_to_slack_broadcast">Reply (Channel)</button>
+          </div>`:''}
         </div>
       </aside>
     `);
@@ -296,12 +319,101 @@ async function unfurl(a, force) {
       card.host.remove();
     });
 
+    card.querySelector('.send_to_slack').addEventListener('click', (event) => {
+      sendToSlack(a, data);
+    });
+
+    card.querySelector('.send_to_slack_broadcast').addEventListener('click', (event) => {
+      sendToSlack(a, data, true);
+    });
+
     card.prepend(style);
 
     a.after(card.host);
 
     unfurls[a] = card.host;
   }
+}
+
+////////////////////////////////
+// sendToSlack
+////////////////////////////////
+
+function sendToSlack(el, preview, reply_broadcast) {
+  if (typeof reply_broadcast === 'undefined') reply_broadcast = false;
+  const SLACK_TOKEN = localStorage.getItem('unfurl-links-SLACK_TOKEN') || prompt('Enter Manual UnfURL Reply app token.');
+  localStorage.setItem('unfurl-links-SLACK_TOKEN', SLACK_TOKEN);
+  const CHANNEL_ID = el.closest('[data-msg-channel-id]').dataset.msgChannelId;
+  const THREAD_TS = el.closest('[data-msg-ts]').dataset.msgTs;
+
+  GM_xmlhttpRequest({
+    method: 'POST',
+    url: 'https://slack.com/api/chat.postMessage',
+
+    headers: {
+      "Authorization": `Bearer ${SLACK_TOKEN}`,
+      "Content-Type": 'application/json'
+    },
+
+    data: JSON.stringify({
+      channel: CHANNEL_ID,
+      thread_ts: THREAD_TS,
+      reply_broadcast: reply_broadcast,
+
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text:
+              `*<${preview.url}|${preview.title}>*\n\n` +
+              `${preview.description}`
+          },
+          accessory: {
+            type: 'image',
+            image_url: preview.image,
+            alt_text: preview.title
+          }
+        },
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'image',
+              image_url: preview.icon,
+              alt_text: preview.site
+            },
+            {
+              type: 'mrkdwn',
+              text: `<${preview.url}|${preview.site}> · ${preview.published?new Date(preview.published).toLocaleString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+              }):''}`
+            }
+          ]
+        }
+      ]
+    }),
+
+    onload(response) {
+      const result = JSON.parse(response.responseText);
+
+      if (!result.ok) {
+        console.error('Slack error:', result);
+        return;
+      }
+
+      console.log('Preview posted:', result.ts);
+    },
+
+    onerror(error) {
+      console.error('Request failed:', error);
+    }
+  });
 }
 
 ////////////////////////////////
