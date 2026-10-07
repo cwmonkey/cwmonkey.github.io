@@ -319,7 +319,7 @@ async function unfurl(a, force) {
               month: 'short',
               day: '2-digit',
               year: 'numeric',
-              hour: '2-digit',
+              hour: 'numeric',
               minute: '2-digit',
               hour12: true
             }):''}</p>`:''}
@@ -334,6 +334,7 @@ async function unfurl(a, force) {
 
     card.querySelector('.close').addEventListener('click', () => {
       card.host.remove();
+      delete unfurls[a];
     });
 
     card.querySelector('.send_to_slack')?.addEventListener('click', (event) => {
@@ -383,8 +384,15 @@ function sendToSlack(el, preview, reply_broadcast) {
           text: {
             type: 'mrkdwn',
             text:
-              `*<${preview.url}|${preview.title}>*\n\n` +
-              `${preview.description}`
+              `*${preview.title}*` +
+              `${preview.description||preview.published?`\n\n${preview.published?`_${new Date(preview.published).toLocaleString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+              })}_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description:''}`:''}`
           },
           accessory: {
             type: 'image',
@@ -402,14 +410,7 @@ function sendToSlack(el, preview, reply_broadcast) {
             },
             {
               type: 'mrkdwn',
-              text: `<${preview.url}|${preview.site}> · ${preview.published?new Date(preview.published).toLocaleString('en-US', {
-                month: 'short',
-                day: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-              }):''}`
+              text: `<${preview.url}|${preview.site}>`
             }
           ]
         }
