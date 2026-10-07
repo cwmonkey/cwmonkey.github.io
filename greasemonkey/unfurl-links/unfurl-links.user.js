@@ -319,11 +319,11 @@ async function unfurl(a, force) {
       card.host.remove();
     });
 
-    card.querySelector('.send_to_slack').addEventListener('click', (event) => {
+    card.querySelector('.send_to_slack')?.addEventListener('click', (event) => {
       sendToSlack(a, data);
     });
 
-    card.querySelector('.send_to_slack_broadcast').addEventListener('click', (event) => {
+    card.querySelector('.send_to_slack_broadcast')?.addEventListener('click', (event) => {
       sendToSlack(a, data, true);
     });
 
