@@ -286,7 +286,7 @@ async function unfurl(a, force) {
             ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
             ${data.site?data.site:''}
             ${data.site || data.icon ? ' - ' : ''}
-            ${(new Date(data.published)).toLocaleString()}</p>`:''}
+            ${data.published?(new Date(data.published)).toLocaleString():''}</p>`:''}
           ${data.description?`<p class="description">${data.description}</p>`:''}
         </div>
       </aside>
