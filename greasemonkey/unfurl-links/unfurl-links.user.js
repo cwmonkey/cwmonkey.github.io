@@ -83,7 +83,26 @@ async function unfurl(a, force) {
 
   // No cached data
   if (!data) {
-    res = await GM.xmlHttpRequest({url: a.href}).catch(e => console.error(e));
+    res = await GM.xmlHttpRequest({
+      method: 'GET',
+      url: a.href,
+      anonymous: false,
+      headers: {
+        'User-Agent': navigator.userAgent,
+        'Sec-Ch-Ua': '"Google Chrome";v="125"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': 'Windows',
+        'Referer': 'https://' + window.location.host,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1'
+      }
+    }).catch(e => console.error(e));
 
     const page = new DOMParser().parseFromString(res.responseText, "text/html");
 
@@ -123,19 +142,22 @@ async function unfurl(a, force) {
       if (time) data.published = time.getAttribute('datetime');
     }
 
+    if (!data.published) {
+      // Just get the first thing that looks like an ISO date
+      const matches = res.responseText.matchAll(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))/gi);
+
+      if (matches) {
+        data.published = [...matches][0][0];
+      }
+    }
+
     // Title fallback
     if (!data.title) {
       const title = page.querySelector('title, h1');
       if (title) data.title = title.textContent;
     }
 
-    // Icon
-    const icon = page.querySelector('link[rel="apple-touch-icon"], link[rel="icon"]');
-
-    if (icon) {
-      data.icon = icon.getAttribute('href');
-    }
-
+    // URL
     if (!data.url) {
       data.url = a.href;
     }
@@ -147,6 +169,16 @@ async function unfurl(a, force) {
         updated: Date.now(),
         url: data.url
       });
+    }
+
+    // Icon
+    const icon = page.querySelector('link[rel="apple-touch-icon"], link[rel="icon"]');
+
+    if (icon) {
+      data.icon = icon.getAttribute('href');
+    } else {
+      const urlo = new URL('/favicon.ico', data.url);
+      data.icon = urlo.href;
     }
 
     GM.setValue(key, data);
@@ -177,9 +209,25 @@ async function unfurl(a, force) {
         display: flex;
         flex-direction: row;
         max-width: 720px;
+        position: relative;
+
+        .close {
+          opacity: 0;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
+
+        &:hover .close {
+          opacity: 1;
+        }
 
         .content {
           flex-shrink: 1;
+
+          > :nth-child(2) {
+            padding-right: 2em;
+          }
         }
 
         .title {
@@ -195,22 +243,15 @@ async function unfurl(a, force) {
           margin: 0;
         }
 
+        .icon {
+          max-height: 14px;
+          vertical-align: middle;
+          margin-right: 3px;
+        }
+
         .description {
           padding: var(--panel-padding);
           margin: 0;
-        }
-
-        .site {
-          padding: var(--panel-padding);
-          padding-top: 0;
-          font-size: 12px;
-          font-style: italic;
-          margin: 0;
-        }
-
-        .icon {
-          height: 14px;
-          vertical-align: middle;
         }
 
         .image {
@@ -221,8 +262,15 @@ async function unfurl(a, force) {
 
           img {
             object-fit: cover;
-            width: 100%;
             position: absolute;
+            min-width: 100%;
+            min-height: 100%;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+              object-fit: contain;
+            }
           }
         }
       }
@@ -232,17 +280,21 @@ async function unfurl(a, force) {
       <aside id="card">
         ${data.image?`<div class="image"><img src="${new URL(data.image, data.url).href}"></div>`:''}
         <div class="content">
+          <button type="button" class="close">×</button>
           ${data.title?`<h3 class="title">${data.title}</h3>`:''}
-          ${data.published?`<p class="published">Published: ${(new Date(data.published)).toLocaleString()}</p>`:''}
-          ${data.description?`<p class="description">${data.description}</p>`:''}
-          ${data.site || data.icon ? `<div class="site">
+          ${data.published || data.site || data.icon?`<p class="published">
             ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
-            ${data.site && data.icon ? ' - ' : ''}
             ${data.site?data.site:''}
-          </div>`:''}
+            ${data.site || data.icon ? ' - ' : ''}
+            ${(new Date(data.published)).toLocaleString()}</p>`:''}
+          ${data.description?`<p class="description">${data.description}</p>`:''}
         </div>
       </aside>
     `);
+
+    card.querySelector('.close').addEventListener('click', () => {
+      card.host.remove();
+    });
 
     card.prepend(style);
 
