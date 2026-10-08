@@ -121,6 +121,7 @@ async function unfurl(a, force) {
       ['alt', 'og:image:alt'],
       ['alt', 'twitter:image:alt'],
       ['description', 'og:description'],
+      ['description', 'description'],
       ['published', 'article:published_time'],
       ['published', 'datePublished'],
       ['site', 'og:site_name'],
@@ -129,7 +130,7 @@ async function unfurl(a, force) {
 
     properties.forEach((property) => {
       if (!data[property[0]]) {
-        const meta = page.querySelector(`meta[property="${property[1]}"], meta[itemprop="${property[1]}"]`);
+        const meta = page.querySelector(`meta[property="${property[1]}"], meta[itemprop="${property[1]}"], meta[name="${property[1]}"]`);
 
         if (meta) data[property[0]] = meta.getAttribute('content');
       }
@@ -171,6 +172,11 @@ async function unfurl(a, force) {
     // URL
     if (!data.url) {
       data.url = a.href;
+    }
+
+    // Site fallback
+    if (!data.site) {
+      data.site = new URL('/', data.url).host;
     }
 
     // image fallback
@@ -241,6 +247,7 @@ async function unfurl(a, force) {
 
         .content {
           flex-shrink: 1;
+          flex-grow: 1;
 
           > :nth-child(2) {
             padding-right: 2em;
@@ -274,6 +281,8 @@ async function unfurl(a, force) {
         .reply {
           display: flex;
           flex-direction: row;
+          flex-shrink: 1;
+          flex-grow: 1;
 
           button {
             min-height: 2em;
@@ -311,10 +320,10 @@ async function unfurl(a, force) {
         <div class="content">
           <button type="button" class="close">×</button>
           ${data.title?`<h3 class="title">${data.title}</h3>`:''}
-          ${data.published || data.site || data.icon?`<p class="published">
+          ${data.published || data.site?`<p class="published">
             ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
             ${data.site?data.site:''}
-            ${data.site || data.icon ? ' - ' : ''}
+            ${(data.site || data.icon) && data.published ? ' - ' : ''}
             ${data.published?(new Date(data.published)).toLocaleString('en-US', {
               month: 'short',
               day: '2-digit',
@@ -346,6 +355,30 @@ async function unfurl(a, force) {
     });
 
     card.prepend(style);
+
+    card.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('error', () => {
+        if (img.src.startsWith('data:')) return;
+
+        GM.xmlHttpRequest({
+          method: 'GET',
+          url: img.src,
+          responseType: 'arraybuffer',
+          onload: (response) => {
+            const bytes = new Uint8Array(response.response);
+            let binary = '';
+            for (const byte of bytes) binary += String.fromCharCode(byte);
+
+            const base64 = btoa(binary);
+            const contentType = response.responseHeaders
+              .match(/^content-type:\s*([^\r\n]+)/im)?.[1]
+              ?.trim() || 'application/octet-stream';
+
+            img.src = `data:${contentType};base64,${base64}`;
+          },
+        });
+      });
+    });
 
     a.after(card.host);
 
@@ -384,15 +417,15 @@ function sendToSlack(el, preview, reply_broadcast) {
           text: {
             type: 'mrkdwn',
             text:
-              `*${preview.title}*` +
-              `${preview.description||preview.published?`\n\n${preview.published?`_${new Date(preview.published).toLocaleString('en-US', {
+              `> *${preview.title}*` +
+              `${preview.description||preview.published?`\n> ${preview.published?`_<!date^${Math.round(new Date(preview.published).getTime()/1000)}^{date}, {time}|${new Date(preview.published).toLocaleString('en-US', {
                 month: 'short',
                 day: '2-digit',
                 year: 'numeric',
                 hour: 'numeric',
                 minute: '2-digit',
                 hour12: true
-              })}_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description:''}`:''}`
+              })}>_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description:''}`:''}`
           },
           accessory: {
             type: 'image',
