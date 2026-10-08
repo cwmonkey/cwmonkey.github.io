@@ -69,7 +69,7 @@ async function unfurl(a, force) {
     force = true;
   }
 
-  let key = `unfurl:${a.href}`
+  let key = `unfurl:${a.href}`;
   let data;
 
   if (!force) {
@@ -83,35 +83,12 @@ async function unfurl(a, force) {
 
   // No cached data
   if (!data) {
-    res = await GM.xmlHttpRequest({
-      method: 'GET',
-      url: a.href,
-      anonymous: false,
-      headers: {
-        'User-Agent': navigator.userAgent,
-        'Sec-Ch-Ua': '"Google Chrome";v="125"',
-        'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Ch-Ua-Platform': 'Windows',
-        'Referer': 'https://' + window.location.host,
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-User': '?1',
-        'Upgrade-Insecure-Requests': '1'
-      }
-    }).catch(e => console.error(e));
+    let url = a.href;
+    let fetchUrl = url;
+    let json = false;
 
-    const page = new DOMParser().parseFromString(res.responseText, "text/html");
-
-    data = {
-      updated: Date.now()
-    };
-
-    // Metas
-    const properties = [
+    // Meta defaults
+    let properties = [
       ['title', 'og:title'],
       ['title', 'twitter:title'],
       ['url', 'og:url'],
@@ -128,80 +105,133 @@ async function unfurl(a, force) {
       ['site', 'twitter:site'],
     ];
 
-    properties.forEach((property) => {
-      if (!data[property[0]]) {
-        const meta = page.querySelector(`meta[property="${property[1]}"], meta[itemprop="${property[1]}"], meta[name="${property[1]}"]`);
-
-        if (meta) data[property[0]] = meta.getAttribute('content');
-      }
-    });
-
-    // Published fallback
-    if (!data.published) {
-      const time = page.querySelector('time[datetime]');
-
-      if (time) data.published = time.getAttribute('datetime');
+    const matches = [...url.matchAll(/^https:\/\/truthsocial\.com\/@[^\/]+\/posts\/([0-9]+)/gi)];
+    if (matches.length) {
+      fetchUrl = `https://truthsocial.com/api/v1/statuses/${matches[0][1]}`;
+      json = true;
     }
 
-    if (!data.published) {
-      // Just get the first thing that looks like an ISO date
-      const matches = [...res.responseText.matchAll(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))/gi)];
+    res = await GM.xmlHttpRequest({
+      method: 'GET',
+      url: fetchUrl,
+      anonymous: false,
+      headers: {
+        'User-Agent': navigator.userAgent,
+        'Sec-Ch-Ua': '"Google Chrome";v="125"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': 'Windows',
+        'Referer': 'https://' + window.location.host,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1'
+      },
+      responseType: json ? 'json' : 'text'
+    }).catch(e => console.error(e));
 
-      if (matches.length) {
-        data.published = matches[0][0];
-      }
-    }
+    data = {
+      updated: Date.now()
+    };
 
-    // Title fallback
-    if (!data.title) {
-      const title = page.querySelector('title, h1');
-      if (title) data.title = title.textContent;
-    }
+    if (json) {
+      jsonRes = res.response;
 
-    if (!data.title) {
-      const title = page.querySelector('shreddit-title');
-      if (title) data.title = title.getAttribute('title');
-    }
-
-    // Description fallback
-    if (!data.description) {
-      const description = page.querySelector('shreddit-post-text-body');
-      if (description) data.description = description.textContent;
-    }
-
-    // URL
-    if (!data.url) {
-      data.url = a.href;
-    }
-
-    // Site fallback
-    if (!data.site) {
-      data.site = new URL('/', data.url).host;
-    }
-
-    // image fallback
-    if (!data.image) {
-      const image = page.querySelector('shreddit-post');
-      if (image) data.image = image.getAttribute('content-href');
-    }
-
-    if (data.url !== a.href) {
-      key = 'unfurl:' + data.url;
-
-      GM.setValue('unfurl:' + a.href, {
-        updated: Date.now(),
-        url: data.url
-      });
-    }
-
-    // Icon
-    const icon = page.querySelector('link[rel="apple-touch-icon"], link[rel="icon"]');
-
-    if (icon) {
-      data.icon = icon.getAttribute('href');
+      data.url = jsonRes.url;
+      data.title = `${jsonRes.account.display_name} (@${jsonRes.account.username})`;
+      data.description = jsonRes.content.replace(/(^<p>)|(<\/p>$)/ig, '');
+      data.image = jsonRes.account.avatar_static;
+      data.alt = jsonRes.account.display_name;
+      data.published = jsonRes.created_at;
+      data.site = 'TruthSocial';
+      data.icon = 'https://truthsocial.com/favicon.ico';
     } else {
-      const urlo = new URL('/favicon.ico', data.url);
-      data.icon = urlo.href;
+      const page = new DOMParser().parseFromString(res.responseText, "text/html");
+
+      properties.forEach((property) => {
+        if (!data[property[0]]) {
+          const meta = page.querySelector(`meta[property="${property[1]}"], meta[itemprop="${property[1]}"], meta[name="${property[1]}"]`);
+
+          if (meta) {
+            data[property[0]] = meta.getAttribute('content');
+
+            if (property[0] === 'url') {
+              data[property[0]] = new URL(data[property[0]], a.href)
+            }
+          }
+        }
+      });
+
+      // Published fallback
+      if (!data.published) {
+        const time = page.querySelector('time[datetime]');
+
+        if (time) data.published = time.getAttribute('datetime');
+      }
+
+      if (!data.published) {
+        // Just get the first thing that looks like an ISO date
+        const matches = [...res.responseText.matchAll(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))/gi)];
+
+        if (matches.length) {
+          data.published = matches[0][0];
+        }
+      }
+
+      // Title fallback
+      if (!data.title) {
+        const title = page.querySelector('title, h1');
+        if (title) data.title = title.textContent;
+      }
+
+      if (!data.title) {
+        const title = page.querySelector('shreddit-title');
+        if (title) data.title = title.getAttribute('title');
+      }
+
+      // Description fallback
+      if (!data.description) {
+        const description = page.querySelector('shreddit-post-text-body');
+        if (description) data.description = description.textContent;
+      }
+
+      // URL
+      if (!data.url) {
+        data.url = a.href;
+      }
+
+      // Site fallback
+      if (!data.site) {
+        data.site = new URL('/', data.url).host;
+      }
+
+      // image fallback
+      if (!data.image) {
+        const image = page.querySelector('shreddit-post');
+        if (image) data.image = image.getAttribute('content-href');
+      }
+
+      if (data.url !== a.href) {
+        key = 'unfurl:' + data.url;
+
+        GM.setValue('unfurl:' + a.href, {
+          updated: Date.now(),
+          url: data.url
+        });
+      }
+
+      // Icon
+      const icon = page.querySelector('link[rel="apple-touch-icon"], link[rel*="icon"]');
+
+      if (icon) {
+        data.icon = icon.getAttribute('href');
+      } else {
+        const urlo = new URL('/favicon.ico', data.url);
+        data.icon = urlo.href;
+      }
     }
 
     GM.setValue(key, data);
@@ -314,32 +344,39 @@ async function unfurl(a, force) {
       }
     `, false);
 
-    const card = createShadowElementFromHTML(/* html */`
-      <aside id="card">
-        ${data.image?`<div class="image"><img src="${new URL(data.image, data.url).href}"></div>`:''}
-        <div class="content">
-          <button type="button" class="close">×</button>
-          ${data.title?`<h3 class="title">${data.title}</h3>`:''}
-          ${data.published || data.site?`<p class="published">
-            ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
-            ${data.site?data.site:''}
-            ${(data.site || data.icon) && data.published ? ' - ' : ''}
-            ${data.published?(new Date(data.published)).toLocaleString('en-US', {
-              month: 'short',
-              day: '2-digit',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true
-            }):''}</p>`:''}
-          ${data.description?`<p class="description">${data.description}</p>`:''}
-          ${window.location.host==='app.slack.com'?`<div class="reply">
-            <button type="button" class="send_to_slack">Reply (Thread)</button>
-            <button type="button" class="send_to_slack_broadcast">Reply (Channel)</button>
-          </div>`:''}
-        </div>
-      </aside>
-    `);
+    let card;
+
+    try {
+      card = createShadowElementFromHTML(/* html */`
+        <aside id="card">
+          ${data.image?`<div class="image"><img src="${new URL(data.image, data.url).href}"></div>`:''}
+          <div class="content">
+            <button type="button" class="close">×</button>
+            ${data.title?`<h3 class="title">${data.title}</h3>`:''}
+            ${data.published || data.site?`<p class="published">
+              ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
+              ${data.site?data.site:''}
+              ${(data.site || data.icon) && data.published ? ' - ' : ''}
+              ${data.published?(new Date(data.published)).toLocaleString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+              }):''}</p>`:''}
+            ${data.description?`<p class="description">${data.description}</p>`:''}
+            ${window.location.host==='app.slack.com'?`<div class="reply">
+              <button type="button" class="send_to_slack">Reply (Thread)</button>
+              <button type="button" class="send_to_slack_broadcast">Reply (Channel)</button>
+            </div>`:''}
+          </div>
+        </aside>
+      `);
+    } catch(err) {
+      GM.deleteValue(key);
+      GM.deleteValue(`unfurl:${a.href}`);
+    }
 
     card.querySelector('.close').addEventListener('click', () => {
       card.host.remove();
@@ -358,7 +395,9 @@ async function unfurl(a, force) {
 
     card.querySelectorAll('img').forEach((img) => {
       img.addEventListener('error', () => {
-        if (img.src.startsWith('data:')) return;
+        if (img.src.startsWith('data:')) {
+          img.remove();
+        }
 
         GM.xmlHttpRequest({
           method: 'GET',
@@ -417,7 +456,7 @@ function sendToSlack(el, preview, reply_broadcast) {
           text: {
             type: 'mrkdwn',
             text:
-              `> *${preview.title}*` +
+              `> *${preview.title.replace(/\n/g, ' ')}*` +
               `${preview.description||preview.published?`\n> ${preview.published?`_<!date^${Math.round(new Date(preview.published).getTime()/1000)}^{date}, {time}|${new Date(preview.published).toLocaleString('en-US', {
                 month: 'short',
                 day: '2-digit',
@@ -425,7 +464,7 @@ function sendToSlack(el, preview, reply_broadcast) {
                 hour: 'numeric',
                 minute: '2-digit',
                 hour12: true
-              })}>_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description:''}`:''}`
+              })}>_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description.replace(/\n/g, ' '):''}`:''}`
           },
           accessory: {
             type: 'image',
