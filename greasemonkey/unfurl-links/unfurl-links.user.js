@@ -143,13 +143,26 @@ async function unfurl(a, force) {
       data.url = jsonRes.url;
       data.title = `${jsonRes.account.display_name} (@${jsonRes.account.username})`;
       data.description = jsonRes.content.replace(/(^<p>)|(<\/p>$)/ig, '');
-      data.image = jsonRes.account.avatar_static;
-      data.alt = jsonRes.account.display_name;
+      //data.image = jsonRes.account.avatar_static;
+      //data.alt = jsonRes.account.display_name;
+      if (jsonRes.media_attachments) {
+        jsonRes.media_attachments.forEach((att) => {
+          if (data.image) return;
+          if (att.type === 'image') {
+            data.image = att.preview_url;
+            data.alt = att.description || '';
+          }
+        });
+      }
       data.published = jsonRes.created_at;
       data.site = 'TruthSocial';
       data.icon = 'https://truthsocial.com/favicon.ico';
     } else {
       const page = new DOMParser().parseFromString(res.responseText, "text/html");
+
+      if (url.match(/^https:\/\/(x|twitter)\.com/)) {
+        data.description = page.querySelector('h1.sr-only').textContent;
+      }
 
       properties.forEach((property) => {
         if (!data[property[0]]) {
@@ -194,7 +207,8 @@ async function unfurl(a, force) {
 
       // Description fallback
       if (!data.description) {
-        const description = page.querySelector('shreddit-post-text-body');
+        // reddit, wikipedia
+        const description = page.querySelector('shreddit-post-text-body, main section p:not([role="note"]):not([class*="empty"])');
         if (description) data.description = description.textContent;
       }
 
@@ -210,8 +224,14 @@ async function unfurl(a, force) {
 
       // image fallback
       if (!data.image) {
-        const image = page.querySelector('shreddit-post');
-        if (image) data.image = image.getAttribute('content-href');
+        const selectors = ['shreddit-post', 'figure img', 'article img', 'main img', 'img'];
+
+        selectors.forEach((selector) => {
+          if (data.image) return;
+          const image = page.querySelector(selector);
+          if (!image) return;
+          data.image = image.getAttribute('content-href') || new URL(image.getAttribute('src'), data.url).href;
+        });
       }
 
       if (data.url !== a.href) {
@@ -259,8 +279,7 @@ async function unfurl(a, force) {
         color: var(--color);
         font-family: var(--font-family);
         font-size: var(--font-size);
-        display: flex;
-        flex-direction: row;
+        display: table;
         max-width: 720px;
         position: relative;
 
@@ -276,10 +295,10 @@ async function unfurl(a, force) {
         }
 
         .content {
-          flex-shrink: 1;
-          flex-grow: 1;
+          display: table-cell;
+          width: 100%;
 
-          > :nth-child(2) {
+          > :nth-child(3) {
             padding-right: 2em;
           }
         }
@@ -288,24 +307,32 @@ async function unfurl(a, force) {
           margin: 0;
           color: var(--header-color);
           padding: var(--panel-padding);
+          padding-bottom: 0;
         }
 
         .published {
           font-style: italic;
-          padding: 0 var(--panel-padding);
+          padding: var(--panel-padding);
+          padding-bottom: 0;
           font-size: 12px;
           margin: 0;
         }
 
         .icon {
           max-height: 14px;
-          vertical-align: middle;
+          vertical-align: top;
           margin-right: 3px;
         }
 
         .description {
           padding: var(--panel-padding);
+          padding-bottom: 0;
           margin: 0;
+          white-space: break-spaces;
+        }
+
+        .content > :last-child {
+          padding-bottom: var(--panel-padding);
         }
 
         .reply {
@@ -319,26 +346,31 @@ async function unfurl(a, force) {
             flex-grow: 1;
             border-right: 0;
             border-bottom: 0;
+            border-left-width: 0;
           }
         }
 
         .image {
-          width: 100%;
-          max-width: 150px;
+          width: 150px;
+          min-width: 150px;
+          max-height: 250px;
           position: relative;
           overflow: hidden;
+          float: right;
 
           img {
-            object-fit: cover;
-            position: absolute;
-            min-width: 100%;
-            min-height: 100%;
             width: 100%;
             height: 100%;
+            max-height: 250px;
+            display: block;
 
             &:hover {
               object-fit: contain;
             }
+          }
+
+          ~ .content .reply button{
+            border-left-width: 1px;
           }
         }
       }
@@ -349,9 +381,9 @@ async function unfurl(a, force) {
     try {
       card = createShadowElementFromHTML(/* html */`
         <aside id="card">
-          ${data.image?`<div class="image"><img src="${new URL(data.image, data.url).href}"></div>`:''}
           <div class="content">
             <button type="button" class="close">×</button>
+            ${data.image?`<div class="image"><img src="${new URL(data.image, data.url).href}"></div>`:''}
             ${data.title?`<h3 class="title">${data.title}</h3>`:''}
             ${data.published || data.site?`<p class="published">
               ${data.icon?`<img class="icon" src="${new URL(data.icon, data.url).href}">`:''}
@@ -466,11 +498,11 @@ function sendToSlack(el, preview, reply_broadcast) {
                 hour12: true
               })}>_`:''}${preview.published&&preview.description?' · ':''}${preview.description?preview.description.replace(/\n/g, ' '):''}`:''}`
           },
-          accessory: {
+          ...(preview.image && { accessory: {
             type: 'image',
             image_url: preview.image,
             alt_text: preview.title
-          }
+          }})
         },
         {
           type: 'context',
