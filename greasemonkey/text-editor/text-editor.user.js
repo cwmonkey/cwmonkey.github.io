@@ -250,10 +250,12 @@ function createWindow() {
 
   preview = textWindow.querySelector('#preview');
   editor = textWindow.querySelector('#editor');
+  const word_count = textWindow.querySelector('#word_count');
   selector = textWindow.querySelector('#selector');
   name = textWindow.querySelector('#name');
 
   editor.addEventListener('input', callDelay(updatePreview, 500));
+  word_count.addEventListener('input', callDelay(updatePreview, 500));
 
   function setHasEdits() {
     hasEdits = true;
@@ -441,6 +443,7 @@ function updatePreview(event) {
   const valueLines = value.split("\n");
 
   valueLines.forEach((line, idx) => {
+    if (line === ' ') line = '';
     let charactersToAdd = 0;
 
     if (line.match(/^>/)) {
