@@ -59,8 +59,51 @@ async function init() {
 init();
 
 ////////////////////////////////
+// iframeInit
+////////////////////////////////
+
+async function iframeInit() {
+  await waitForElement('body');
+
+  window.parent.postMessage({
+    type: '__cwmUnfurlIframe--response',
+    response: {
+      responseText: document.querySelector('html').outerHTML
+    }
+  }, '*');
+}
+
+if (window.self !== window.top) {
+  if (window.location.href.match(/^https:\/\/www\.nytimes\.com/i)) {
+    iframeInit();
+  }
+}
+
+////////////////////////////////
 // unfurl
 ////////////////////////////////
+
+async function getIframeContent(iframe, url) {
+  const res = await new Promise((resolve) => {
+    function onMessage(event) {
+      if (event.data.type === '__cwmUnfurlIframe--response') {
+        const sendingIframe = Array.from(document.querySelectorAll('iframe')).find(
+          (iframe) => iframe.contentWindow === event.source
+        );
+
+        if (sendingIframe.dataset.href === url) {
+          window.removeEventListener('message', onMessage);
+          iframe.remove();
+          resolve(event.data.response);
+        }
+      }
+    }
+
+    window.addEventListener('message', onMessage);
+  });
+
+  return res;
+}
 
 unfurls = {};
 async function unfurl(a, force) {
@@ -86,6 +129,7 @@ async function unfurl(a, force) {
     let url = a.href;
     let fetchUrl = url;
     let json = false;
+    let res;
 
     // Meta defaults
     let properties = [
@@ -105,33 +149,44 @@ async function unfurl(a, force) {
       ['site', 'twitter:site'],
     ];
 
-    const matches = [...url.matchAll(/^https:\/\/truthsocial\.com\/@[^\/]+\/posts\/([0-9]+)/gi)];
-    if (matches.length) {
-      fetchUrl = `https://truthsocial.com/api/v1/statuses/${matches[0][1]}`;
-      json = true;
-    }
+    if (url.match(/^https:\/\/www\.nytimes\.com/i)) {
+      const iframe = document.createElement('iframe');
+      iframe.className = '__cwmUnfurlIframe';
+      iframe.style = 'width: 1px;height: 1px;border: 0;opacity: 0;position: absolute;';
+      iframe.src = url;
+      iframe.dataset.href = url;
+      document.body.append(iframe);
 
-    res = await GM.xmlHttpRequest({
-      method: 'GET',
-      url: fetchUrl,
-      anonymous: false,
-      headers: {
-        'User-Agent': navigator.userAgent,
-        'Sec-Ch-Ua': '"Google Chrome";v="125"',
-        'Sec-Ch-Ua-Mobile': '?0',
-        'Sec-Ch-Ua-Platform': 'Windows',
-        'Referer': 'https://' + window.location.host,
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-User': '?1',
-        'Upgrade-Insecure-Requests': '1'
-      },
-      responseType: json ? 'json' : 'text'
-    }).catch(e => console.error(e));
+      res = await getIframeContent(iframe, url);
+    } else {
+      const matches = [...url.matchAll(/^https:\/\/truthsocial\.com\/@[^\/]+\/posts\/([0-9]+)/gi)];
+      if (matches.length) {
+        fetchUrl = `https://truthsocial.com/api/v1/statuses/${matches[0][1]}`;
+        json = true;
+      }
+
+      res = await GM.xmlHttpRequest({
+        method: 'GET',
+        url: fetchUrl,
+        anonymous: false,
+        headers: {
+          'User-Agent': navigator.userAgent,
+          'Sec-Ch-Ua': '"Google Chrome";v="125"',
+          'Sec-Ch-Ua-Mobile': '?0',
+          'Sec-Ch-Ua-Platform': 'Windows',
+          'Referer': 'https://' + window.location.host,
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Accept-Encoding': 'gzip, deflate, br, zstd',
+          'Sec-Fetch-Dest': 'document',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-Site': 'same-origin',
+          'Sec-Fetch-User': '?1',
+          'Upgrade-Insecure-Requests': '1'
+        },
+        responseType: json ? 'json' : 'text'
+      }).catch(e => console.error(e));
+    }
 
     data = {
       updated: Date.now()
@@ -172,7 +227,7 @@ async function unfurl(a, force) {
             data[property[0]] = meta.getAttribute('content');
 
             if (property[0] === 'url') {
-              data[property[0]] = new URL(data[property[0]], a.href)
+              data[property[0]] = new URL(data[property[0]], a.href).href;
             }
           }
         }
@@ -292,6 +347,7 @@ async function unfurl(a, force) {
 
         &:hover .close {
           opacity: 1;
+          z-index: 2;
         }
 
         .content {
@@ -354,7 +410,6 @@ async function unfurl(a, force) {
           width: 150px;
           min-width: 150px;
           max-height: 250px;
-          position: relative;
           overflow: hidden;
           float: right;
 
@@ -363,6 +418,7 @@ async function unfurl(a, force) {
             height: 100%;
             max-height: 250px;
             display: block;
+            margin: 0 0 var(--panel-padding) var(--panel-padding);
 
             &:hover {
               object-fit: contain;
