@@ -535,10 +535,6 @@ function updatePreview(event) {
 // tools
 ////////////////////////////////
 
-////////////////////////////////
-// showToast
-////////////////////////////////
-
 {% include greasemonkey/_shared/addStyle.js %}
 
 {% include greasemonkey/_shared/showToast.js %}
